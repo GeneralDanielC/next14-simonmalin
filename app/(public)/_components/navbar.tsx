@@ -1,0 +1,61 @@
+"use client"
+
+import Link from "next/link"
+import { MenuIcon } from "lucide-react";
+
+import { southland } from "@/lib/fonts";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+
+export const NavBar = () => {
+    const navItems = [
+        { title: "Startsida", href: "/" },
+        { title: "Vår historia", href: "/our-story" },
+        { title: "24 maj 2025", href: "/wedding-day" },
+        { title: "O.S.A.", href: "/osa" },
+        { title: "Toastmadames", href: "/toastmadames" },
+        { title: "Önskelista", href: "/gift-registry" },
+        { title: "Galleri", href: "/gallery" },
+    ];
+
+    const [openNavbar, setOpenNavbar] = useState(false);
+
+    return (
+        <nav className="w-full flex justify-center items-center py-5 fixed z-50">
+            <Link href="/" className="">
+                <div className={cn(southland.className, "text-6xl flex h-full items-center backdrop-blur-sm bg-beige/50 rounded-2xl pt-5 pb-2 px-5")}>
+                    <span className="text-rose-300">
+                        M
+                    </span>
+                    <span className="text-stone-500">
+                        &
+                    </span>
+                    <span className="text-dark-green">
+                        S
+                    </span>
+                </div>
+            </Link>
+            <div className="fixed right-5 top-8">
+                <Sheet open={openNavbar} onOpenChange={() => setOpenNavbar(!openNavbar)}>
+                    <SheetTrigger asChild>
+                        <Button className="rounded-xl size-12 backdrop-blur-md bg-transparent shadow-none text-stone-400">
+                            <MenuIcon className="size-16" />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-full p-0">
+                        <div className="w-full h-full bg-orange-700/30 flex flex-col gap-y-4 justify-center items-center font-semibold sm:w-full">
+                            {navItems.map((item, index) => (
+                                <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-orange-900/30 hover:text-white animate transition">
+                                    {/* <span>0{index + 1}</span> */}
+                                    <span className="uppercase">{item.title}</span>
+                                </Link>
+                            ))}
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </nav>
+    )
+}
