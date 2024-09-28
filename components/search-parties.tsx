@@ -1,11 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Search } from "lucide-react"
+import { ChevronRight, Search } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
-import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { PartyWithGuests } from "@/types"
+import Link from "next/link"
+import { Button } from "./ui/button"
 
 interface SearchPartiesProps {
     parties: PartyWithGuests[];
@@ -53,28 +55,31 @@ export const SearchParties = ({
                     {/* CommandList positioned absolutely below the input */}
                     <div className="absolute top-full left-0 mt-2 w-full z-10">
                         <CommandList className="max-h-[300px] overflow-y-auto bg-white shadow-lg rounded-lg">
-                            {filteredItems.map(party => (
-                                <CommandItem key={party.id}>
-                                        <p className="font-semibold">{party.email}</p>
-                                        {party.guests?.map(guest => (
-                                            <p key={guest.id} className="text-xs">{guest.firstName} {guest.lastName}</p>
-                                        ))}
-                                </CommandItem>
-                            ))}
+                            {searchTerm !== "" && (
+                                <CommandGroup heading="Parties & Guests">
+                                    {filteredItems.map(party => (
+                                        <CommandItem key={party.id} value={party.email}>
+                                            <Link href={`/admin/parties/${party.id}`} className="w-full">
+                                                <div className="flex flex-row justify-between items-center w-full">
+                                                    <div>
+                                                        <p className="font-semibold">{party.email}</p>
+                                                        {party.guests?.map(guest => (
+                                                            <p key={guest.id} className="text-xs">{guest.firstName} {guest.lastName}</p>
+                                                        ))}
+                                                    </div>
+                                                    <ChevronRight />
+                                                </div>
+                                            </Link>
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            )}
                             {filteredItems.length === 0 && searchTerm !== "" && (
                                 <CommandEmpty className="flex flex-col p-5 justify-center items-center">
                                     <span className="font-bold">Oh no!</span>
                                     <span className="text-xs text-stone-400">No Results.</span>
                                 </CommandEmpty>
                             )}
-
-                            {/* <CommandItem>
-                                    <div>
-                                        <p className="font-semibold">danielcarlsson2002@gmail.com</p>
-                                        <p className="text-xs">Daniel Carlsson</p>
-                                    </div>
-
-                                </CommandItem> */}
                         </CommandList>
                     </div>
                 </Command>

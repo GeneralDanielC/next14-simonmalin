@@ -82,7 +82,9 @@ import { getParties } from "@/data/data"
             
             Admin Dashboard
             <p>Varna för dubbletter. Kolla på namn & efternamn.</p>
-            <p>Visa de som har fyllt i allergier / alkoholpreferens om de kommer eller inte. Kommer de inte bör dessa tas bort, det borde finnas en netto räknare som räknar alla som ska ha alkohol som kommer etc.</p>
+            <p>Visa de som har fyllt i allergier / alkoholpreferens om de kommer eller inte. Kommer de inte bör dessa tas bort, det borde finnas en netto räknare som räknar alla som ska ha alkohol som kommer etc. Ha en alert card för detta?</p>
+            Varna för gäster/filtrera ut gäster som har matpreferenser.
+
         </div> */}
 
 const DashboardPage = async () => {
