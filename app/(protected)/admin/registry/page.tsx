@@ -28,14 +28,14 @@ import {
 } from "@/components/ui/tabs"
 
 
-import { Navbar } from "../../_components/navbar";
+import { Navbar } from "../_components/navbar";
 import { getParties, getPartyById } from "@/data/data"
 
 import { SpecialFoodCard } from "@/components/admin/special-food-card"
 import { AttendanceCard } from "@/components/admin/attendance-card"
 import { AlcoholFreeCard } from "@/components/admin/alcohol-free-card"
 import { GuestTable } from "@/components/admin/guest-table"
-import { PartySettings } from "../_components/party-settings"
+import { PartiesTable } from "@/components/admin/parties-table"
 
 {/* <div className="w-full h-full flex flex-col py-10">
             <h1 className="text-2xl font-semibold">Dashboard</h1>
@@ -45,14 +45,11 @@ import { PartySettings } from "../_components/party-settings"
             <p>Visa de som har fyllt i allergier / alkoholpreferens om de kommer eller inte. Kommer de inte bör dessa tas bort, det borde finnas en netto räknare som räknar alla som ska ha alkohol som kommer etc.</p>
         </div> */}
 
-const PartyPage = async ({ params
-}: { params: { partyId: string } }) => {
-    const { partyId } = params;
+const PartiesPage = async () => {
 
-    const party = await getPartyById(partyId);
     const parties = await getParties();
 
-    if (!party) return <p>Something went wrong!</p>
+    if (!parties) return <p>Something went wrong!</p>
 
     const breadcrumbs = [
         {
@@ -63,10 +60,6 @@ const PartyPage = async ({ params
             title: "Parties & Guests",
             href: "/admin/parties",
         },
-        {
-            title: party.email,
-            href: "/admin/parties",
-        },
     ];
 
     return (
@@ -75,15 +68,17 @@ const PartyPage = async ({ params
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
                 <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
                     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                        <SpecialFoodCard party={party} />
-                        <AttendanceCard party={party} />
-                        <AlcoholFreeCard party={party} />
+                        <SpecialFoodCard parties={parties} />
+                        {/* Assigned Gifts Card */}
+                        
+                        <AttendanceCard parties={parties} />
+                        <AlcoholFreeCard parties={parties} />
                     </div>
-                    <Tabs defaultValue="guests">
+                    <Tabs defaultValue="gifts">
                         <div className="flex items-center">
                             <TabsList>
-                                <TabsTrigger value="guests">Guests</TabsTrigger>
-                                <TabsTrigger value="settings">Settings</TabsTrigger>
+                                <TabsTrigger value="gifts">Gift Registry</TabsTrigger>
+                                {/* <TabsTrigger value="guests">Guests</TabsTrigger> */}
                             </TabsList>
                             <div className="ml-auto flex items-center gap-2">
                                 <DropdownMenu>
@@ -122,50 +117,24 @@ const PartyPage = async ({ params
                                 </Button>
                             </div>
                         </div>
-                        <TabsContent value="guests">
+                        <TabsContent value="gifts">
                             <Card x-chunk="dashboard-05-chunk-3">
                                 <CardHeader className="px-7">
                                     <div className="flex flex-row items-center justify-between">
                                         <div className="flex flex-col gap-y-1">
-                                            <CardDescription className="text-xs">{party.email}</CardDescription>
-                                            <CardTitle>Guests</CardTitle>
+                                            <CardTitle>Gift Registry</CardTitle>
                                             <CardDescription className="flex flex-col gap-y-2">
-                                                Guests in this party.
+                                                List of all the gifts in the registry.
                                                 <span className="text-xs italic">Tip: Tap a row to view and edit.</span>
                                             </CardDescription>
                                         </div>
-                                        <Button asChild variant={"secondary"}>
-                                            <a href={`mailto:${party.email}`}>
-                                                Email Party
-                                            </a>
+                                        <Button className="text-xs" variant={"secondary"}>
+                                            New Gift
                                         </Button>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <GuestTable party={party} />
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-                        <TabsContent value="settings">
-                            <Card x-chunk="dashboard-05-chunk-3">
-                                <CardHeader className="px-7">
-                                    <div className="flex flex-row items-center justify-between">
-                                        <div className="flex flex-col gap-y-1">
-                                            <CardDescription className="text-xs">{party.email}</CardDescription>
-                                            <CardTitle>Settings</CardTitle>
-                                            <CardDescription className="flex flex-col gap-y-2">
-                                                Options for this party.
-                                            </CardDescription>
-                                        </div>
-                                        <Button asChild variant={"secondary"}>
-                                            <a href={`mailto:${party.email}`}>
-                                                Email Party
-                                            </a>
-                                        </Button>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <PartySettings party={party} />
+                                    <PartiesTable parties={parties} />
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -177,4 +146,4 @@ const PartyPage = async ({ params
     );
 }
 
-export default PartyPage;
+export default PartiesPage;

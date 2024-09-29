@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { southland } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { GiftIcon, Home, HomeIcon, LogOutIcon, Package, Settings, UsersRound } from "lucide-react";
+import { GiftIcon, Home, HomeIcon, LogOutIcon, Package, Settings, Users, UsersRound } from "lucide-react";
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -26,7 +26,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                href="/admin/dashboard"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Home className="h-5 w-5" />
@@ -35,12 +35,36 @@ export const Sidebar = () => {
             </TooltipTrigger>
             <TooltipContent side="right">Dashboard</TooltipContent>
           </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                href="/admin/parties"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              >
+                <Users className="h-5 w-5" />
+                <span className="sr-only">Parties & Guests</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">Parties & Guests</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                href="/admin/registry"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              >
+                <Package className="h-5 w-5" />
+                <span className="sr-only">Gift Registry</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">Gift Registry</TooltipContent>
+          </Tooltip>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                href="/admin/settings"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Settings className="h-5 w-5" />

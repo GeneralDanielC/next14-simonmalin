@@ -1,20 +1,14 @@
 "use client";
 
-import { LogoutButton } from "@/components/auth/logout-button";
-import { Logo } from "@/components/logo";
 import { SearchParties } from "@/components/search-parties";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { southland } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
 import { PartyWithGuests } from "@/types";
-import { GiftIcon, Home, HomeIcon, LineChart, LogOutIcon, Package, PanelLeft, Search, UsersRound } from "lucide-react";
+import { Home, Package, PanelLeft, Settings, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import React from "react";
 
 type Breadcrumb = {
@@ -44,24 +38,38 @@ export const Navbar = ({
                 <SheetContent side="left" className="sm:max-w-xs">
                     <nav className="grid gap-6 text-lg font-medium">
                         <Link
-                            href="#"
+                            href="/admin/dashboard"
                             className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                         >
                             <Package className="h-5 w-5 transition-all group-hover:scale-110" />
                             <span className="sr-only">Acme Inc</span>
                         </Link>
                         <Link
-                            href="#"
+                            href="/admin/dashboard"
                             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                         >
                             <Home className="h-5 w-5" />
                             Dashboard
                         </Link>
                         <Link
-                            href="#"
+                            href="/admin/parties"
                             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                         >
-                            <LineChart className="h-5 w-5" />
+                            <Users className="h-5 w-5" />
+                            Parties & Guests
+                        </Link>
+                        <Link
+                            href="/admin/registry"
+                            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                        >
+                            <Package className="h-5 w-5" />
+                            Gift Registry
+                        </Link>
+                        <Link
+                            href="/admin/settings"
+                            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                        >
+                            <Settings className="h-5 w-5" />
                             Settings
                         </Link>
                     </nav>

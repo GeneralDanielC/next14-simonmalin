@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 import { PartyWithGuests } from "@/types"
-import { getGuestsWithFoodPreferencesInParty } from "@/lib/parties"
+import { getGuestsWithFoodPreferences, getGuestsWithFoodPreferencesInParty, getTotalGuests } from "@/lib/parties"
 
 import {
     Card,
@@ -23,19 +23,29 @@ import {
 } from "@/components/ui/table"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 interface SpecialFoodCardProps {
-    party: PartyWithGuests
+    party?: PartyWithGuests,
+    parties?: PartyWithGuests[]
 }
 
 export const SpecialFoodCard = ({
-    party
+    party,
+    parties,
 }: SpecialFoodCardProps) => {
-    const [guestsWithFoodPreferences, setGuestsWithFoodPreferences] = useState(getGuestsWithFoodPreferencesInParty({ party }));
+    const router = useRouter();
+
+    const [guestsWithFoodPreferences, setGuestsWithFoodPreferences] = useState(party && getGuestsWithFoodPreferencesInParty({ party }) || parties && getGuestsWithFoodPreferences({ parties }));
+
+    const totalGuests = party && party.guests.length || parties && getTotalGuests({ parties });
 
     useEffect(() => {
-        setGuestsWithFoodPreferences(getGuestsWithFoodPreferencesInParty({ party }));
-    }, [party])
+        if (party) setGuestsWithFoodPreferences(getGuestsWithFoodPreferencesInParty({ party }));
+        if (parties) setGuestsWithFoodPreferences(getGuestsWithFoodPreferences({ parties }));
+
+    }, [party, parties])
 
     return (
         <Card
@@ -44,17 +54,17 @@ export const SpecialFoodCard = ({
             <CardHeader className="pb-3">
                 <CardDescription className="text-xs">Special Food Preferences</CardDescription>
                 <CardTitle className="flex flex-row gap-x-2 items-center">
-                    <span className={cn("text-4xl", guestsWithFoodPreferences > 0 && "text-amber-400")}>{guestsWithFoodPreferences}</span>
-                    <span className="text-xl text-stone-400">/ {party.guests.length}</span>
+                    <span className={cn("text-4xl", (guestsWithFoodPreferences || 0) > 0 && "text-amber-400")}>{guestsWithFoodPreferences}</span>
+                    <span className="text-xl text-stone-400">/ {totalGuests}</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="text-xs text-muted-foreground">
-                    Guests in this party that require special foods due to allergies.
+                    {party ? "Guests in this party that require special foods due to allergies." : "Guests that require special foods due to allergies."}
                 </div>
                 {guestsWithFoodPreferences === 0 ?
                     <div className="flex flex-col justify-center items-center mt-2">
-                        <span className="text-xs text-muted-foreground underline">No allergies in this party.</span>
+                        <span className="text-xs text-muted-foreground underline">{party ? "No allergies in this party." : "No special food preferences."}</span>
                     </div>
                     :
                     <Table>
@@ -65,20 +75,39 @@ export const SpecialFoodCard = ({
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {party.guests.map(guest => (
-                                guest.foodPreferences !== "" && (
-                                    <TableRow className="text-xs">
-                                        <TableCell>{guest.firstName} {guest.lastName}</TableCell>
-                                        <TableCell>{guest.foodPreferences}</TableCell>
-                                    </TableRow>
-                                )
-                            ))}
+                            {party ? (
+                                party?.guests.map(guest => (
+                                    guest.foodPreferences !== "" && (
+                                        <TableRow className="text-xs">
+                                            <TableCell>{guest.firstName} {guest.lastName}</TableCell>
+                                            <TableCell>{guest.foodPreferences}</TableCell>
+                                        </TableRow>
+                                    )
+                                ))
+                            ) : (
+                                parties?.map(party => (
+                                    party.guests.map(guest => (
+                                        guest.foodPreferences !== "" && (
+                                            <TableRow className="text-xs hover:cursor-pointer" onClick={() => router.push(`/admin/parties/${party.id}`)}>
+                                                <TableCell>
+                                                    <div className="font-medium">{guest.firstName} {guest.lastName}</div>
+                                                    <div className="text-xs text-muted-foreground md:inline">
+                                                        {party.email}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>{guest.foodPreferences}</TableCell>
+                                            </TableRow>
+                                        )
+                                    ))
+                                ))
+                            )}
+
                         </TableBody>
                     </Table>
                 }
             </CardContent>
             <CardFooter>
-                <Progress value={guestsWithFoodPreferences / party.guests.length * 100} aria-label="" />
+                <Progress value={(guestsWithFoodPreferences || 0) / (totalGuests || 0) * 100} aria-label="" />
             </CardFooter>
         </Card>
     )

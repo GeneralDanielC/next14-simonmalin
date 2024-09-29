@@ -12,7 +12,7 @@ export const getAlcoholFreeGuestsInParty = ({ party }: { party: PartyWithGuests 
     return guestsPreferAlcoholFree;
 }
 
-export const getParticipatingGuestsInParty = ({ party }: { party: PartyWithGuests }) => {
+export const getAttendingGuestsInParty = ({ party }: { party: PartyWithGuests }) => {
     let guestsParticipating = 0;
 
     party.guests.forEach(guest => {
@@ -34,4 +34,57 @@ export const getGuestsWithFoodPreferencesInParty = ({ party }: { party: PartyWit
     });
 
     return guestsWithFoodPreferences;
+}
+
+export const getAlcoholFreeGuests = ({ parties }: { parties: PartyWithGuests[] }) => {
+    let guestsPreferAlcoholFree = 0;
+
+    parties.map(party => {
+        party.guests.forEach(guest => {
+            if (guest.alcoholPreference) {
+                guestsPreferAlcoholFree += 1;
+            }
+        });
+    });
+
+    return guestsPreferAlcoholFree;
+}
+
+export const getAttendingGuests = ({ parties }: { parties: PartyWithGuests[] }) => {
+    let guestsParticipating = 0;
+
+    parties.map(party => {
+        party.guests.map(guest => {
+            if (guest.willAttend) {
+                guestsParticipating += 1;
+            }
+        })
+    })
+
+    return guestsParticipating;
+}
+
+export const getGuestsWithFoodPreferences = ({ parties }: { parties: PartyWithGuests[] }) => {
+    let guestsWithFoodPreferences = 0;
+
+    parties.map(party => {
+        party.guests.map(guest => {
+            if (guest.foodPreferences !== "") {
+                guestsWithFoodPreferences += 1;
+            }
+        })
+    })
+
+    return guestsWithFoodPreferences;
+}
+
+export const getTotalGuests = ({ parties }: { parties: PartyWithGuests[]}) => {
+    let totalGuests = 0;
+
+    parties.map(party => {
+        totalGuests += party.guests.length;
+    })
+    console.log(totalGuests);
+    
+    return totalGuests;
 }
