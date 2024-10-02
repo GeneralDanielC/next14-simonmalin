@@ -30,19 +30,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="sv">
-        <body className={cn(cormorant.className, "bg-beige min-h-screen flex flex-col")}>
-          <NavBar />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Toaster />
-          <footer className="w-full">
-            <div className="aspect-video relative flex items-center justify-center">
-              <Image src="/images/flowers.png" className="object-cover" fill alt="flowers" />
+    <html lang="sv">
+      <body className={cn(cormorant.className, "bg-beige min-h-screen flex flex-col")}>
+        <NavBar />
+        <main className="flex-grow">
+          {children}
+        </main>
+        <Toaster />
+        <footer className="w-full">
+          <div className="aspect-video relative flex items-center justify-center">
+            <Image src="/images/flowers.png" className="object-cover" fill alt="flowers" />
+          </div>
+          <div className="relative w-full mx-auto">
+            <div className="absolute bottom-1">
+              <div className="flex flex-col items-center backdrop-blur-md rounded-lg p-2">
+                <span className="text-xs">Utvecklad & Tillhandahållen av</span>
+                <span className="text-xs">NOLL2 SOLUTIONS AB</span>
+              </div>
             </div>
-          </footer>
-        </body>
-      </html>
+          </div>
+        </footer>
+      </body>
+    </html>
   );
 }

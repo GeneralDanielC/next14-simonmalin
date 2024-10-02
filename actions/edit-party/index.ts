@@ -7,8 +7,12 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { EditParty } from "./schema";
+import { currentUser } from "@/lib/auth";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
+    const user = await currentUser();
+
+    if (!user) return { error: "Unauthorized" }
 
     const { partyId, email, } = data;
     
@@ -25,6 +29,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             where: { id: partyId },
             data: {
                 email,
+                updatedAt: new Date(),
             },
             include: {
                 guests: true,

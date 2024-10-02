@@ -13,6 +13,9 @@ import { getPartyByEmail } from "@/data/data";
 import { sendRSVPConfirmation } from "@/lib/mail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
+    const user = await currentUser();
+
+    if (!user) return { error: "Unauthorized" }
 
     const {
         partyId,
@@ -36,7 +39,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 lastName,
                 foodPreferences,
                 alcoholPreference,
-                willAttend
+                willAttend,
+                updatedAt: new Date(),
             },
         });
 

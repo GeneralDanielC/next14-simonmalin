@@ -15,12 +15,14 @@ import { sendRSVPConfirmation } from "@/lib/mail";
 const handler = async (data: InputType): Promise<ReturnType> => {
 
     const { partyId, email, guests } = data;
-    
-    if (!partyId) return {error: "Something went wrong! Missing id."}
+
+    if (!partyId) return { error: "Something went wrong! Missing id." }
 
     if (!email) return { error: "Something went wrong! Missing email." }
 
     if (guests.length === 0) return { error: "Du måste ange åtminstone en gäst." }
+
+    if (new Date().getTime() > new Date(process.env.NEXT_PUBLIC_END_RSVP_DATE || "2025-01-01").getTime()) return { error: "Det är försent för att OSA!" }
 
     let party;
 
@@ -43,6 +45,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                         },
                     })),
                 },
+                updatedAt: new Date(),
             },
             include: {
                 guests: true,

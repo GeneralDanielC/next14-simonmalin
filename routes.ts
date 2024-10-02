@@ -22,6 +22,7 @@ export const publicRoutes = [
  * @type {string[]}
  */
 export const authRoutes = [
+    "/auth/client-login",
     "/auth/login",
     "/auth/register",
     "/auth/error",
@@ -41,3 +42,4 @@ export const apiAuthPrefix = "/api/auth";
  * @type {string}
  */
 export const DEFAULT_LOGIN_REDIRECT = "/admin/dashboard";
+export const DEFAULT_CLIENT_LOGIN_REDIRECT = "/";

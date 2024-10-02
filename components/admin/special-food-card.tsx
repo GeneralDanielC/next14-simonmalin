@@ -60,7 +60,7 @@ export const SpecialFoodCard = ({
             </CardHeader>
             <CardContent>
                 <div className="text-xs text-muted-foreground">
-                    {party ? "Guests in this party that require special foods due to allergies." : "Guests that require special foods due to allergies."}
+                    {party ? "Attending guests in this party who require special foods due to allergies." : "Guests attending who require special foods due to allergies."}
                 </div>
                 {guestsWithFoodPreferences === 0 ?
                     <div className="flex flex-col justify-center items-center mt-2">
@@ -77,7 +77,7 @@ export const SpecialFoodCard = ({
                         <TableBody>
                             {party ? (
                                 party?.guests.map(guest => (
-                                    guest.foodPreferences !== "" && (
+                                    guest.foodPreferences !== "" && guest.willAttend && (
                                         <TableRow className="text-xs">
                                             <TableCell>{guest.firstName} {guest.lastName}</TableCell>
                                             <TableCell>{guest.foodPreferences}</TableCell>
@@ -87,7 +87,7 @@ export const SpecialFoodCard = ({
                             ) : (
                                 parties?.map(party => (
                                     party.guests.map(guest => (
-                                        guest.foodPreferences !== "" && (
+                                        guest.foodPreferences !== "" && guest.willAttend && (
                                             <TableRow className="text-xs hover:cursor-pointer" onClick={() => router.push(`/admin/parties/${party.id}`)}>
                                                 <TableCell>
                                                     <div className="font-medium">{guest.firstName} {guest.lastName}</div>

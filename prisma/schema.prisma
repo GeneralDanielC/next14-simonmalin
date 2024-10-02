@@ -88,26 +88,32 @@ model TwoFactorConfirmation {
 }
 
 model Guest {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
   firstName         String
   lastName          String
   foodPreferences   String?
   alcoholPreference Boolean
   willAttend        Boolean
-  party             Party?  @relation(fields: [partyId], references: [id], onDelete: Cascade)
-  partyId           String? @db.ObjectId
+  party             Party?   @relation(fields: [partyId], references: [id], onDelete: Cascade)
+  partyId           String?  @db.ObjectId
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
 }
 
 model Party {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  email  String
-  guests Guest[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  guests    Guest[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Gift {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
   title           String
-  brand           String?
+  backstory       String?
   url             String?
   assignedToEmail String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
 }

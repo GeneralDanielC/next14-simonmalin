@@ -31,3 +31,9 @@ export const getParties = async () => {
 
     return parties;
 }
+
+export const getGifts = async () => {
+    const gifts = await db.gift.findMany();
+
+    return gifts;
+}

@@ -1,49 +1,13 @@
-import {
-    File,
-    ListFilter,
-} from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs"
 
 
 import { Navbar } from "../../_components/navbar";
-import { getParties, getPartyById } from "@/data/data"
+import { getGifts, getParties, getPartyById } from "@/data/data"
 
 import { SpecialFoodCard } from "@/components/admin/special-food-card"
 import { AttendanceCard } from "@/components/admin/attendance-card"
 import { AlcoholFreeCard } from "@/components/admin/alcohol-free-card"
-import { GuestTable } from "@/components/admin/guest-table"
-import { PartySettings } from "../_components/party-settings"
-
-{/* <div className="w-full h-full flex flex-col py-10">
-            <h1 className="text-2xl font-semibold">Dashboard</h1>
-            
-            Admin Dashboard
-            <p>Varna för dubbletter. Kolla på namn & efternamn.</p>
-            <p>Visa de som har fyllt i allergier / alkoholpreferens om de kommer eller inte. Kommer de inte bör dessa tas bort, det borde finnas en netto räknare som räknar alla som ska ha alkohol som kommer etc.</p>
-        </div> */}
+import { GuestsTabs } from "./_components/guests-tabs";
 
 const PartyPage = async ({ params
 }: { params: { partyId: string } }) => {
@@ -51,6 +15,7 @@ const PartyPage = async ({ params
 
     const party = await getPartyById(partyId);
     const parties = await getParties();
+    const gifts = await getGifts();
 
     if (!party) return <p>Something went wrong!</p>
 
@@ -71,7 +36,7 @@ const PartyPage = async ({ params
 
     return (
         <div className="w-full flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-            <Navbar breadcrumbs={breadcrumbs} parties={parties} />
+            <Navbar breadcrumbs={breadcrumbs} parties={parties} gifts={gifts} />
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
                 <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
                     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
@@ -79,97 +44,7 @@ const PartyPage = async ({ params
                         <AttendanceCard party={party} />
                         <AlcoholFreeCard party={party} />
                     </div>
-                    <Tabs defaultValue="guests">
-                        <div className="flex items-center">
-                            <TabsList>
-                                <TabsTrigger value="guests">Guests</TabsTrigger>
-                                <TabsTrigger value="settings">Settings</TabsTrigger>
-                            </TabsList>
-                            <div className="ml-auto flex items-center gap-2">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-7 gap-1 text-sm"
-                                        >
-                                            <ListFilter className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">Filter</span>
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuCheckboxItem checked>
-                                            Fulfilled
-                                        </DropdownMenuCheckboxItem>
-                                        <DropdownMenuCheckboxItem>
-                                            Declined
-                                        </DropdownMenuCheckboxItem>
-                                        <DropdownMenuCheckboxItem>
-                                            Refunded
-                                        </DropdownMenuCheckboxItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-7 gap-1 text-sm"
-                                    disabled
-                                >
-                                    <File className="h-3.5 w-3.5" />
-                                    <span className="sr-only sm:not-sr-only">Export</span>
-                                </Button>
-                            </div>
-                        </div>
-                        <TabsContent value="guests">
-                            <Card x-chunk="dashboard-05-chunk-3">
-                                <CardHeader className="px-7">
-                                    <div className="flex flex-row items-center justify-between">
-                                        <div className="flex flex-col gap-y-1">
-                                            <CardDescription className="text-xs">{party.email}</CardDescription>
-                                            <CardTitle>Guests</CardTitle>
-                                            <CardDescription className="flex flex-col gap-y-2">
-                                                Guests in this party.
-                                                <span className="text-xs italic">Tip: Tap a row to view and edit.</span>
-                                            </CardDescription>
-                                        </div>
-                                        <Button asChild variant={"secondary"}>
-                                            <a href={`mailto:${party.email}`}>
-                                                Email Party
-                                            </a>
-                                        </Button>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <GuestTable party={party} />
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-                        <TabsContent value="settings">
-                            <Card x-chunk="dashboard-05-chunk-3">
-                                <CardHeader className="px-7">
-                                    <div className="flex flex-row items-center justify-between">
-                                        <div className="flex flex-col gap-y-1">
-                                            <CardDescription className="text-xs">{party.email}</CardDescription>
-                                            <CardTitle>Settings</CardTitle>
-                                            <CardDescription className="flex flex-col gap-y-2">
-                                                Options for this party.
-                                            </CardDescription>
-                                        </div>
-                                        <Button asChild variant={"secondary"}>
-                                            <a href={`mailto:${party.email}`}>
-                                                Email Party
-                                            </a>
-                                        </Button>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <PartySettings party={party} />
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-                    </Tabs>
+                    <GuestsTabs party={party} />
                 </div>
             </main>
         </div>

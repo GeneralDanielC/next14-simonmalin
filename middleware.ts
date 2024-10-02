@@ -10,6 +10,8 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
+const CLIENT_LOGIN_COOKIE = "client_auth";
+
 // The default export of this module is a middleware function that handles authentication.
 export default auth((req, ctx) => {
     // Extracts the nextUrl object from the request (req).
@@ -18,16 +20,14 @@ export default auth((req, ctx) => {
     // Determines if the user is logged in by checking the presence of 'req.auth'.
     const isLoggedIn = !!req.auth;
 
+    const clientAuth = req.cookies.get(CLIENT_LOGIN_COOKIE);
+
     // Checks if the requested path starts with the API auth prefix, indicating an API auth route.
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     // Checks if the requested path is listed as a public route, meaning no authentication is needed.
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     // Checks if the requested path is listed as an auth route, which requires the user to be authenticated.
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-    const isRSVPRoute = nextUrl.pathname.startsWith('/osa/');
-
-    if (isRSVPRoute) return;
 
     // If the request is for an API auth route, no further action is taken (passes through).
     if (isApiAuthRoute) {
@@ -41,6 +41,32 @@ export default auth((req, ctx) => {
         }
         // If the user is not logged in, no action is taken (passes through).
         return;
+    }
+
+    // If the user is logged in (admin) and is trying to access a public route, no action is taken.
+    if (isLoggedIn && isPublicRoute) {
+        return;
+    }
+
+    // If the user is logged in (admin), but not client, and is trying to access a public route, no action is taken.
+    if (isLoggedIn && !clientAuth && isPublicRoute) {
+        return;
+    }
+
+    // If user tries accessing a protected route without the general password, redirect to client login
+    if (!clientAuth && isPublicRoute) {
+        let callbackUrl = nextUrl.pathname;
+
+
+        if (nextUrl.search) {
+            callbackUrl += nextUrl.search;
+        }
+
+        // URL-encodes the callback URL to be passed as a query parameter.
+        const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+
+        // Redirects to the login page with the callbackUrl query parameter.
+        return Response.redirect(new URL(`/auth/client-login?callbackUrl=${encodedCallbackUrl}`, nextUrl));
     }
 
     // If the user is not logged in and the route is not public, redirect to the login page with a callback URL.

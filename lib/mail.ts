@@ -1,6 +1,6 @@
 import { getUserByEmail } from "@/data/auth/user";
 import { PartyWithGuests } from "@/types";
-import { Guest, Party } from "@prisma/client";
+import { Gift, Guest, Party } from "@prisma/client";
 import { Resend } from "resend";
 
 // Create a new instance of the Resend class using the API key from environment variables.
@@ -52,20 +52,6 @@ export const sendVerificationEmail = async (
     });
 }
 
-export const sendSharedToNotificationEmail = async (
-    email: string,
-    listId: string,
-) => {
-    const link = `${domain}/lists/${listId}`;
-
-    await resend.emails.send({
-        from: "info@pakkit.app", // TODO: change domain to real domain to be able to send to all addresses. See video @ 07:54:00
-        to: email,
-        subject: `New List Shared`,
-        html: `<p>${email} shared a list with you. Click <a href="${link}">here</a> see the list.</p>`
-    });
-}
-
 export const sendRSVPConfirmation = async (
     email: string,
     party: PartyWithGuests,
@@ -94,6 +80,23 @@ export const sendRSVPConfirmation = async (
             <a href="${link}">Klicka här för att se och ändra dina val.</a>
         `
     });
+}
 
+export const sendNewAssignedGiftToClient = async (
+    email: string,
+    gift: Gift
+) => {
+    await resend.emails.send({
+        from: "info@pakkit.app", // change domain
+        to: email,
+        subject: `Malin & Simons bröllop // Present Bekräftelse`,
+        html: `
+            <h1>Tack!</h1>
+            <p>Dina val:</p>
+            <p style="font-weight: bold;">${gift.title}</p>
+            <p style="">${gift.backstory}</p>
+            <a href=${gift.url}>${gift.url}</a>
+            `
+    });
 }
 

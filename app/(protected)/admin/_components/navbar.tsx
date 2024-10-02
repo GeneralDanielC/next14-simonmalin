@@ -1,11 +1,13 @@
 "use client";
 
-import { SearchParties } from "@/components/search-parties";
+import { SearchParties } from "@/components/admin/search-parties";
+import { LogoutButton } from "@/components/auth/logout-button";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { PartyWithGuests } from "@/types";
+import { Gift } from "@prisma/client";
 import { Home, Package, PanelLeft, Settings, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link"
@@ -19,11 +21,13 @@ type Breadcrumb = {
 interface NavbarProps {
     breadcrumbs: Breadcrumb[],
     parties: PartyWithGuests[],
+    gifts: Gift[]
 }
 
 export const Navbar = ({ 
     breadcrumbs,
-    parties
+    parties,
+    gifts,
  }: NavbarProps) => {
 
     return (
@@ -94,7 +98,7 @@ export const Navbar = ({
                     ))}
                 </BreadcrumbList>
             </Breadcrumb>
-            <SearchParties parties={parties} />
+            <SearchParties parties={parties} gifts={gifts} />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -120,7 +124,7 @@ export const Navbar = ({
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem><LogoutButton>Logout</LogoutButton></DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </header>

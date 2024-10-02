@@ -45,11 +45,11 @@ export const FormSwitch = ({
                     <div className="flex flex-col justify-center">
                         <Label
                             htmlFor={id}
-                            className="text-xs"
+                            className={cn("text-xs", disabled && "text-stone-400")}
                         >
                             {label}
                         </Label>
-                        <span className="text-xs text-stone-400">{description}</span>
+                        <span className={cn("text-xs text-stone-400", disabled && "text-stone-300")}>{description}</span>
                     </div>
                 ) : null}
                 <div className="flex items-center">

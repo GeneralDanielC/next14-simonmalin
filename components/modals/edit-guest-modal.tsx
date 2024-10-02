@@ -31,6 +31,7 @@ export const EditGuestModal = ({
         onSuccess: (data) => {
             toast.success("Successfully saved!")
             formRef.current?.reset();
+            editGuestModal.onClose();
         },
         onError: (error) => {
             toast.error(error);
@@ -77,7 +78,7 @@ export const EditGuestModal = ({
                             id="alcoholPreference"
                             defaultChecked={guest.alcoholPreference}
                             label="Prefers Alcohol Free Beverage"
-                            description="If the guest prefers alcohol-free beverages."
+                            description="If the guest prefers alcohol-free beverage at the wedding."
                             onChange={(checked) => setAlcoholPreference(checked)}
                             errors={fieldErrors}
                         />
@@ -85,7 +86,7 @@ export const EditGuestModal = ({
                             id="willAttend"
                             defaultChecked={guest.willAttend}
                             label="Attendance"
-                            description="If the guest intends to attend the wedding."
+                            description="If the guest intend to attend the wedding."
                             onChange={(checked) => setWillAttend(checked)}
                             errors={fieldErrors}
                         />

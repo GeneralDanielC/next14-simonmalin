@@ -45,7 +45,7 @@ export const AttendanceCard = ({
             </CardHeader>
             <CardContent>
                 <div className="text-xs text-muted-foreground">
-                    {party ? "Guests in this party that intend to attend the wedding." : "Guests that intend to attend the wedding."}
+                    {party ? "Guests in this party who intend to attend the wedding." : "Guests who intend to attend the wedding."}
                 </div>
             </CardContent>
             <CardFooter>

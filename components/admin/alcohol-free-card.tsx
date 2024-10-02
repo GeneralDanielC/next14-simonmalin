@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 import { PartyWithGuests } from "@/types"
-import { getAlcoholFreeGuests, getAlcoholFreeGuestsInParty, getParticipatingGuestsInParty, getTotalGuests } from "@/lib/parties"
+import { getAlcoholFreeGuests, getAlcoholFreeGuestsInParty, getTotalGuests } from "@/lib/parties"
 
 import {
     Card,
@@ -37,7 +37,7 @@ export const AlcoholFreeCard = ({
     return (
         <Card x-chunk="dashboard-05-chunk-2">
             <CardHeader className="pb-2">
-                <CardDescription className="text-xs">Alcohol Free</CardDescription>
+                <CardDescription className="text-xs">Alcohol-Free</CardDescription>
                 <CardTitle className="flex flex-row gap-x-2 items-center">
                     <span className="text-4xl">{alcoholFreeGuests}</span>
                     <span className="text-xl text-stone-400">/ {totalGuests}</span>
@@ -45,7 +45,7 @@ export const AlcoholFreeCard = ({
             </CardHeader>
             <CardContent>
                 <div className="text-xs text-muted-foreground">
-                    {party ? "Guests in this party that prefer alcohol free beverages." : "Guests that prefer alcohol free beverages."}
+                    {party ? "Attending guests in this party who prefer alcohol-free beverages." : "Guests attending who prefer alcohol-free beverages."}
                 </div>
             </CardContent>
             <CardFooter>

@@ -2,17 +2,20 @@
 
 import { EditGuestModal } from "@/components/modals/edit-guest-modal";
 import { PartyWithGuests } from "@/types";
-import { Guest } from "@prisma/client";
+import { Gift, Guest } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { EditGiftModal } from "../modals/edit-gift-modal";
 
 interface ModalProviderProps {
     party?: PartyWithGuests,
     guest?: Guest,
+    gift?: Gift,
 }
 
 export const ModalProvider = ({
     party,
-    guest
+    guest,
+    gift,
 }: ModalProviderProps) => {
     const [isMounted, setIsMounted] = useState(false);
 
@@ -27,6 +30,7 @@ export const ModalProvider = ({
     return (
         <>
             {party && guest && <EditGuestModal guest={guest} party={party} />}
+            {gift && <EditGiftModal gift={gift} />}
         </>
     )
 
