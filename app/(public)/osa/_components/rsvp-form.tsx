@@ -32,11 +32,13 @@ export type Guest = {
 interface RSVPFormProps {
     party?: PartyWithGuests
     mode?: 'edit' | 'rsvp' | 'editEntireParty',
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const RSVPForm = ({
     party,
-    mode = "rsvp"
+    mode = "rsvp",
+    setSuccess
 }: RSVPFormProps) => {
     const formRef = useRef<ElementRef<"form">>(null);
     const { pending } = useFormStatus();
@@ -93,8 +95,9 @@ export const RSVPForm = ({
 
     const { execute: executeRSVP, fieldErrors: fieldErrorsRSVP } = useAction(createRSVP, {
         onSuccess: (data) => {
-            toast.success(`Tack! Det är nu inskickat! Håll koll på mejlen för bekräftelse.`);
+            toast.success(`Tack! Dina val är inskickade! Håll koll på mejlen för bekräftelse.`);
             formRef.current?.reset();
+            setSuccess(true);
             setGuests([]);
         },
         onError: (error) => {
@@ -104,8 +107,9 @@ export const RSVPForm = ({
 
     const { execute: executeEditRSVP, fieldErrors: fieldErrorsEdit } = useAction(editRSVP, {
         onSuccess: (data) => {
-            toast.success(`Tack! Dina val är nu sparade! Håll koll på mejlen för bekräftelse.`);
+            toast.success(`Tack! Dina val är sparade! Håll koll på mejlen för bekräftelse.`);
             formRef.current?.reset();
+            setSuccess(true);
             setGuests([]);
         },
         onError: (error) => {
@@ -280,7 +284,7 @@ export const RSVPForm = ({
                 <FormInput
                     id="email"
                     defaultValue={party?.email}
-
+                    type="email"
                     placeholder="E-postadress"
                     errors={fieldErrorsRSVP || fieldErrorsEdit}
                 />

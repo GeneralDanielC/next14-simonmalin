@@ -100,3 +100,21 @@ export const sendNewAssignedGiftToClient = async (
     });
 }
 
+export const sendGiftConfirmation = async (
+    email: string,
+    gift: Gift
+) => {
+    await resend.emails.send({
+        from: "info@pakkit.app", // change domain
+        to: email,
+        subject: `Malin & Simons bröllop // Present Bekräftelse`,
+        html: `
+            <h1>Tack! Presenten är nu gömd från andra gäster.</h1>
+            <p>Kontakta på X@X.X om du inte längre vill köpa denna present.</p>
+            <br/>
+            <p style="font-weight: bold;">${gift.title}</p>
+            <p style="">${gift.backstory}</p>
+            <a href=${gift.url}>${gift.url}</a>
+            `
+    });
+}

@@ -37,18 +37,57 @@ export default function RootLayout({
           {children}
         </main>
         <Toaster />
-        <footer className="w-full">
-          <div className="aspect-video relative flex items-center justify-center">
-            <Image src="/images/flowers.png" className="object-cover" fill alt="flowers" />
-          </div>
-          <div className="relative w-full mx-auto">
-            <div className="absolute bottom-1">
-              <div className="flex flex-col items-center backdrop-blur-md rounded-lg p-2">
-                <span className="text-xs">Utvecklad & Tillhandahållen av</span>
-                <span className="text-xs">NOLL2 SOLUTIONS AB</span>
+        <footer className="w-full flex flex-col">
+          <div>
+            <div className="aspect-video relative flex items-center justify-center max-h-72 w-full bottom-0">
+              <div className="relative w-full h-full">
+                <Image
+                  src="/images/flowers.png"
+                  className="object-contain"
+                  fill
+                  alt="flowers"
+                />
+              </div>
+              <div className="relative hidden md:flex w-full h-full">
+                <Image
+                  src="/images/flowers.png"
+                  className="object-contain"
+                  fill
+                  alt="flowers"
+                />
+              </div>
+              <div className="relative hidden lg:flex w-full h-full">
+                <Image
+                  src="/images/flowers.png"
+                  className="object-contain"
+                  fill
+                  alt="flowers"
+                />
+              </div>
+              <div className="relative hidden xl:flex w-full h-full">
+                <Image
+                  src="/images/flowers.png"
+                  className="object-contain"
+                  fill
+                  alt="flowers"
+                />
+              </div>
+              <div className="relative hidden 2xl:flex w-full h-full">
+                <Image
+                  src="/images/flowers.png"
+                  className="object-contain"
+                  fill
+                  alt="flowers"
+                />
               </div>
             </div>
           </div>
+          {/* <div className="w-full">
+            <div className="flex gap-x-1 italic">
+              <span className="text-xs">Utvecklad & Tillhandahållen av</span>
+              <span className="text-xs font-semibold">NOLL2 SOLUTIONS AB</span>
+            </div>
+          </div> */}
         </footer>
       </body>
     </html>

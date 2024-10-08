@@ -51,7 +51,7 @@ export const ModuleSection = () => {
 
   return (
     <div className="my-24 flex flex-col items-center justify-center w-full h-full overflow-hidden">
-      <motion.div className="flex flex-col flex-1 p-5 lg:px-10 gap-4 w-full max-w-screen-lg">
+      <motion.div className="flex flex-col flex-1 p-5 lg:px-10 gap-4 w-full max-w-screen-md">
         {/* Card 1 */}
         <motion.div
           className="flex flex-row h-32 gap-4"

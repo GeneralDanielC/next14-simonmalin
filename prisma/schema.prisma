@@ -117,3 +117,13 @@ model Gift {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
 }
+
+model GalleryPost {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  email     String
+  comment   String?
+  imgUrl    String
+  hidden    Boolean
+  createdAt DateTime @default(now())
+}
