@@ -29,6 +29,8 @@ export default auth((req, ctx) => {
     // Checks if the requested path is listed as an auth route, which requires the user to be authenticated.
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    const isEditRSVPRoute = nextUrl.pathname.includes("/osa/")
+
     // If the request is for an API auth route, no further action is taken (passes through).
     if (isApiAuthRoute) {
         return;
@@ -54,7 +56,7 @@ export default auth((req, ctx) => {
     }
 
     // If user tries accessing a protected route without the general password, redirect to client login
-    if (!clientAuth && isPublicRoute) {
+    if ((!clientAuth && isPublicRoute) || (!clientAuth && isEditRSVPRoute)) {
         let callbackUrl = nextUrl.pathname;
 
 

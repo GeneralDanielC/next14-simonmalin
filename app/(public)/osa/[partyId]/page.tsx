@@ -12,8 +12,6 @@ const OsaPage = async ({
 }: { params: { partyId: string } }) => {
     const { partyId } = params;
     const party = await getPartyById(partyId);
-    console.log(partyId);
-
 
     if (!party) {
         return (
