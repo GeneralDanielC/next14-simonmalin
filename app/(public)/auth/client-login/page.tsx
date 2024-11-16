@@ -13,18 +13,16 @@ import { Skew } from "@/components/skew";
 const LoginPage = () => {
     return (
         <div className="h-full w-full">
-            <HeroSection className="pb-24" />
-            <Skew
-                backgroundColor="bg-sky-600/10"
-            >
-                <div className="w-full">
-                    <CardTitle>Logga in</CardTitle>
-                    <CardDescription>För att komma åt sidan behöver du ange lösenordet.</CardDescription>
+            <HeroSection heading="Logga in" />
+            <div className="px-8 flex justify-center items-center">
+                <div className="max-w-screen-md px-8 bg-stone-400/10 rounded-xl shadow-lg py-6">
+                    <CardTitle className="text-xl">Logga in</CardTitle>
+                    <CardDescription>Lösenordet finns angivet på inbjudan.</CardDescription>
                     <div className="mt-4">
                         <ClientLoginForm />
                     </div>
                 </div>
-            </Skew>
+            </div>
         </div>
     );
 }

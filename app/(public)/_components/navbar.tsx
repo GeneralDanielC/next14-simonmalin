@@ -51,7 +51,7 @@ export const NavBar = () => {
                         <SheetContent className="w-full p-0">
                             <div className="w-full h-full bg-beige flex flex-col gap-y-4 justify-center items-center font-semibold sm:w-full">
                                 {navItems.map((item, index) => (
-                                    <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-lime-900/30 hover:text-white animate transition">
+                                    <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-lime-900/30 hover:text-green animate transition">
                                         {/* <span>0{index + 1}</span> */}
                                         <span className="uppercase">{item.title}</span>
                                     </Link>
