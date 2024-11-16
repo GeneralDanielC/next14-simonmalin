@@ -11,6 +11,9 @@ import { FormSwitch } from "@/components/form/form-switch";
 import { FormSubmit } from "@/components/form/form-submit";
 import { ElementRef, useRef, useState } from "react";
 import { editGuestInParty } from "@/actions/edit-guest-in-party";
+import { deleteGuest } from "@/actions/delete-guest";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 interface EditGuestModalProps {
     party: PartyWithGuests,
@@ -26,6 +29,22 @@ export const EditGuestModal = ({
 
     const [alcoholPreference, setAlcoholPreference] = useState<boolean>(guest.alcoholPreference);
     const [willAttend, setWillAttend] = useState<boolean>(guest.willAttend);
+    const [willAttendNuptials, setWillAttendNuptials] = useState<boolean>(guest.willAttendNuptials);
+    const [willAttendReception, setWillAttendReception] = useState<boolean>(guest.willAttendReception);
+
+    const { execute: executeDelete } = useAction(deleteGuest, {
+        onSuccess: (data) => {
+            toast.success(`Successfully deleted ${data.firstName} ${data.lastName} from party.`)
+            editGuestModal.onClose();
+        },
+        onError: (error) => {
+            toast.error(error)
+        }
+    })
+
+    const handleDelete = () => {
+        executeDelete({ id: guest.id })
+    }
 
     const { execute, fieldErrors } = useAction(editGuestInParty, {
         onSuccess: (data) => {
@@ -52,7 +71,9 @@ export const EditGuestModal = ({
             lastName,
             foodPreferences,
             alcoholPreference,
-            willAttend
+            willAttend,
+            willAttendNuptials,
+            willAttendReception
         })
 
     }
@@ -90,9 +111,46 @@ export const EditGuestModal = ({
                             onChange={(checked) => setWillAttend(checked)}
                             errors={fieldErrors}
                         />
+                        <FormSwitch
+                            id="willAttendNuptials"
+                            defaultChecked={guest.willAttendNuptials}
+                            label="Attendance Nuptials"
+                            description="If the guest intend to attend the nuptials."
+                            onChange={(checked) => setWillAttendNuptials(checked)}
+                            errors={fieldErrors}
+                        />
+                        <FormSwitch
+                            id="willAttendReception"
+                            defaultChecked={guest.willAttendReception}
+                            label="Attendance Reception"
+                            description="If the guest intend to attend the reception."
+                            onChange={(checked) => setWillAttendReception(checked)}
+                            errors={fieldErrors}
+                        />
                         <FormSubmit variant="secondary" className="border border-black mt-3">Save</FormSubmit>
                     </div>
                 </form>
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button variant="destructive" className="w-full">Delete</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>This action cannot be undone. This will permanently delete the guest from our servers.</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <form
+                            action={handleDelete}
+                        >
+                            <AlertDialogAction asChild>
+                                <FormSubmit variant="destructive" className="w-full">Delete</FormSubmit>
+                            </AlertDialogAction>
+                        </form>
+
+                    </AlertDialogContent>
+                </AlertDialog>
+
             </DialogContent>
         </Dialog>
     )

@@ -5,6 +5,8 @@ import { Countdown } from "@/components/countdown";
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { calculateTime } from "@/lib/calculate-time";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, ExternalLink, SquareArrowOutUpRight } from "lucide-react";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_APP_MAPBOX_KEY || "";
 
@@ -51,8 +53,9 @@ export const ModuleSection = () => {
 
   return (
     <div className="my-24 flex flex-col items-center justify-center w-full h-full overflow-hidden">
+      <h1 className="text-4xl mb-10">Lite Information</h1>
       <motion.div className="flex flex-col flex-1 p-5 lg:px-10 gap-4 w-full max-w-screen-md">
-        {/* Card 1 */}
+        {/* Row 1 */}
         <motion.div
           className="flex flex-row h-32 gap-4"
           initial="hidden"
@@ -61,20 +64,31 @@ export const ModuleSection = () => {
           variants={variants}
           custom={0} // Custom index for stagger effect
         >
-          <motion.div className="bg-rose-300/20 flex flex-col justify-center items-center p-2 flex-1 rounded-xl shadow-lg h-full">
-            <Countdown targetDate={new Date("2025-05-24 00:00:00")} />
-          </motion.div>
-          <motion.div className="bg-stone-400/10 w-32 rounded-xl flex flex-col gap-y-2 shadow-lg p-4">
-            <p className="text-xs font-semibold">Sista dagen att OSA</p>
-            <div className="flex flex-row gap-x-2 items-baseline">
-              <p className="text-xl">{Math.abs(calculateTime({ diffMs }).days)}</p>
-              <p className="text-xs">dagar kvar</p>
+          {/* Card 1 */}
+          <motion.div className="bg-stone-400/10 flex flex-col justify-between p-4 flex-1 rounded-xl shadow-lg h-full">
+            <div className="flex flex-col">
+              <span className="text-xl">Räkna med mig!</span>
+              <span className="text-stone-500/80">{Math.abs(calculateTime({ diffMs }).days)} dagar kvar</span>
             </div>
-            <p className="text-xs">{endRSVPDateString}</p>
+            <div className="flex flex-row justify-between items-center text-stone-500/80">
+              <span>Till O.S.A.</span>
+              <ArrowRight className="size-5" />
+            </div>
+          </motion.div>
+          {/* Card 2 */}
+          <motion.div className="bg-stone-400/10 w-32 flex flex-col justify-between p-4 flex-1 rounded-xl shadow-lg h-full">
+            <div className="flex flex-col">
+              <span className="text-xl">Toastmadames</span>
+              <span className="text-stone-500/80"></span>
+            </div>
+            <div className="flex flex-row justify-between items-center text-stone-500/80">
+              <span>Till sidan.</span>
+              <ArrowRight className="size-5" />
+            </div>
           </motion.div>
         </motion.div>
 
-        {/* Card 2 */}
+        {/* Row 2 */}
         <motion.div
           className="flex flex-row h-32 gap-4"
           initial="hidden"
@@ -83,14 +97,15 @@ export const ModuleSection = () => {
           variants={variants}
           custom={1} // Stagger second card
         >
-          <motion.div className="bg-stone-400/10 w-32 flex-none flex flex-col gap-y-2 rounded-xl shadow-lg p-4">
-            <p className="text-xs font-semibold">Tid & Plats</p>
-            <div className="text-xs">
-              <p className="text-lg">11:00</p>
+          {/* Card 3 */}
+          <motion.div className="bg-stone-400/10 max-w-32 flex flex-col justify-between p-4 flex-1 rounded-xl shadow-lg h-full">
+            <div className="flex flex-col">
+              <span className="text-xl">Tid & Plats</span>
+              <span className="text-stone-500/80"></span>
             </div>
-            <div className="text-xs">
-              <p>Honungsgatan 40</p>
-              <p>752 55 Uppsala</p>
+            <div className="flex flex-row justify-between items-center text-stone-500/80">
+              <span>Visa.</span>
+              <ArrowRight className="size-5" />
             </div>
           </motion.div>
           <motion.div className="bg-stone-400/10 flex-1 rounded-xl shadow-lg border-4 border-stone-400/10 overflow-hidden">

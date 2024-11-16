@@ -29,14 +29,14 @@ export const NavBar = () => {
         <nav className="w-full flex justify-center items-center py-5 fixed z-50">
             <Link href="/" className="">
                 <div className={cn(southland.className, "text-6xl flex h-full items-center backdrop-blur-sm bg-beige/50 rounded-2xl pt-5 pb-2 px-5")}>
-                    <span className="text-rose-300">
-                        M
+                    <span className="">
+                        Malin
                     </span>
-                    <span className="text-stone-500">
+                    <span className="">
                         &
                     </span>
-                    <span className="text-dark-green">
-                        S
+                    <span className="">
+                        Simon
                     </span>
                 </div>
             </Link>
@@ -44,14 +44,14 @@ export const NavBar = () => {
                 <div className="fixed right-5 top-8">
                     <Sheet open={openNavbar} onOpenChange={() => setOpenNavbar(!openNavbar)}>
                         <SheetTrigger asChild>
-                            <Button className="rounded-xl size-12 backdrop-blur-md bg-transparent shadow-none text-stone-400">
+                            <Button className="rounded-xl size-12 backdrop-blur-md bg-transparent shadow-none text-stone-400 hover:bg-light-beige">
                                 <MenuIcon className="size-16" />
                             </Button>
                         </SheetTrigger>
                         <SheetContent className="w-full p-0">
-                            <div className="w-full h-full bg-orange-700/30 flex flex-col gap-y-4 justify-center items-center font-semibold sm:w-full">
+                            <div className="w-full h-full bg-beige flex flex-col gap-y-4 justify-center items-center font-semibold sm:w-full">
                                 {navItems.map((item, index) => (
-                                    <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-orange-900/30 hover:text-white animate transition">
+                                    <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-lime-900/30 hover:text-white animate transition">
                                         {/* <span>0{index + 1}</span> */}
                                         <span className="uppercase">{item.title}</span>
                                     </Link>

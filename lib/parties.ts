@@ -26,6 +26,30 @@ export const getAttendingGuestsInParty = ({ party }: { party: PartyWithGuests })
     return guestsParticipating;
 }
 
+export const getAttendingNuptialsInParty = ({ party }: { party: PartyWithGuests }) => {
+    let guestsParticipating = 0;
+
+    party.guests.forEach(guest => {
+        if (guest.willAttendNuptials) {
+            guestsParticipating++;
+        }
+    });
+
+    return guestsParticipating;
+}
+
+export const getAttendingReceptionInParty = ({ party }: { party: PartyWithGuests }) => {
+    let guestsParticipating = 0;
+
+    party.guests.forEach(guest => {
+        if (guest.willAttendReception) {
+            guestsParticipating++;
+        }
+    });
+
+    return guestsParticipating;
+}
+
 export const getGuestsWithFoodPreferencesInParty = ({ party }: { party: PartyWithGuests }) => {
     let guestsWithFoodPreferences = 0;
 
@@ -62,6 +86,34 @@ export const getAttendingGuests = ({ parties }: { parties: PartyWithGuests[] }) 
     parties.map(party => {
         party.guests.map(guest => {
             if (guest.willAttend) {
+                guestsParticipating++;
+            }
+        })
+    })
+
+    return guestsParticipating;
+}
+
+export const getAttendingNuptials = ({ parties }: { parties: PartyWithGuests[] }) => {
+    let guestsParticipating = 0;
+
+    parties.map(party => {
+        party.guests.map(guest => {
+            if (guest.willAttendNuptials) {
+                guestsParticipating++;
+            }
+        })
+    })
+
+    return guestsParticipating;
+}
+
+export const getAttendingReception = ({ parties }: { parties: PartyWithGuests[] }) => {
+    let guestsParticipating = 0;
+
+    parties.map(party => {
+        party.guests.map(guest => {
+            if (guest.willAttendReception) {
                 guestsParticipating++;
             }
         })

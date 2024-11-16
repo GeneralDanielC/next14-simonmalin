@@ -51,6 +51,19 @@ export const GuestTable = ({
                         </TableHead>
                         <TableHead className="text-center">Alcohol Free</TableHead>
                         <TableHead className="text-center">Attending</TableHead>
+
+                        <TableHead className="text-center">
+                            <div className="flex flex-col w-full">
+                                <span>Attending</span>
+                                <span className="text-xs italic">Nuptials</span>
+                            </div>
+                        </TableHead>
+                        <TableHead className="text-center">
+                            <div className="flex flex-col w-full">
+                                <span>Attending</span>
+                                <span className="text-xs italic">Reception</span>
+                            </div>
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -74,6 +87,16 @@ export const GuestTable = ({
                                 <TableCell className="text-center">
                                     <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttend ? "secondary" : "outline"}>
                                         {guest.willAttend ? "Yes" : "No"}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell className="text-center">
+                                    <Badge className={cn("text-xs", guest.willAttendNuptials ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttendNuptials ? "secondary" : "outline"}>
+                                        {guest.willAttendNuptials ? "Yes" : "No"}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell className="text-center">
+                                    <Badge className={cn("text-xs", guest.willAttendReception ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttendReception ? "secondary" : "outline"}>
+                                        {guest.willAttendReception ? "Yes" : "No"}
                                     </Badge>
                                 </TableCell>
                             </TableRow>

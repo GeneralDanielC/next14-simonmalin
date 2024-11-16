@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant, Nunito } from "next/font/google";
+import { Cormorant_SC, Nunito } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
 import { southland } from "@/lib/fonts";
@@ -11,7 +11,7 @@ import Link from "next/link";
 import { NavBar } from "./_components/navbar";
 import { Toaster } from "sonner";
 
-const cormorant = Cormorant({ subsets: ["latin"] });
+const cormorant = Cormorant_SC({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sv">
-      <body className={cn(cormorant.className, "bg-beige min-h-screen flex flex-col")}>
+      <body className={cn(cormorant.className, "font-light bg-beige min-h-screen flex flex-col")}>
         <NavBar />
         <main className="flex-grow">
           {children}

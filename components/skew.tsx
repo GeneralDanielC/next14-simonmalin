@@ -6,6 +6,7 @@ interface SkewProps {
     direction?: 'tb' | 'bt',
     align?: 'left' | 'right', //property to set where the main content should be
     backgroundColor: string,
+    card: boolean,
 }
 
 export const Skew = ({
@@ -14,17 +15,24 @@ export const Skew = ({
     direction = 'tb',
     align = 'left',
     backgroundColor,
+    card = false,
 }: SkewProps) => {
     return (
         <div className={cn(backgroundColor, direction === 'tb' ? "skew-y-6" : "-skew-y-6", "p-8 flex items-center")}>
-            <div className={cn(direction === 'tb' ? "-skew-y-6" : "skew-y-6", align === 'left' ? "flex-row" : "flex-row-reverse", !secondaryChildren && "w-full", "flex justify-around items-center")}>
-                <div className={cn(direction === 'tb' ? "skew-y-6" : "-skew-y-6", "bg-beige w-96 px-6 pb-10 pt-6 rounded-xl shadow-lg")}>
-                    <div className={cn(direction === 'tb' ? "-skew-y-6" : "skew-y-6")}>
-                        {children}
+            {card ? (
+                <div className={cn(direction === 'tb' ? "-skew-y-6" : "skew-y-6", align === 'left' ? "flex-row" : "flex-row-reverse", !secondaryChildren && "w-full", "flex justify-around items-center")}>
+                    <div className={cn(direction === 'tb' ? "skew-y-6" : "-skew-y-6", "bg-beige w-96 px-6 pb-10 pt-6 rounded-xl shadow-lg")}>
+                        <div className={cn(direction === 'tb' ? "-skew-y-6" : "skew-y-6")}>
+                            {children}
+                        </div>
                     </div>
+                    {secondaryChildren && (secondaryChildren)}
                 </div>
-                {secondaryChildren && (secondaryChildren)}
-            </div>
+            ) : (
+                <div className={cn(direction === 'tb' ? "-skew-y-6" : "skew-y-6", "w-full text-center")}>
+                    {children}
+                </div>
+            )}
         </div>
     )
 }

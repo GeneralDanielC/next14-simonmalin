@@ -37,10 +37,12 @@ export const NewGuestForm = ({
 
     const [alcoholPreference, setAlcoholPreference] = useState<boolean>(false);
     const [willAttend, setWillAttend] = useState<boolean>(false);
+    const [willAttendNuptials, setWillAttendNuptials] = useState<boolean>(false);
+    const [willAttendReception, setWillAttendReception] = useState<boolean>(false);
 
     const { execute, fieldErrors } = useAction(createGuest, {
         onSuccess: (data) => {
-            toast.success("Successfully created gift.")
+            toast.success("Successfully created guest.")
             formRef.current?.reset();
             setOpen(false);
         },
@@ -60,7 +62,9 @@ export const NewGuestForm = ({
             lastName,
             foodPreferences,
             alcoholPreference,
-            willAttend
+            willAttend,
+            willAttendNuptials,
+            willAttendReception
         });
     }
 
@@ -97,6 +101,22 @@ export const NewGuestForm = ({
                             label="Attendance"
                             description="If the guest intend to attend the wedding."
                             onChange={(checked) => setWillAttend(checked)}
+                            errors={fieldErrors}
+                        />
+                        <FormSwitch
+                            id="willAttendNuptials"
+                            defaultChecked={willAttendNuptials}
+                            label="Attend Nuptials"
+                            description="If the guest intend to attend the nuptials."
+                            onChange={(checked) => setWillAttendNuptials(checked)}
+                            errors={fieldErrors}
+                        />
+                        <FormSwitch
+                            id="willAttendReception"
+                            defaultChecked={willAttendReception}
+                            label="Attendance"
+                            description="If the guest intend to attend the reception."
+                            onChange={(checked) => setWillAttendReception(checked)}
                             errors={fieldErrors}
                         />
                         <FormSubmit variant="success">Save</FormSubmit>

@@ -8,5 +8,7 @@ export const EditGuestInParty = z.object({
     foodPreferences: z.optional(z.string()),
     alcoholPreference: z.boolean(),
     willAttend: z.boolean(),
+    willAttendNuptials: z.boolean(),
+    willAttendReception: z.boolean(),
 });
 

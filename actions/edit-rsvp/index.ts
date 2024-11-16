@@ -24,6 +24,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (new Date().getTime() > new Date(process.env.NEXT_PUBLIC_END_RSVP_DATE || "2025-01-01").getTime()) return { error: "Det är försent för att OSA!" }
 
+    // Validation & Correction
+    guests.map(guest => {
+        if (!guest.willAttend) {
+            guest.willAttendNuptials = false
+            guest.willAttendReception = false
+        }
+    })
+
     let party;
 
     try {
@@ -42,6 +50,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                             foodPreferences: guest.foodPreferences,
                             alcoholPreference: guest.alcoholPreference,
                             willAttend: guest.willAttend,
+                            willAttendNuptials: guest.willAttendNuptials,
+                            willAttendReception: guest.willAttendReception
                         },
                     })),
                 },

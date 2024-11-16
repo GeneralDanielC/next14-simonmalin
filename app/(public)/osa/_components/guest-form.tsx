@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Guest } from "./rsvp-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 
@@ -15,9 +15,11 @@ interface GuestFormProps {
     dialogDescription: string
     submitText: string
     children: React.ReactNode
-    handleSubmit: () => void
+    handleSubmit: (guest?: Guest) => void
+    handleOnOpen?: () => void
     guest: Guest
     setGuest: React.Dispatch<React.SetStateAction<Guest>>
+    edit?: boolean
 }
 
 export const GuestForm = ({
@@ -26,13 +28,31 @@ export const GuestForm = ({
     submitText,
     children,
     handleSubmit,
+    handleOnOpen,
     guest,
-    setGuest
+    setGuest,
+    edit = false
 }: GuestFormProps) => {
     const [open, setOpen] = useState(false);
 
+    const [editingGuest, setEditingGuest] = useState<Guest>(guest);
+
+    useEffect(() => {
+        setEditingGuest(guest); // Reset editingGuest state when guest prop changes        
+    }, [guest]);
+
+    const handleSave = () => {
+        setGuest(editingGuest); // Only update parent state here
+        setOpen(false);
+
+        edit ? handleSubmit(guest) : handleSubmit();
+    };
+
     return (
-        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+        <Dialog open={open} onOpenChange={() => {
+            setOpen(!open);
+            !open && handleOnOpen && handleOnOpen();
+        }}>
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
@@ -45,57 +65,163 @@ export const GuestForm = ({
                     <div className="w-full flex flex-row gap-x-2">
                         <FormInput
                             id="firstName"
-                            defaultValue={guest.firstName}
-                            onChange={(e) => setGuest({ ...guest, firstName: e.target.value })}
+                            defaultValue={edit ? editingGuest.firstName : guest.firstName}
+                            onChange={(e) =>
+                                edit ? setEditingGuest({
+                                    ...editingGuest,
+                                    firstName: e.target.value
+                                }) : setGuest({
+                                    ...guest,
+                                    firstName: e.target.value
+                                })}
                             placeholder="Förnamn"
                         />
                         <FormInput
                             id="lastName"
-                            defaultValue={guest.lastName}
-                            onChange={(e) => setGuest({ ...guest, lastName: e.target.value })}
-                            placeholder="Förnamn"
+                            defaultValue={edit ? editingGuest.lastName : guest.lastName}
+                            onChange={(e) =>
+                                edit ? setEditingGuest({
+                                    ...editingGuest,
+                                    lastName: e.target.value
+                                }) : setGuest({
+                                    ...guest,
+                                    lastName: e.target.value
+                                })}
+                            placeholder="Efternamn"
                         />
                     </div>
                     <FormInput
                         id="foodPreferences"
-                        defaultValue={guest.foodPreferences}
-                        disabled={!guest.willAttend}
-                        onChange={(e) => setGuest({ ...guest, foodPreferences: e.target.value })}
+                        defaultValue={edit ? editingGuest.foodPreferences : guest.foodPreferences}
+                        disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
+                        onChange={(e) =>
+                            edit ? setEditingGuest({
+                                ...editingGuest,
+                                foodPreferences: e.target.value
+                            }) : setGuest({
+                                ...guest,
+                                foodPreferences: e.target.value
+                            })}
                         placeholder="Allergier & Specialkost"
-                        className={cn("disabled:opacity-100 disabled:text-stone-400/70", !guest.willAttend && "placeholder:text-stone-400/70")}
+                        className={cn("disabled:opacity-100 disabled:text-stone-400/70", (edit ? !editingGuest.willAttend : !guest.willAttend) && "placeholder:text-stone-400/70")}
                     />
                     <div className={cn("flex flex-row justify-between items-center bg-stone-400/10 rounded-xl shadow-sm px-3 py-2")}>
                         <div className="flex flex-col justify-center">
-                            <Label htmlFor="alkoholfritt" className={cn(!guest.willAttend && "text-stone-400/70")}>Alkoholfritt</Label>
-                            <span className={cn("text-xs", !guest.willAttend && "text-stone-400/70")}>Om alkoholfri dryck önskas.</span>
+                            <Label htmlFor="alkoholfritt" className={cn((edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Alkoholfritt</Label>
+                            <span className={cn("text-xs", (edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Alkoholfri dryck önskas.</span>
                         </div>
                         <Switch
                             id="alkoholfritt"
-                            defaultChecked={guest.alcoholPreference}
-                            disabled={!guest.willAttend}
-                            onCheckedChange={(checked) => setGuest({ ...guest, alcoholPreference: checked })}
+                            defaultChecked={edit ? editingGuest.alcoholPreference : guest.alcoholPreference}
+                            checked={
+                                edit ? editingGuest.alcoholPreference : guest.alcoholPreference
+                            }
+                            disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
+                            onCheckedChange={(checked) =>
+                                edit ? setEditingGuest({
+                                    ...editingGuest,
+                                    alcoholPreference: checked
+                                }) : setGuest({
+                                    ...guest,
+                                    alcoholPreference: checked
+                                })}
                         />
                     </div>
-                    <div className="flex flex-row justify-between items-center bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
-                        <div className="flex flex-col justify-center">
-                            <Label htmlFor="willAttend">Deltagande</Label>
-                            <span className="text-xs">Om personen kommer att närvara på bröllopet.</span>
+                    <div className="flex flex-col gap-y-2 bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
+                        <div className="flex flex-row justify-between items-center">
+                            <div className="flex flex-col justify-center">
+                                <Label htmlFor="willAttend">Deltagande</Label>
+                                <Label htmlFor="willAttend" className="text-xs">Personen kommer att närvara på bröllopet.</Label>
+                            </div>
+                            <Switch
+                                id="willAttend"
+                                defaultChecked={edit ? editingGuest.willAttend : guest.willAttend}
+                                onCheckedChange={(checked) =>
+                                    edit ? setEditingGuest({
+                                        ...editingGuest,
+                                        alcoholPreference: !checked && false,
+                                        willAttend: checked,
+                                        willAttendNuptials: !checked && false,
+                                        willAttendReception: !checked && false,
+                                    }) : setGuest({
+                                        ...guest,
+                                        alcoholPreference: !checked && false,
+                                        willAttend: checked,
+                                        willAttendNuptials: !checked && false,
+                                        willAttendReception: !checked && false,
+                                    })}
+                            />
+
                         </div>
-                        <Switch
-                            id="willAttend"
-                            defaultChecked={guest.willAttend}
-                            onCheckedChange={(checked) => setGuest({ ...guest, willAttend: checked, alcoholPreference: checked === false ? false : true })}
-                        />
+                        {(editingGuest.willAttend || guest.willAttend) && (
+                            <>
+                                <div className="flex flex-row justify-between items-center">
+                                    <div className="flex flex-col justify-center">
+                                        <Label htmlFor="willAttendNuptials" className={cn((edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Vigsel</Label>
+                                        <Label htmlFor="willAttendNuptials" className={cn("text-xs", (edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Personen kommer att närvara på vigseln.</Label>
+                                    </div>
+                                    <Switch
+                                        id="willAttendNuptials"
+                                        defaultChecked={
+                                            edit ? editingGuest.willAttendNuptials : guest.willAttendNuptials
+                                        }
+                                        checked={
+                                            edit ? editingGuest.willAttendNuptials : guest.willAttendNuptials
+                                        }
+                                        onCheckedChange={(checked) =>
+                                            edit ? setEditingGuest({
+                                                ...editingGuest,
+                                                willAttendNuptials: editingGuest.willAttend ? checked : !checked
+                                            }) : setGuest({
+                                                ...guest,
+                                                willAttendNuptials: guest.willAttend ? checked : !checked
+                                            })}
+                                        disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
+
+                                    />
+
+                                </div>
+                                <div className="flex flex-row justify-between items-center">
+                                    <div className="flex flex-col justify-center">
+                                        <Label htmlFor="willAttendReception" className={cn((edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Mottagning</Label>
+                                        <Label htmlFor="willAttendReception" className={cn("text-xs", (edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Personen kommer att närvara på mottagningen.</Label>
+                                    </div>
+                                    <Switch
+                                        id="willAttendReception"
+                                        defaultChecked={
+                                            edit ? editingGuest.willAttendReception : guest.willAttendReception
+                                        }
+                                        checked={
+                                            edit ? editingGuest.willAttendReception : guest.willAttendReception
+                                        }
+                                        onCheckedChange={(checked) =>
+                                            edit ? setEditingGuest({
+                                                ...editingGuest,
+                                                willAttendReception: editingGuest.willAttend ? checked : !checked
+                                            }) : setGuest({
+                                                ...guest,
+                                                willAttendReception: guest.willAttend ? checked : !checked
+                                            })}
+                                        disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
+                                    />
+
+                                </div>
+                            </>
+                        )}
+
                     </div>
                     <Button
                         variant="success"
                         onClick={() => {
-                            handleSubmit();
-                            setOpen(false);
+                            edit ? handleSave() : handleSubmit(); setOpen(false)
                         }}
                     >
                         {submitText}
                     </Button>
+                    *must have atleast one of the attending checked if willattend is checked.
+                    *update row if name is updated.
+                    *fixa blommor som är i vägen i vissa vyer
+                    *kontrollera att rätt saker uppdateras som det ska. Skriv ner 5 scenarion, och sedan vad de ska ändras till. Kontrollera sedan person för person att det stämmer överens.
                 </div>
             </DialogContent>
         </Dialog>

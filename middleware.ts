@@ -55,6 +55,11 @@ export default auth((req, ctx) => {
         return;
     }
 
+    // If the user is logged in as client, and is trying to access editRSVPRoute, no action is taken.
+    if (clientAuth && isEditRSVPRoute) {
+        return;
+    }
+
     // If user tries accessing a protected route without the general password, redirect to client login
     if ((!clientAuth && isPublicRoute) || (!clientAuth && isEditRSVPRoute)) {
         let callbackUrl = nextUrl.pathname;

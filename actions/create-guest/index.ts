@@ -15,9 +15,18 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (!user) return { error: "Unauthorized" }
 
-    const { partyId, firstName, lastName, foodPreferences, alcoholPreference, willAttend } = data;
+    let { partyId, firstName, lastName, foodPreferences, alcoholPreference, willAttend, willAttendNuptials, willAttendReception } = data;
+
+    // VALIDATION
+    if (!willAttend) {
+        willAttendNuptials = false
+        willAttendReception = false
+    }
+
+    if (!firstName || !lastName) return { error: "Name is needed." }
 
     let guest;
+
 
     try {
         // throw new Error("a"); // artificial error - to be removed
@@ -29,7 +38,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 lastName,
                 foodPreferences,
                 alcoholPreference,
-                willAttend
+                willAttend,
+                willAttendNuptials,
+                willAttendReception
             },
         });
 

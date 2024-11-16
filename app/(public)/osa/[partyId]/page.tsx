@@ -4,6 +4,8 @@ import { getPartyById } from "@/data/data";
 import { southland } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { RSVPForm } from "../_components/rsvp-form";
+import { EditRSVPContainer } from "../_components/edit-rsvp-container";
+import { RSVPContainer } from "../_components/rsvp-container";
 
 // import { RSVPEditForm } from "../_components/rsvp-edit-form";
 
@@ -40,10 +42,8 @@ const OsaPage = async ({
             <Skew
                 backgroundColor="bg-sky-700/30"
             >
-                <h1 className={cn(southland.className, "text-3xl")}>Ändra dina val</h1>
-                <p className="text-xs text-stone-500">Du kan ändra dina val fram till {process.env.NEXT_PUBLIC_END_RSVP_DATE}.</p>
                 {/* RSVP-form */}
-                <RSVPForm party={party} mode="editEntireParty" />
+                <RSVPContainer mode="editEntireParty" party={party} />
             </Skew>
         </div>
     );

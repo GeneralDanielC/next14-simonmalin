@@ -21,17 +21,19 @@ import { PartyWithGuests } from "@/types";
 import { editRSVP } from "@/actions/edit-rsvp";
 
 export type Guest = {
-    id?: string;
+    id: string;
     firstName: string;
     lastName: string;
-    foodPreferences: string;
+    foodPreferences?: string | undefined;
     alcoholPreference: boolean;
     willAttend: boolean;
+    willAttendNuptials: boolean;
+    willAttendReception: boolean;
 };
 
 interface RSVPFormProps {
     party?: PartyWithGuests
-    mode?: 'edit' | 'rsvp' | 'editEntireParty',
+    mode?: 'rsvp' | 'editEntireParty',
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -44,13 +46,28 @@ export const RSVPForm = ({
     const { pending } = useFormStatus();
 
     const [guest, setGuest] = useState<Guest>({
+        id: "",
         firstName: "",
         lastName: "",
         foodPreferences: "",
         alcoholPreference: false,
         willAttend: false,
+        willAttendNuptials: false,
+        willAttendReception: false,
     });
-    const [guests, setGuests] = useState<Guest[]>(party?.guests || []);
+    const [guests, setGuests] = useState<Guest[]>(
+        (party?.guests || []).map((guest) => ({
+            id: guest.id || "",
+            firstName: guest.firstName,
+            lastName: guest.lastName,
+            foodPreferences: guest.foodPreferences ?? "",
+            alcoholPreference: guest.alcoholPreference,
+            willAttend: guest.willAttend,
+            willAttendNuptials: guest.willAttendNuptials,
+            willAttendReception: guest.willAttendReception,
+        }))
+    );
+
     const [openAddGuest, setOpenAddGuest] = useState(false);
     const [editIndex, setEditIndex] = useState<number | null>(null);
 
@@ -58,11 +75,14 @@ export const RSVPForm = ({
         if (guest.firstName && guest.lastName) {
             setGuests(prevGuests => [...(prevGuests || []), guest]);
             setGuest({
+                id: "",
                 firstName: "",
                 lastName: "",
                 foodPreferences: "",
                 alcoholPreference: false,
                 willAttend: false,
+                willAttendNuptials: false,
+                willAttendReception: false,
             });
             setOpenAddGuest(false);
         } else {
@@ -70,27 +90,47 @@ export const RSVPForm = ({
         }
     }
 
-    const handleEditGuest = () => {
+    const handleEditGuest = (guest?: Guest) => {
+
+        if (!guest) return toast.error("Något gick fel!")
+
+        console.log("Function called");
+        console.log("Guest", guest);
+        console.log("Edit Index", editIndex);
+
         if (editIndex !== null) {
+            console.log("Edit Index not null");
+
             if (guest.firstName && guest.lastName) {
+                console.log("First and lastname not null");
+
                 setGuests(prevGuests => {
                     const updatedGuests = [...prevGuests];
                     updatedGuests[editIndex] = guest; // Update the guest at the specified index
+
                     return updatedGuests;
                 });
+
+                // Clear the guest state and reset editIndex after saving
                 setGuest({
+                    id: "",
                     firstName: "",
                     lastName: "",
                     foodPreferences: "",
                     alcoholPreference: false,
                     willAttend: false,
+                    willAttendNuptials: false,
+                    willAttendReception: false,
                 });
-                setEditIndex(null); // Clear the edit index after editing
+                setEditIndex(null);
             } else {
+                console.log("First or last name null");
+
                 toast.error("Hoppsan! Ange både för- och efternamn och försök igen.")
             }
         }
     };
+
 
 
     const { execute: executeRSVP, fieldErrors: fieldErrorsRSVP } = useAction(createRSVP, {
@@ -119,7 +159,7 @@ export const RSVPForm = ({
 
     const handleSubmit = (formData: FormData) => {
         const email = formData.get("email") as string;
-        
+
         if (mode === "rsvp") {
             executeRSVP({
                 email,
@@ -130,20 +170,20 @@ export const RSVPForm = ({
 
     const handleSubmitEdit = (formData: FormData) => {
         const email = formData.get("email") as string;
-        
+
         if (party?.id) {
             console.log(guests);
-            
+
             if (mode === "editEntireParty") {
                 executeEditRSVP({
-                    partyId: party.id, 
+                    partyId: party.id,
                     email,
-                    guests
+                    guests: guests
                 })
             }
         }
     }
-    
+
 
     return (
         <div className="flex flex-col gap-y-2">
@@ -157,9 +197,14 @@ export const RSVPForm = ({
                         submitText="Spara"
                         handleSubmit={handleEditGuest}
                         guest={guest}
+                        edit
                         setGuest={(updatedGuest) => {
                             setEditIndex(index);
-                            setGuest(updatedGuest);
+                            setGuest
+                        }}
+                        handleOnOpen={() => {
+                            console.log(index);
+                            setEditIndex(index)
                         }}
                     >
                         <Button
@@ -169,7 +214,6 @@ export const RSVPForm = ({
                         >
                             <div className="w-full h-full flex flex-row justify-between border-b border-stone-400 border-dotted">
                                 <span className="italic text-xs font-thin">{guest.firstName} {guest.lastName}</span>
-                                <ArrowRight className="size-4" />
                             </div>
                         </Button>
                     </GuestForm>
@@ -182,6 +226,18 @@ export const RSVPForm = ({
                     dialogDescription="Här kan du lägga till fler gäster i ditt sällskap."
                     submitText="Lägg till"
                     handleSubmit={handleAddGuest}
+                    handleOnOpen={() =>
+                        setGuest({
+                            id: "",
+                            firstName: "",
+                            lastName: "",
+                            foodPreferences: "",
+                            alcoholPreference: false,
+                            willAttend: false,
+                            willAttendNuptials: false,
+                            willAttendReception: false,
+                        })
+                    }
                     guest={guest}
                     setGuest={setGuest}
                 >
@@ -194,88 +250,11 @@ export const RSVPForm = ({
                         Lägg till gäst...
                     </Button>
                 </GuestForm>
-                // <Dialog open={openAddGuest} onOpenChange={(open) => {
-                //     if (open) {
-                //         setGuest({
-                //             firstName: "",
-                //             lastName: "",
-                //             foodPreferences: "",
-                //             alcoholPreference: false,
-                //             willAttend: false,
-                //         });
-                //     }
-                //     setOpenAddGuest(open)
-                // }}>
-                //     <DialogTrigger asChild>
-                //         <Button
-                //             variant="primary"
-                //             disabled={pending}
-                //         >
-                //             Lägg till gäst...
-                //         </Button>
-                //     </DialogTrigger>
-                //     <DialogContent>
-                //         <DialogHeader>
-                //             <DialogTitle>Ny gäst</DialogTitle>
-                //             <DialogDescription className="text-xs">Här kan du lägga till fler gäster i ditt sällskap.</DialogDescription>
-                //         </DialogHeader>
-                //         <div className="flex flex-col gap-y-2">
-                //             <div className="w-full flex flex-row gap-x-2">
-                //                 <FormInput
-                //                     id="firstName"
-                //                     value={guest.firstName}
-                //                     onChange={(e) => setGuest({ ...guest, firstName: e.target.value })}
-                //                     placeholder="Förnamn"
-                //                 />
-                //                 <FormInput
-                //                     id="lastName"
-                //                     value={guest.lastName}
-                //                     onChange={(e) => setGuest({ ...guest, lastName: e.target.value })}
-                //                     placeholder="Förnamn"
-                //                 />
-                //             </div>
-                //             <FormInput
-                //                 id="foodPreferences"
-                //                 value={guest.foodPreferences}
-                //                 onChange={(e) => setGuest({ ...guest, foodPreferences: e.target.value })}
-                //                 placeholder="Allergier & Specialkost"
-                //             />
-                //             <div className="flex flex-row justify-between items-center bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
-                //                 <div className="flex flex-col justify-center">
-                //                     <Label htmlFor="alkoholfritt">Alkoholfritt</Label>
-                //                     <span className="text-xs">Om alkoholfri dryck önskas.</span>
-                //                 </div>
-                //                 <Switch
-                //                     id="alkoholfritt"
-                //                     checked={guest.alcoholPreference}
-                //                     onCheckedChange={(checked) => setGuest({ ...guest, alcoholPreference: checked })}
-                //                 />
-                //             </div>
-                //             <div className="flex flex-row justify-between items-center bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
-                //                 <div className="flex flex-col justify-center">
-                //                     <Label htmlFor="willAttend">Deltagande</Label>
-                //                     <span className="text-xs">Om personen kommer att närvara på bröllopet.</span>
-                //                 </div>
-                //                 <Switch
-                //                     id="willAttend"
-                //                     checked={guest.willAttend}
-                //                     onCheckedChange={(checked) => setGuest({ ...guest, willAttend: checked })}
-                //                 />
-                //             </div>
-                //             <Button
-                //                 variant="success"
-                //                 onClick={handleAddGuest}
-                //             >
-                //                 Lägg till
-                //             </Button>
-                //         </div>
-                //     </DialogContent>
-                // </Dialog>
             )}
 
-            <div className="w-full flex justify-center py-2">
+            {/* <div className="w-full flex justify-center py-2">
                 <Separator className="w-[90%] bg-stone-400/10" />
-            </div>
+            </div> */}
             <form
                 ref={formRef}
                 action={mode === "rsvp" ? handleSubmit : handleSubmitEdit}

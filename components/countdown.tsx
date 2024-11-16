@@ -34,29 +34,31 @@ export const Countdown = ({ targetDate }: CountdownProps) => {
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
     }, [targetDate]);
 
-    if (!time) return <p>no</p>
+    if (!time) return null;
 
     return (
         <div className="flex flex-col justify-center items-center text-center w-full h-full text-stone-500">
             <div className="flex flex-row items-baseline justify-center gap-x-1.5">
                 <span className="text-4xl">{time.days}</span>
-                <span className="text-xs">dagar</span>
+                <span className="text-4xl">dagar</span>
             </div>
             <div className="flex flex-row items-baseline justify-center gap-x-2 mb-2">
                 <div className="flex flex-row items-baseline justify-center gap-x-1.5">
-                    <span className="text-2xl">{time.hours}</span>
-                    <span className="text-xs">timmar</span>
+                    <span className="">{time.hours}</span>
+                    <span className="">{time.hours === 1 ? "timme" : "timmar"}</span>
                 </div>
+                <span>•</span>
                 <div className="flex flex-row items-baseline justify-center gap-x-1.5">
-                    <span className="text-2xl">{time.minutes}</span>
-                    <span className="text-xs">minuter</span>
+                    <span className="">{time.minutes}</span>
+                    <span className="">minuter</span>
                 </div>
+                <span>•</span>
                 <div className="flex flex-row items-baseline justify-center gap-x-1.5">
-                    <span className="text-2xl">{time.seconds}</span>
-                    <span className="text-xs">sekunder</span>
+                    <span className="">{time.seconds}</span>
+                    <span className="">sekunder</span>
                 </div>
             </div>
-            <em className="text-xs">{countingUp ? "Tid sedan bröllopet." : "Tid till bröllopet."}</em>
+            <em className="text-xs">{countingUp && "Tid sedan bröllopet."}</em>
         </div>
     )
 

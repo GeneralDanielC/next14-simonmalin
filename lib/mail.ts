@@ -64,6 +64,9 @@ export const sendRSVPConfirmation = async (
             <p style="margin: 0;"><strong>Allergier & Specialkost:</strong> ${guest.foodPreferences || 'Inga'}</p>
             <p style="margin: 0;"><strong>Alkoholfritt:</strong> ${guest.alcoholPreference ? 'Ja' : 'Nej'}</p>
             <p style="margin: 0;"><strong>Kommer att närvara:</strong> ${guest.willAttend ? 'Ja' : 'Nej'}</p>
+            ${guest.willAttend ? 
+                `<p style="margin: 0;"><strong>Närvara på vigsel:</strong> ${guest.willAttendNuptials ? 'Ja' : 'Nej'}</p>
+            <p style="margin: 0;"><strong>Närvara på mottagning:</strong> ${guest.willAttendReception ? 'Ja' : 'Nej'}</p>` : ""}
             <br/>
         </div>
         `).join('');

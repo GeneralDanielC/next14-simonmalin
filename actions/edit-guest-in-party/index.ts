@@ -17,15 +17,23 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (!user) return { error: "Unauthorized" }
 
-    const {
+    let {
         partyId,
         guestId,
         firstName,
         lastName,
         foodPreferences,
         alcoholPreference,
-        willAttend
+        willAttend,
+        willAttendNuptials,
+        willAttendReception
     } = data;
+
+    // VALIDATION
+    if (!willAttend) {
+        willAttendNuptials = false
+        willAttendReception = false
+    }
 
     let guest;
 
@@ -40,6 +48,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 foodPreferences,
                 alcoholPreference,
                 willAttend,
+                willAttendNuptials,
+                willAttendReception,
                 updatedAt: new Date(),
             },
         });

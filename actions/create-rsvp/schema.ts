@@ -6,6 +6,8 @@ const guestSchema = z.object({
     foodPreferences: z.optional(z.string()),
     alcoholPreference: z.boolean(),
     willAttend: z.boolean(),
+    willAttendNuptials: z.boolean(),
+    willAttendReception: z.boolean(),
 });
 
 export const CreateRSVP = z.object({

@@ -19,13 +19,13 @@ export const Logo = () => {
         <Link href="/" className="">
             <div className={cn(southland.className, "text-6xl flex h-full items-center backdrop-blur-sm bg-beige/50 rounded-2xl pt-5 pb-2 px-5")}>
                 <span className="text-rose-300">
-                    M
+                    Malin
                 </span>
                 <span className="text-stone-500">
                     &
                 </span>
                 <span className="text-dark-green">
-                    S
+                    Simon
                 </span>
             </div>
         </Link>

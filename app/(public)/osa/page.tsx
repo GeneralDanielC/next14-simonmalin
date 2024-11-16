@@ -16,7 +16,7 @@ const OsaPage = () => {
             <Skew
                 backgroundColor="bg-sky-700/30"
             >
-                <RSVPContainer />
+                <RSVPContainer mode="default" />
             </Skew>
         </div>
     );

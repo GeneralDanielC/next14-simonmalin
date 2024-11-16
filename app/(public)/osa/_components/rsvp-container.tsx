@@ -6,8 +6,17 @@ import { southland } from "@/lib/fonts";
 import { RSVPForm } from "./rsvp-form";
 import { useState } from "react";
 import { Check, X } from "lucide-react";
+import { PartyWithGuests } from "@/types";
 
-export const RSVPContainer = () => {
+interface RSVPContainerProps {
+    party?: PartyWithGuests
+    mode: "default" | "editEntireParty"
+}
+
+export const RSVPContainer = ({
+    party,
+    mode = "default"
+}: RSVPContainerProps) => {
     const [success, setSuccess] = useState<boolean>(false);
 
     const latestDateToRsvp = process.env.NEXT_PUBLIC_END_RSVP_DATE;
@@ -34,15 +43,27 @@ export const RSVPContainer = () => {
                 </div>
             ) : (
                 <div>
-                    <div className="flex flex-col mb-2">
-                        <h1 className={cn(southland.className, "text-xl")}>OSA</h1>
-                        <div>
-                            <p className="text-xs text-stone-500">Här anger du de personer i ditt sällskap som kommer på bröllopet.</p>
-                            <p className="text-xs text-stone-500">Sista dagen att OSA är {latestDateToRsvp}.</p>
+                    {mode === "editEntireParty" ? (
+                        <div className="flex flex-col mb-2">
+                            <h1 className={cn(southland.className, "text-3xl")}>Ändra dina val</h1>
+                            <p className="text-xs text-stone-500">Du kan ändra dina val fram till {process.env.NEXT_PUBLIC_END_RSVP_DATE}.</p>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="flex flex-col mb-2">
+                            <h1 className={cn(southland.className, "text-xl")}>OSA</h1>
+                            <div>
+                                <p className="text-xs text-stone-500">Här anger du de personer i ditt sällskap som kommer på bröllopet.</p>
+                                <p className="text-xs text-stone-500">Sista dagen att OSA är {latestDateToRsvp}.</p>
+                            </div>
+                        </div>
+                    )}
+
                     {/* RSVP form component */}
-                    <RSVPForm setSuccess={setSuccess} />
+                    {mode === "editEntireParty" ? (
+                        <RSVPForm setSuccess={setSuccess} party={party} mode="editEntireParty" />
+                    ) : (
+                        <RSVPForm setSuccess={setSuccess} />
+                    )}
                 </div>
             )}
         </>

@@ -7,7 +7,7 @@ export const getPartyByEmail = async (email: string) => {
         },
         include: {
             guests: true
-        }
+        },
     });
 
     return party;
@@ -20,14 +20,16 @@ export const getPartyById = async (id: string) => {
         },
         include: {
             guests: true
-        }
+        },
     });
 
     return party;
 }
 
 export const getParties = async () => {
-    const parties = await db.party.findMany({ include: { guests: true } });
+    const parties = await db.party.findMany({
+        include: { guests: true },
+    });
 
     return parties;
 }
