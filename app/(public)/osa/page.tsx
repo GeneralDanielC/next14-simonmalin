@@ -11,9 +11,10 @@ const OsaPage = () => {
     return (
         <div>
             <HeroSection
-                subText="OSA"
+                heading="OSA"
             />
             <Skew
+                card={true}
                 backgroundColor="bg-sky-700/30"
             >
                 <RSVPContainer mode="default" />

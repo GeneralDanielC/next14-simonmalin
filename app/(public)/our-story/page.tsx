@@ -4,8 +4,9 @@ import { Skew } from "@/components/skew";
 const OurStoryPage = () => {
     return (
         <div>
-            <HeroSection subText="Vår Historia" />
+            <HeroSection heading="Vår Historia" />
             <Skew
+                card={false}
                 direction="bt"
                 backgroundColor="bg-green-700/10"
             >
@@ -17,6 +18,7 @@ const OurStoryPage = () => {
                 <p>någon bild kankse</p>
             </div>
             <Skew
+                card={false}
                 backgroundColor="bg-pink-500/10"
             >
                 <h1 className="text-stone-400">5 juli 2023</h1>

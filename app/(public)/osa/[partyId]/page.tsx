@@ -19,9 +19,10 @@ const OsaPage = async ({
         return (
             <div>
                 <HeroSection
-                    subText="OSA"
+                    heading="OSA"
                 />
                 <Skew
+                    card={true}
                     backgroundColor="bg-sky-700/30"
                 >
                     <div className="h-full w-full flex flex-col justify-center items-center">
@@ -37,9 +38,10 @@ const OsaPage = async ({
     return (
         <div>
             <HeroSection
-                subText="OSA"
+                heading="OSA"
             />
             <Skew
+                card={true}
                 backgroundColor="bg-sky-700/30"
             >
                 {/* RSVP-form */}

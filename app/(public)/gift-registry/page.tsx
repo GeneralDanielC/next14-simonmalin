@@ -17,9 +17,10 @@ const GiftRegistryPage = async () => {
     return (
         <div>
             <HeroSection
-                subText="Önskelista"
+                heading="Önskelista"
             />
             <Skew
+                card={true}
                 backgroundColor="bg-orange-700/30"
             >
                 <h1 className={cn(southland.className, "text-2xl")}>Önskelista</h1>

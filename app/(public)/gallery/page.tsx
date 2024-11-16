@@ -12,8 +12,9 @@ const GalleryPage = () => {
     return (
         <div>
             {/* Hero-section */}
-            <HeroSection subText="Bröllop" />
+            <HeroSection heading="Galleri" />
             <Skew
+                card={false}
                 backgroundColor="bg-rose-300/10"
             >
                 <UploadImageForm />
