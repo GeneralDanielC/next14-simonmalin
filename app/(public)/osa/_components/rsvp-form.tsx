@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
-import { ElementRef, useRef, useState } from "react";
+import { ElementRef, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 
 
@@ -43,7 +43,7 @@ export const RSVPForm = ({
     setSuccess
 }: RSVPFormProps) => {
     const formRef = useRef<ElementRef<"form">>(null);
-    const { pending } = useFormStatus();
+    const [isPending, setIsPending] = useState<boolean>(false);
 
     const [guest, setGuest] = useState<Guest>({
         id: "",
@@ -68,7 +68,6 @@ export const RSVPForm = ({
         }))
     );
 
-    const [openAddGuest, setOpenAddGuest] = useState(false);
     const [editIndex, setEditIndex] = useState<number | null>(null);
 
     const handleAddGuest = () => {
@@ -84,30 +83,24 @@ export const RSVPForm = ({
                 willAttendNuptials: false,
                 willAttendReception: false,
             });
-            setOpenAddGuest(false);
         } else {
             toast.error("Hoppsan! Ange både för- och efternamn och försök igen.")
         }
     }
 
-    const handleEditGuest = (guest?: Guest) => {
+    const handleEditGuest = (updatedGuest?: Guest) => {
 
-        if (!guest) return toast.error("Något gick fel!")
-
-        console.log("Function called");
-        console.log("Guest", guest);
-        console.log("Edit Index", editIndex);
+        if (!updatedGuest) return toast.error("Något gick fel!")
 
         if (editIndex !== null) {
-            console.log("Edit Index not null");
+            if (updatedGuest.firstName && updatedGuest.lastName) {
 
-            if (guest.firstName && guest.lastName) {
-                console.log("First and lastname not null");
+                setGuests((prevGuests) => {
+                    console.log("prevGuests", prevGuests);
+                    console.log("Guest", updatedGuest);
 
-                setGuests(prevGuests => {
                     const updatedGuests = [...prevGuests];
-                    updatedGuests[editIndex] = guest; // Update the guest at the specified index
-
+                    updatedGuests[editIndex] = updatedGuest; // Update the specific guest
                     return updatedGuests;
                 });
 
@@ -139,9 +132,11 @@ export const RSVPForm = ({
             formRef.current?.reset();
             setSuccess(true);
             setGuests([]);
+            setIsPending(false);
         },
         onError: (error) => {
             toast.error(error);
+            setIsPending(false);
         }
     });
 
@@ -151,13 +146,17 @@ export const RSVPForm = ({
             formRef.current?.reset();
             setSuccess(true);
             setGuests([]);
+            setIsPending(false);
         },
         onError: (error) => {
             toast.error(error);
-        }
+            setIsPending(false);
+        },
     });
 
     const handleSubmit = (formData: FormData) => {
+        setIsPending(true);
+
         const email = formData.get("email") as string;
 
         if (mode === "rsvp") {
@@ -169,6 +168,8 @@ export const RSVPForm = ({
     }
 
     const handleSubmitEdit = (formData: FormData) => {
+        setIsPending(true);
+
         const email = formData.get("email") as string;
 
         if (party?.id) {
@@ -184,77 +185,13 @@ export const RSVPForm = ({
         }
     }
 
+    useEffect(() => {
+        console.log(isPending);
+        
+    }, [isPending])
 
     return (
-        <div className="flex flex-col gap-y-2">
-            {/* List of guests in the party */}
-            <div className="flex flex-col">
-                {guests?.map((guest, index) => (
-                    <GuestForm
-                        key={index}
-                        dialogTitle={`Ändra ${guest.firstName} ${guest.lastName}`}
-                        dialogDescription="Här kan du göra ändringar."
-                        submitText="Spara"
-                        handleSubmit={handleEditGuest}
-                        guest={guest}
-                        edit
-                        setGuest={(updatedGuest) => {
-                            setEditIndex(index);
-                            setGuest
-                        }}
-                        handleOnOpen={() => {
-                            console.log(index);
-                            setEditIndex(index)
-                        }}
-                    >
-                        <Button
-                            variant="ghost"
-                            className="hover:bg-stone-400/10 px-2"
-                            disabled={pending}
-                        >
-                            <div className="w-full h-full flex flex-row justify-between border-b border-stone-400 border-dotted">
-                                <span className="italic text-xs font-thin">{guest.firstName} {guest.lastName}</span>
-                            </div>
-                        </Button>
-                    </GuestForm>
-                ))}
-            </div>
-
-            {mode === "rsvp" && (
-                <GuestForm
-                    dialogTitle="Ny gäst"
-                    dialogDescription="Här kan du lägga till fler gäster i ditt sällskap."
-                    submitText="Lägg till"
-                    handleSubmit={handleAddGuest}
-                    handleOnOpen={() =>
-                        setGuest({
-                            id: "",
-                            firstName: "",
-                            lastName: "",
-                            foodPreferences: "",
-                            alcoholPreference: false,
-                            willAttend: false,
-                            willAttendNuptials: false,
-                            willAttendReception: false,
-                        })
-                    }
-                    guest={guest}
-                    setGuest={setGuest}
-                >
-                    <Button
-                        variant="link"
-                        size={"sm"}
-                        className="text-xs border border-black rounded-xl"
-                        disabled={pending}
-                    >
-                        Lägg till gäst...
-                    </Button>
-                </GuestForm>
-            )}
-
-            {/* <div className="w-full flex justify-center py-2">
-                <Separator className="w-[90%] bg-stone-400/10" />
-            </div> */}
+        <div className="flex flex-col gap-y-2 mt-4">
             <form
                 ref={formRef}
                 action={mode === "rsvp" ? handleSubmit : handleSubmitEdit}
@@ -266,9 +203,89 @@ export const RSVPForm = ({
                     type="email"
                     placeholder="E-postadress"
                     errors={fieldErrorsRSVP || fieldErrorsEdit}
+                    className="bg-transparent border border-black"
                 />
+
+                {mode === "rsvp" && (
+                    <GuestForm
+                        dialogTitle="Ny gäst"
+                        dialogDescription="Lägg till fler gäster i ditt sällskap."
+                        submitText="Lägg till"
+                        handleSubmit={handleAddGuest}
+                        handleOnOpen={() =>
+                            setGuest({
+                                id: "",
+                                firstName: "",
+                                lastName: "",
+                                foodPreferences: "",
+                                alcoholPreference: false,
+                                willAttend: false,
+                                willAttendNuptials: false,
+                                willAttendReception: false,
+                            })
+                        }
+                        guest={guest}
+                        setGuest={setGuest}
+                    >
+                        <Button
+                            variant="link"
+                            className="text-xs border border-black rounded-xl"
+                            disabled={isPending}
+                        >
+                            Lägg till gäst...
+                        </Button>
+                    </GuestForm>
+                )}
+
+                {/* List of guests in the party */}
+                <div className="flex flex-col">
+                    {guests?.map((guest, index) => (
+                        <GuestForm
+                            key={index}
+                            dialogTitle={`Ändra ${guest.firstName} ${guest.lastName}`}
+                            dialogDescription="Gör ändringar här."
+                            submitText="Spara"
+                            handleSubmit={handleEditGuest}
+                            guest={guest}
+                            edit
+                            setGuest={() => {
+                                setEditIndex(index);
+                                setGuest
+                            }}
+                            handleOnOpen={() => {
+                                setEditIndex(index)
+                            }}
+                        >
+                            <Button
+                                variant="ghost"
+                                className="hover:bg-stone-400/10 px-2 h-full"
+                                disabled={isPending}
+                            >
+                                <div className="w-full h-full flex flex-col border-b border-stone-400 border-dotted text-left pb-1.5">
+                                    <span className="text-lg font-thin">{guest.firstName} {guest.lastName}</span>
+                                    <div className="text-stone-500 flex flex-col font-thin">
+                                        {guest.willAttend && (
+                                            <>
+                                                <span>{guest.foodPreferences ? guest.foodPreferences : "Inga allergier"}</span>
+                                                <span>{guest.alcoholPreference ? "Önskar alkoholfritt" : "Önskar inte alkoholfritt"}</span>
+                                            </>
+                                        )}
+                                        <span>
+                                            {guest.willAttend && guest.willAttendNuptials && guest.willAttendReception && "Deltar på vigseln och mottagning"}
+                                            {guest.willAttend && guest.willAttendNuptials && !guest.willAttendReception && "Deltar enbart på vigseln"}
+                                            {guest.willAttend && !guest.willAttendNuptials && guest.willAttendReception && "Deltar enbart på mottagning"}
+                                            {guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception && "Något gick fel"}
+                                            {!guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception && "Deltar inte på bröllopet"}
+                                        </span>
+                                    </div>
+                                </div>
+                            </Button>
+                        </GuestForm>
+                    ))}
+                </div>
+
                 <FormSubmit
-                    className="w-full" variant="success"
+                    className="w-full border border-black" variant="success"
                 >
                     {mode === "rsvp" ? "Skicka" : "Spara"}
                 </FormSubmit>

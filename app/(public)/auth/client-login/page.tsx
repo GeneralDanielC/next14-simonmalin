@@ -14,8 +14,8 @@ const LoginPage = () => {
     return (
         <div className="h-full w-full">
             <HeroSection heading="Logga in" />
-            <div className="px-8 flex justify-center items-center">
-                <div className="max-w-screen-md px-8 bg-stone-400/10 rounded-xl shadow-lg py-6">
+            <div className="w-full px-6 flex justify-center items-center">
+                <div className="max-w-screen-md px-8 w-[400px] bg-stone-400/10 rounded-xl shadow-lg py-6">
                     <CardTitle className="text-xl">Logga in</CardTitle>
                     <CardDescription>Lösenordet finns angivet på inbjudan.</CardDescription>
                     <div className="mt-4">

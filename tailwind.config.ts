@@ -56,7 +56,9 @@ const config = {
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			beige: '#FFFDF5',
+			'card-beige': '#F9F4EB',
 			green: '#D6E0CF',
+			'green-secondary': '#CDE2C6',
 			'alt-beige': '#FCF4EC',
   			'light-beige': '#EAE4DD',
   			'dark-green': '#96B593'

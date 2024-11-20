@@ -19,16 +19,17 @@ const OsaPage = async ({
         return (
             <div>
                 <HeroSection
-                    heading="OSA"
+                    heading="O.S.A."
+                    subtext="Ändra dina val"
                 />
                 <Skew
                     card={true}
                     backgroundColor="bg-sky-700/30"
                 >
                     <div className="h-full w-full flex flex-col justify-center items-center">
-                        <h1 className={cn(southland.className, "text-3xl")}>Ajdå!</h1>
-                        <p className="text-xs font-semibold">Någonting verkar ha gått fel.</p>
-                        <p className="text-xs">Vi kunde inte hitta ditt sällskap.</p>
+                        <h1 className={cn(southland.className, "text-4xl")}>Ajdå!</h1>
+                        <p className="font-semibold">Någonting verkar ha gått fel.</p>
+                        <p className="">Vi kunde inte hitta ditt sällskap.</p>
                     </div>
                 </Skew>
             </div>
@@ -38,7 +39,8 @@ const OsaPage = async ({
     return (
         <div>
             <HeroSection
-                heading="OSA"
+                heading="O.S.A."
+                subtext="Ändra dina val"
             />
             <Skew
                 card={true}

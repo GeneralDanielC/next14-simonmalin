@@ -13,9 +13,12 @@ export default async function Home() {
     <div>
       {/* Hero-section */}
       <HeroSection heading="Bröllop" subtext="24 maj 2025" />
-      <Skew card={false} backgroundColor="bg-green">
-        <div className="py-14">
-          <Countdown targetDate={new Date("2025-05-24")} />
+      <Skew card={false} backgroundColor="bg-pink-500/20">
+        <div className="py-14 text-4xl text-stone-500">
+          {/* <Countdown targetDate={new Date("2025-05-24")} /> */}
+          <h1 className="text-2xl">Välkomna till</h1>
+          <h1>Malin & Simons</h1>
+          <h1>Bröllop</h1>
         </div>
       </Skew>
 
@@ -28,8 +31,7 @@ export default async function Home() {
         direction="bt"
       >
         <div className="text-stone-500 py-14">
-          <h1 className="text-4xl">Frågor?</h1>
-          <p>hör av dig till brudparet.</p>
+          <Countdown targetDate={new Date("2025-05-24")} />
         </div>
       </Skew>
     </div>

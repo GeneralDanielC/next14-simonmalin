@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Guest } from "./rsvp-form";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 
 interface GuestFormProps {
@@ -45,7 +46,7 @@ export const GuestForm = ({
         setGuest(editingGuest); // Only update parent state here
         setOpen(false);
 
-        edit ? handleSubmit(guest) : handleSubmit();
+        edit ? handleSubmit(editingGuest) : handleSubmit();
     };
 
     return (
@@ -127,7 +128,7 @@ export const GuestForm = ({
                                 })}
                         />
                     </div>
-                    <div className="flex flex-col gap-y-2 bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
+                    <div className="flex flex-col gap-y-2 bg-stone-400/10 rounded-xl shadow-sm px-3 py-2 border">
                         <div className="flex flex-row justify-between items-center">
                             <div className="flex flex-col justify-center">
                                 <Label htmlFor="willAttend">Deltagande</Label>
@@ -211,17 +212,18 @@ export const GuestForm = ({
 
                     </div>
                     <Button
+                        className="border border-black"
                         variant="success"
                         onClick={() => {
-                            edit ? handleSave() : handleSubmit(); setOpen(false)
+                            if ((guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception) || (editingGuest.willAttend && !editingGuest.willAttendNuptials && !editingGuest.willAttendReception)) {
+                                toast.error("Ange vilken del av bröllopet personen kommer att delta vid.")
+                            } else {
+                                edit ? handleSave() : handleSubmit(); setOpen(false)
+                            }
                         }}
                     >
                         {submitText}
                     </Button>
-                    *must have atleast one of the attending checked if willattend is checked.
-                    *update row if name is updated.
-                    *fixa blommor som är i vägen i vissa vyer
-                    *kontrollera att rätt saker uppdateras som det ska. Skriv ner 5 scenarion, och sedan vad de ska ändras till. Kontrollera sedan person för person att det stämmer överens.
                 </div>
             </DialogContent>
         </Dialog>

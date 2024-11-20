@@ -48,7 +48,7 @@ export const NavBar = () => {
                                 <MenuIcon className="size-16" />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent className="w-full p-0">
+                        <SheetContent className="w-full h-full p-0">
                             <div className="w-full h-full bg-beige flex flex-col gap-y-4 justify-center items-center font-semibold sm:w-full">
                                 {navItems.map((item, index) => (
                                     <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-lime-900/30 hover:text-green animate transition">
@@ -56,6 +56,9 @@ export const NavBar = () => {
                                         <span className="uppercase">{item.title}</span>
                                     </Link>
                                 ))}
+                            </div>
+                            <div className="absolute bottom-3 w-full flex justify-center">
+                                <span className="text-xs lowercase text-stone-400">TILLHANDAHÅLLS AV NOLL2 SOLUTIONS AB</span>
                             </div>
                         </SheetContent>
                     </Sheet>

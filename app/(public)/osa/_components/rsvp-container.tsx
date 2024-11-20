@@ -25,40 +25,24 @@ export const RSVPContainer = ({
         return new Date().getTime() > new Date(latestDateToRsvp ?? "").getTime();
     }
 
-    const [tooLate, setTooLate] = useState<boolean>(tooLateToRSVP())
-
     return (
-        <>
-            {tooLate ? (
-                <div className="flex flex-col justify-center items-center pt-4">
-                    <h1 className={cn(southland.className, "font-semibold text-5xl text-amber-900/40")}>För sent att OSA</h1>
-                    <p className="text-xs">Tyvärr har sista datumet för att OSA passerat.</p>
+        <div className={cn(tooLateToRSVP() && "flex flex-col justify-center items-center", "h-full border border-black p-6 rounded-xl shadow-lg bg-card-beige max-w-[400px] w-full")}>
+            {tooLateToRSVP() ? (
+                <div className="w-full h-full">
+                    <h1 className="text-2xl">Försent</h1>
+                    <h2 className="text-stone-500">Det är försent för att O.S.A.</h2>
+                    <p className="text-stone-500">Kontakta brudparet vid frågor.</p>
                 </div>
             ) : success ? (
-                <div className="flex flex-col justify-center items-center">
-                    <Check className="size-40 text-lime-600/30" />
-                    <h1 className={cn(southland.className, "font-semibold text-5xl text-amber-900/40")}>Sparat</h1>
-                    <p className="text-xs">En bekräftelse har skickats till din angivna mejl.</p>
-                    <i className="text-xs">Kolla skräpposten.</i>
+                <div>
+                    <h1 className="text-2xl">O.S.A.</h1>
+                    <h2 className="text-stone-500">Dina val är sparade!</h2>
+                    <p className="text-stone-500 text-xs">En bekräftelse har skickats till den angivna epostadressen. Kolla skräpposten.</p>
                 </div>
             ) : (
                 <div>
-                    {mode === "editEntireParty" ? (
-                        <div className="flex flex-col mb-2">
-                            <h1 className={cn(southland.className, "text-3xl")}>Ändra dina val</h1>
-                            <p className="text-xs text-stone-500">Du kan ändra dina val fram till {process.env.NEXT_PUBLIC_END_RSVP_DATE}.</p>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col mb-2">
-                            <h1 className={cn(southland.className, "text-xl")}>OSA</h1>
-                            <div>
-                                <p className="text-xs text-stone-500">Här anger du de personer i ditt sällskap som kommer på bröllopet.</p>
-                                <p className="text-xs text-stone-500">Sista dagen att OSA är {latestDateToRsvp}.</p>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* RSVP form component */}
+                    <h1 className="text-2xl text-center">O.S.A.</h1>
+                    {mode === "editEntireParty" && <h2 className="text-stone-500">Ändra dina val</h2>}
                     {mode === "editEntireParty" ? (
                         <RSVPForm setSuccess={setSuccess} party={party} mode="editEntireParty" />
                     ) : (
@@ -66,6 +50,6 @@ export const RSVPContainer = ({
                     )}
                 </div>
             )}
-        </>
+        </div>
     );
 };
