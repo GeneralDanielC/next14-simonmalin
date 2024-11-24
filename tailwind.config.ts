@@ -56,10 +56,10 @@ const config = {
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			beige: '#FFFDF5',
-			'card-beige': '#F9F4EB',
-			green: '#D6E0CF',
-			'green-secondary': '#CDE2C6',
-			'alt-beige': '#FCF4EC',
+  			'card-beige': '#F9F4EB',
+  			green: '#D6E0CF',
+  			'green-secondary': '#CDE2C6',
+  			'alt-beige': '#FCF4EC',
   			'light-beige': '#EAE4DD',
   			'dark-green': '#96B593'
   		},
@@ -84,27 +84,9 @@ const config = {
   				to: {
   					height: '0'
   				}
-  			},
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
   			}
   		},
   		animation: {
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}

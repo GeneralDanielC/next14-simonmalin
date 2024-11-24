@@ -1,28 +1,17 @@
 "use client";
 
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
 import { Gift } from "@prisma/client";
 import { FormInput } from "@/components/form/form-input";
-import { FormSwitch } from "@/components/form/form-switch";
 import { FormSubmit } from "@/components/form/form-submit";
-import { ElementRef, useRef, useState } from "react";
-import { editGuestInParty } from "@/actions/edit-guest-in-party";
-import { useEditGiftModal } from "@/hooks/use-edit-gift-modal";
-import { FormTextarea } from "@/components/form/form-textarea";
-import { Separator } from "@/components/ui/separator";
-import { editGift } from "@/actions/edit-gift";
-import { Check, Trash, X } from "lucide-react";
-import { unassignGift } from "@/actions/unassign-gift";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { deleteGift } from "@/actions/delete-gift";
+import { ElementRef, useRef } from "react";
 import { useRequestGiftModal } from "@/hooks/use-request-gift-modal";
 import { requestGift } from "@/actions/request-gift";
 import Link from "next/link";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface RequestGiftModalProps {
     gift: Gift
@@ -61,14 +50,19 @@ export const RequestGiftModal = ({
         >
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>{gift.title}</DialogTitle>
-                    <DialogDescription>{gift.backstory} {gift.url && <Link className="underline" href={gift.url}>Länk!</Link>}</DialogDescription>
-                    <Separator />
-                    <DialogDescription className="flex flex-col">
-                        <span>Vill du köpa den här presenten? Besvara formuläret nedan.</span>
-                        <span className="text-xs italic">Presenten kommer att gömmas från andra gäster.</span>
-                    </DialogDescription>
+                    <DialogTitle>Vill du paxa '{gift.title}' ?</DialogTitle>
+                    <DialogDescription>Presenten kommer att gömmas från andra gäster.</DialogDescription>
                 </DialogHeader>
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="more-info">
+                        <AccordionTrigger className="border border-black p-2 rounded-lg">Mer info</AccordionTrigger>
+                        <AccordionContent className="flex flex-col px-2 py-1.5">
+                            <span className="text-lg">{gift.title}</span>
+                            <span>{gift.backstory}</span>
+                            <span>{gift.url && <Link className="underline" href={gift.url}>{gift.url}</Link>}</span>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
                 <form ref={formRef} action={handleRequestGiftSubmit}>
                     <div className="flex flex-col gap-y-1">
                         <FormInput
@@ -76,12 +70,13 @@ export const RequestGiftModal = ({
                             placeholder="E-postadress..."
                             defaultValue={gift.assignedToEmail ?? ""}
                             errors={fieldErrors}
+                            autofocus
                         />
                         <FormSubmit
                             variant="success"
-                            className="mt-3"
+                            className="mt-3 border border-black"
                         >
-                            Skicka
+                            Paxa
                         </FormSubmit>
                     </div>
                 </form>

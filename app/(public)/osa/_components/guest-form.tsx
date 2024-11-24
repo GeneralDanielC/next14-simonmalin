@@ -128,7 +128,7 @@ export const GuestForm = ({
                                 })}
                         />
                     </div>
-                    <div className="flex flex-col gap-y-2 bg-stone-400/10 rounded-xl shadow-sm px-3 py-2 border">
+                    <div className="flex flex-col gap-y-2 bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
                         <div className="flex flex-row justify-between items-center">
                             <div className="flex flex-col justify-center">
                                 <Label htmlFor="willAttend">Deltagande</Label>

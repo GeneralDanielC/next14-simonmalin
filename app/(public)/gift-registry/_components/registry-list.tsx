@@ -3,6 +3,7 @@
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
+import { Separator } from "@/components/ui/separator";
 import { useRequestGiftModal } from "@/hooks/use-request-gift-modal";
 import { Gift } from "@prisma/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -19,8 +20,8 @@ export const RegistryList = ({
 }: RegistryListProps) => {
     const requestGiftModal = useRequestGiftModal();
 
+    const [hideList, setHideList] = useState<boolean>(false);
     const [requestGift, setRequestGift] = useState<Gift | undefined>(undefined);
-
     const [currentPage, setCurrentPage] = useState(1);
 
     const filteredGifts = gifts.filter(gift => !gift.assignedToEmail);
@@ -47,13 +48,23 @@ export const RegistryList = ({
         requestGiftModal.onOpen();
     }
 
+    if (hideList) {
+        return (
+            <div className="w-full h-full min-h-[125px] flex flex-col items-center justify-center">
+                <h2 className="text-xl">Inga saker här ännu</h2>
+                <span className="text-stone-500">Återkom lite senare</span>
+            </div>
+        )
+    }
+
     return (
         <div>
-            <div className="flex flex-col gap-y-1">
+            <div className="flex flex-col gap-y-0.5">
                 {currentGifts.map(gift => (
-                    <div onClick={() => handleOpenModal(gift)} key={gift.id} className="border-b border-black border-dotted flex flex-col p-1 rounded-t-lg hover:cursor-pointer hover:bg-stone-700/10">
+                    <div onClick={() => handleOpenModal(gift)} key={gift.id} className="flex flex-col p-1 rounded-lg hover:cursor-pointer hover:bg-stone-500/10">
                         <span>{gift.title}</span>
                         <span className="text-xs text-stone-500/90">{gift.backstory}</span>
+                        <Separator className="bg-transparent border-b border-black border-dotted my-1" />
                     </div>
                 ))}
                 <div className="flex flex-row items-center w-full">

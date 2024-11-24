@@ -24,7 +24,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (password !== websitePassword) return { error: "Incorrect Password." }
 
-    cookies().set(CLIENT_LOGIN_COOKIE, 'authenticated', { path: '/', maxAge: 60 * 60 * 24 });
+    cookies().set(CLIENT_LOGIN_COOKIE, 'authenticated', { path: '/', maxAge: 60 * 60 * 24 * 7 });
 
     revalidatePath(`/auth/client-login`);
     return { data: true };

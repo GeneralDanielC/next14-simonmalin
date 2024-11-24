@@ -13,7 +13,10 @@ export default async function Home() {
     <div>
       {/* Hero-section */}
       <HeroSection heading="Bröllop" subtext="24 maj 2025" />
-      <Skew card={false} backgroundColor="bg-pink-500/20">
+      <Skew
+        card={false}
+        backgroundColor="bg-pink-600/10"
+      >
         <div className="py-14 text-4xl text-stone-500">
           {/* <Countdown targetDate={new Date("2025-05-24")} /> */}
           <h1 className="text-2xl">Välkomna till</h1>
@@ -25,7 +28,7 @@ export default async function Home() {
       <ModuleSection />
 
       <Skew
-        backgroundColor="bg-sky-600/30"
+        backgroundColor="bg-sky-700/30"
         align="right"
         card={false}
         direction="bt"

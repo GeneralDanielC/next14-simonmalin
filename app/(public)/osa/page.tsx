@@ -23,8 +23,8 @@ const OsaPage = () => {
                 backgroundColor="bg-sky-700/30"
             >
                 <div className="py-14 text-stone-500">
-                    <h1 className="text-4xl">Information</h1>
-                    <p>Kan vi räkna med dig? O.S.A. även om du inte kan komma!</p>
+                    <h1 className="text-4xl">Kan vi räkna med dig?</h1>
+                    <p>O.S.A. även om du inte kan komma!</p>
                     <p className="italic">Sista dagen är {endRSVPDate}</p>
 
                 </div>

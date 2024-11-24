@@ -7,6 +7,8 @@ import mapboxgl from "mapbox-gl";
 import { calculateTime } from "@/lib/calculate-time";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ExternalLink, SquareArrowOutUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_APP_MAPBOX_KEY || "";
 
@@ -31,19 +33,17 @@ export const ModuleSection = () => {
   const endRSVPDate = process.env.NEXT_PUBLIC_END_RSVP_DATE;
   const diffMs = new Date().getTime() - new Date(endRSVPDate || "").getTime();
 
-  const endRSVPDateString = new Date(endRSVPDate || "").toLocaleDateString('sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
   useEffect(() => {
     if (mapContainerRef.current) {
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: 'mapbox://styles/dcarlsson/cm1gvrcwg003e01r2c1x01tt9',
-        center: [18.0649, 59.3326], // Longitude, Latitude
-        zoom: 10,
+        center: [18.090709486764048, 59.394866756208195], // Longitude, Latitude
+        zoom: 12,
         attributionControl: false,
       });
 
-      new mapboxgl.Marker({ color: 'pink' }).setLngLat([18.153315, 59.343966]).addTo(map);
+      new mapboxgl.Marker({ color: 'pink' }).setLngLat([18.090709486764048, 59.394866756208195]).addTo(map);
 
       return () => {
         map.remove();
@@ -64,28 +64,21 @@ export const ModuleSection = () => {
           variants={variants}
           custom={0} // Custom index for stagger effect
         >
-          {/* Card 1 */}
-          <motion.div className="bg-stone-400/10 flex flex-col justify-between p-4 flex-1 rounded-xl shadow-lg h-full">
-            <div className="flex flex-col">
-              <span className="text-xl">Räkna med mig!</span>
-              <span className="text-stone-500/80">{Math.abs(calculateTime({ diffMs }).days)} dagar kvar</span>
-            </div>
-            <div className="flex flex-row justify-between items-center text-stone-500/80">
-              <span>Till O.S.A.</span>
-              <ArrowRight className="size-5" />
-            </div>
-          </motion.div>
-          {/* Card 2 */}
-          <motion.div className="bg-stone-400/10 w-32 flex flex-col justify-between p-4 flex-1 rounded-xl shadow-lg h-full">
-            <div className="flex flex-col">
-              <span className="text-xl">Toastmadames</span>
-              <span className="text-stone-500/80"></span>
-            </div>
-            <div className="flex flex-row justify-between items-center text-stone-500/80">
-              <span>Till sidan.</span>
-              <ArrowRight className="size-5" />
-            </div>
-          </motion.div>
+          <Module
+            heading="Räkna med mig!"
+            subtext={`${Math.abs(calculateTime({ diffMs }).days)} dagar kvar`}
+            showAction
+            actionText="Till O.S.A."
+            classNames="flex-1"
+            href="/osa"
+          />
+          <Module
+            heading="Toastmadames"
+            showAction
+            actionText="Till sidan"
+            classNames="w-32 flex-1"
+            href="/toastmadames"
+          />
         </motion.div>
 
         {/* Row 2 */}
@@ -97,23 +90,22 @@ export const ModuleSection = () => {
           variants={variants}
           custom={1} // Stagger second card
         >
-          {/* Card 3 */}
-          <motion.div className="bg-stone-400/10 max-w-32 flex flex-col justify-between p-4 flex-1 rounded-xl shadow-lg h-full">
-            <div className="flex flex-col">
-              <span className="text-xl">Tid & Plats</span>
-              <span className="text-stone-500/80"></span>
-            </div>
-            <div className="flex flex-row justify-between items-center text-stone-500/80">
-              <span>Visa.</span>
-              <ArrowRight className="size-5" />
-            </div>
-          </motion.div>
-          <motion.div className="bg-stone-400/10 flex-1 rounded-xl shadow-lg border-4 border-stone-400/10 overflow-hidden">
-            <div ref={mapContainerRef} style={{ borderRadius: "9px" }} className="w-full h-full rounded-lg overflow-hidden"></div>
-          </motion.div>
+          <Module
+            heading="Tid & Plats"
+            showAction
+            actionText="Visa"
+            classNames="max-w-32 flex-1"
+            href="/toastmadames"
+          />
+          <Module
+            heading=""
+            showAction
+            showMap
+            classNames="flex-1"
+          />
         </motion.div>
 
-        {/* Card 3 */}
+        {/* Row 3 */}
         <motion.div
           className="flex flex-row gap-4 h-32"
           initial="hidden"
@@ -122,17 +114,93 @@ export const ModuleSection = () => {
           variants={variants}
           custom={2} // Stagger third card
         >
-          <motion.div className="bg-stone-400/10 w-full rounded-xl shadow-lg p-4">
-            <p className="text-xs font-semibold">Klädkod</p>
-          </motion.div>
-          <motion.div className="bg-stone-400/10 w-full rounded-xl shadow-lg p-4">
-            <p className="text-xs font-semibold">Information</p>
-          </motion.div>
-          <motion.div className="bg-stone-400/10 w-full rounded-xl shadow-lg p-4">
-            <p className="text-xs font-semibold">Information</p>
-          </motion.div>
+          <Module 
+            heading="Mer info om bröllopet"
+            subtext="24 maj 2025"
+            showAction
+            actionText="Till sidan"
+            classNames="flex-1"
+            href="/wedding-day"
+          />
+          <Module 
+            heading="Önskelista"
+            showAction
+            actionText="Till sidan"
+            classNames="w-32"
+          />
         </motion.div>
       </motion.div>
     </div>
   );
 };
+
+interface ModuleProps {
+  heading: string
+  subtext?: string
+  showAction: boolean
+  actionText?: string
+  showMap?: boolean
+  href?: string
+  classNames?: string
+}
+
+const Module = ({
+  heading,
+  subtext,
+  showAction,
+  actionText,
+  showMap = false,
+  href,
+  classNames
+}: ModuleProps) => {
+  const router = useRouter();
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (mapContainerRef.current) {
+      const map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/dcarlsson/cm1gvrcwg003e01r2c1x01tt9',
+        center: [18.090709486764048, 59.394866756208195], // Longitude, Latitude
+        zoom: 12,
+        attributionControl: false,
+      });
+
+      new mapboxgl.Marker({ color: 'pink' }).setLngLat([18.090709486764048, 59.394866756208195]).addTo(map);
+
+      return () => {
+        map.remove();
+      };
+    }
+  }, []);
+
+  const handleOnClick = () => {
+    href && router.push(href);
+  }
+
+  if (showMap) {
+    return (
+      <motion.div className={cn("bg-stone-400/10 flex-1 rounded-xl shadow-lg border-4 border-stone-400/10 overflow-hidden", classNames)}>
+        <div ref={mapContainerRef} style={{ borderRadius: "9px" }} className="w-full h-full rounded-lg overflow-hidden"></div>
+      </motion.div>
+    )
+  }
+
+  return (
+    <motion.div className={cn("bg-stone-400/10 flex flex-col justify-between p-4 rounded-xl shadow-lg h-full hover:cursor-pointer", classNames)} onClick={handleOnClick}>
+      <div className="flex flex-col">
+        <span className="text-xl">{heading}</span>
+        <span className="text-stone-500/80">{subtext}</span>
+      </div>
+      {showAction && (
+        <div className="flex flex-row justify-between items-center text-stone-500/80">
+          <span>{actionText}</span>
+          <ArrowRight className="size-5" />
+        </div>
+      )}
+    </motion.div>
+  )
+}
+
+
+
