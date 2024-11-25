@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export const NavBar = () => {
     const pathname = usePathname();
+    const router = useRouter();
 
     const navItems = [
         { title: "Startsida", href: "/" },
@@ -20,10 +21,16 @@ export const NavBar = () => {
         { title: "O.S.A.", href: "/osa" },
         { title: "Toastmadames", href: "/toastmadames" },
         { title: "Önskelista", href: "/gift-registry" },
-        { title: "Galleri", href: "/gallery" },
+        // { title: "Galleri", href: "/gallery" },
     ];
 
     const [openNavbar, setOpenNavbar] = useState(false);
+
+    const handleRedirectToAuth = () => {
+        router.push("/auth/login");
+        setOpenNavbar(false);
+    }
+
 
     return (
         <nav className="w-full flex justify-center items-center py-5 fixed z-50">
@@ -50,15 +57,21 @@ export const NavBar = () => {
                         </SheetTrigger>
                         <SheetContent className="w-full h-full p-0">
                             <div className="w-full h-full bg-beige flex flex-col gap-y-4 justify-center items-center font-semibold sm:w-full">
-                                {navItems.map((item, index) => (
+                                {navItems.map((item) => (
                                     <Link onClick={() => setOpenNavbar(false)} href={item.href} className="flex flex-row gap-x-7 text-4xl text-lime-900/30 hover:text-green animate transition">
-                                        {/* <span>0{index + 1}</span> */}
                                         <span className="uppercase">{item.title}</span>
                                     </Link>
                                 ))}
+                                <div className="text-lime-900/30 flex flex-col items-center justify-center opacity-50 hover:cursor-not-allowed">
+                                    <span className="text-4xl">GALLERI</span>
+                                    <span>kommer strax</span>
+                                </div>
                             </div>
                             <div className="absolute bottom-3 w-full flex justify-center">
                                 <span className="text-xs lowercase text-stone-400">TILLHANDAHÅLLS AV NOLL2 SOLUTIONS AB</span>
+                            </div>
+                            <div onClick={handleRedirectToAuth} className="fixed bg-blue-500 size-10 bottom-0 hover:cursor-pointer">
+                                
                             </div>
                         </SheetContent>
                     </Sheet>

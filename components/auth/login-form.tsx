@@ -75,9 +75,6 @@ export const LoginForm = () => {
     return (
         <CardWrapper
             headerLabel="Welcome back"
-            backButtonLabel="Don't have an account?"
-            backButtonHref="/auth/register"
-            showSocial
         >
             <Form {...form}>
                 <form
@@ -155,8 +152,9 @@ export const LoginForm = () => {
 
                     <Button
                         type="submit"
-                        className="w-full"
+                        className="w-full border border-black"
                         disabled={isPending}
+                        variant="success"
                     >
                         {showTwoFactor ? "Confirm" : "Login"}
                     </Button>

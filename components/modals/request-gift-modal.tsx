@@ -25,7 +25,7 @@ export const RequestGiftModal = ({
 
     const { execute, fieldErrors } = useAction(requestGift, {
         onSuccess: (data) => {
-            toast.success("Inskickat! Håll utkik på mejlen för bekräftelse.")
+            toast.success("Paxat! Håll utkik på mejlen för bekräftelse.")
             formRef.current?.reset();
             requestGiftModal.onClose();
         },
@@ -54,7 +54,7 @@ export const RequestGiftModal = ({
                     <DialogDescription>Presenten kommer att gömmas från andra gäster.</DialogDescription>
                 </DialogHeader>
                 <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="more-info">
+                    <AccordionItem value="more-info" className="border-none">
                         <AccordionTrigger className="border border-black p-2 rounded-lg">Mer info</AccordionTrigger>
                         <AccordionContent className="flex flex-col px-2 py-1.5">
                             <span className="text-lg">{gift.title}</span>

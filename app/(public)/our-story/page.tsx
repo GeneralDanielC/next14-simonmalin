@@ -24,7 +24,7 @@ const OurStoryPage = () => {
                 <div className="max-w-[400px] flex flex-col gap-y-2 justify-center items-center px-6 h-auto">
                     <Image
                         src="/images/our-story/IMG_0001.jpg"
-                        className="rounded-md"
+                        className="rounded-md shadow-lg"
                         width={400}
                         height={400}
                         alt="Malin & Simon"
@@ -46,21 +46,21 @@ const OurStoryPage = () => {
                     <div className="w-full h-full flex flex-col sm:flex-row gap-2 justify-center items-center">
                         <Image
                             src="/images/our-story/IMG_1723.jpg"
-                            className="rounded-md"
+                            className="rounded-md shadow-lg w-[300px] sm:w-[200px]"
                             width={200}
                             height={200}
                             alt="Malin & Simon"
                         />
                         <Image
                             src="/images/our-story/IMG_1717.jpg"
-                            className="rounded-md"
+                            className="rounded-md shadow-lg w-[300px] sm:w-[200px]"
                             width={200}
                             height={200}
                             alt="Malin & Simon"
                         />
                         <Image
                             src="/images/our-story/IMG_1708.jpg"
-                            className="rounded-md"
+                            className="rounded-md shadow-lg w-[300px] sm:w-[200px]"
                             width={200}
                             height={200}
                             alt="Malin & Simon"

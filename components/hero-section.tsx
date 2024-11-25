@@ -6,13 +6,15 @@ interface HeroSectionProps {
     subtext?: string,
     size?: "sm" | "default",
     className?: string,
+    children?: React.ReactNode,
 }
 
 export const HeroSection = ({
     heading,
     subtext,
     size = "default",
-    className
+    className,
+    children
 }: HeroSectionProps) => {
     return (
         // <div className={cn(size === "sm" ? "py-20" : "py-40", "w-full", className)}>
@@ -29,6 +31,7 @@ export const HeroSection = ({
         <div className="py-40 mt-10 w-full px-5 text-center">
             <h1 className={cn("font-thin text-4xl")}>{heading}</h1>
             <h2 className={cn("font-thin text-2xl text-stone-400")}>{subtext}</h2>
+            {children}
         </div>
     )
 }

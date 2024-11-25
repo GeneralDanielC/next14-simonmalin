@@ -92,7 +92,7 @@ export const sendNewAssignedGiftToClient = async (
     await resend.emails.send({
         from: "info@pakkit.app", // change domain
         to: email,
-        subject: `Malin & Simons bröllop // Present Bekräftelse`,
+        subject: `Malin & Simons bröllop // Presentbekräftelse`,
         html: `
             <h1>Tack!</h1>
             <p>Dina val:</p>
@@ -110,7 +110,7 @@ export const sendGiftConfirmation = async (
     await resend.emails.send({
         from: "info@pakkit.app", // change domain
         to: email,
-        subject: `Malin & Simons bröllop // Present Bekräftelse`,
+        subject: `Malin & Simons bröllop // Presentbekräftelse`,
         html: `
             <h1>Tack! Presenten är nu gömd från andra gäster.</h1>
             <p>Kontakta på X@X.X om du inte längre vill köpa denna present.</p>
