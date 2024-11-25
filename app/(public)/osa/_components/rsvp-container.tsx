@@ -42,7 +42,7 @@ export const RSVPContainer = ({
             ) : (
                 <div>
                     <h1 className="text-2xl text-center">O.S.A.</h1>
-                    {mode === "editEntireParty" && <h2 className="text-stone-500">Ändra dina val</h2>}
+                    {mode === "editEntireParty" && <h2 className="text-stone-500 text-center">Ändra dina val</h2>}
                     {mode === "editEntireParty" ? (
                         <RSVPForm setSuccess={setSuccess} party={party} mode="editEntireParty" />
                     ) : (

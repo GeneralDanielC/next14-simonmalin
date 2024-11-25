@@ -14,6 +14,7 @@ export const getPartyByEmail = async (email: string) => {
 }
 
 export const getPartyById = async (id: string) => {
+
     const party = await db.party.findUnique({
         where: {
             id

@@ -34,8 +34,8 @@ export const ClientLoginForm = () => {
 
     return (
         <form action={handleLogin} ref={formRef} className="flex flex-col gap-y-2">
-            <FormInput id="password" placeholder="******" errors={fieldErrors} />
-            <FormSubmit variant="success">Logga in</FormSubmit>
+            <FormInput id="password" placeholder="******" errors={fieldErrors} className="bg-transparent border border-black" />
+            <FormSubmit variant="success" className="border border-black">Logga in</FormSubmit>
         </form>
     )
 }

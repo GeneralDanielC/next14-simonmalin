@@ -6,6 +6,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { PartyWithGuests } from "@/types";
 import { Gift } from "@prisma/client";
 import { Home, Package, PanelLeft, Settings, Users } from "lucide-react";
@@ -29,6 +30,7 @@ export const Navbar = ({
     parties,
     gifts,
  }: NavbarProps) => {
+    const user = useCurrentUser();
 
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -116,13 +118,13 @@ export const Navbar = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
+                    {/* <DropdownMenuSeparator /> */}
+                    {/* <DropdownMenuItem>
                         <Link href={"/admin/settings"}>
                             Settings
                         </Link>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem><LogoutButton>Logout</LogoutButton></DropdownMenuItem>
                 </DropdownMenuContent>
