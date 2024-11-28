@@ -43,7 +43,7 @@ const ToastMadamesPage = () => {
             >
                 <div className="text-stone-500 py-20">
                     <h1 className="text-4xl">Kontakt</h1>
-                    <h2>epost@epostadress.epost</h2>
+                    <a href={`mailto:${process.env.NEXT_PUBLIC_TOASTMADAMES_EMAIL}`} className="underline">{process.env.NEXT_PUBLIC_TOASTMADAMES_EMAIL}</a>
                 </div>
             </Skew>
         </div>

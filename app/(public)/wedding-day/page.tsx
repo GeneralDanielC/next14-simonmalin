@@ -2,33 +2,54 @@ import { HeroSection } from "@/components/hero-section";
 import { Skew } from "@/components/skew";
 import { Separator } from "@/components/ui/separator";
 import { Timeline } from "./_components/timeline";
+import { AddressCardDetails } from "@/components/modals/address-modal";
 
 const WeddingDayPage = () => {
 
-    const timelineItems = [
+    const timelineItems: AddressCardDetails[] = [
         {
             time: "15:00",
             heading: "Vigsel",
             description: "Djursholms kapell",
-            address: "59.394866756208195, 18.090709486764048"
+            mapSettings: {
+                coordinates: [59.394866756208195, 18.090709486764048]
+            },
+            street: "Danavägen 9",
+            postalCode: "182 60",
+            city: "Djursholm",
         },
         {
             time: "16:00",
             heading: "Båtfärd till Ekensdal",
             description: "Ekudden, Djursholm",
-            address: "59.390066456177344, 18.090977310922415"
+            mapSettings: {
+                coordinates: [59.390066456177344, 18.090977310922415]
+            },
+            street: "Ekudden",
+            postalCode: "182 60",
+            city: "Djursholm",
         },
         {
             time: "17:00",
             heading: "Ankomst och mingel",
             description: "Ekensdal, Nacka",
-            address: "59.33258913266237, 18.205240166907075"
+            mapSettings: {
+                coordinates: [59.33258913266237, 18.205240166907075]
+            },
+            street: "Skurusundsvägen 151",
+            postalCode: "131 46",
+            city: "Nacka",
         },
         {
             time: "17:30",
             heading: "Till bords",
             description: "Ekensdal, Nacka",
-            address: "59.33258913266237, 18.205240166907075"
+            mapSettings: {
+                coordinates: [59.33258913266237, 18.205240166907075]
+            },
+            street: "Skurusundsvägen 151",
+            postalCode: "131 46",
+            city: "Nacka",
         },
     ]
 
@@ -46,7 +67,7 @@ const WeddingDayPage = () => {
             </Skew>
             <div className="py-36 w-full h-full flex flex-col gap-y-12 justify-center items-center">
                 <Timeline items={timelineItems} />
-                <span className="text-xs">Klicka för att visa i kartor</span>
+                <span className="text-xs">Klicka för att visa detaljer</span>
                 <div>
                     <span className="text-3xl tracking-widest text-stone-500">•••</span>
                 </div>

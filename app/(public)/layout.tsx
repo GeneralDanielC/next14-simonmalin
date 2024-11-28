@@ -47,57 +47,19 @@ export default function RootLayout({
             }
           }}
         />
-        <footer className="w-full flex flex-col">
-          <div>
-            <div className="aspect-video relative flex items-center justify-center max-h-72 w-full bottom-0">
-              <div className="relative w-full h-full">
-                <Image
-                  src="/images/flowers.png"
-                  className="object-contain"
-                  fill
-                  alt="flowers"
-                />
-              </div>
-              <div className="relative hidden md:flex w-full h-full">
-                <Image
-                  src="/images/flowers.png"
-                  className="object-contain"
-                  fill
-                  alt="flowers"
-                />
-              </div>
-              <div className="relative hidden lg:flex w-full h-full">
-                <Image
-                  src="/images/flowers.png"
-                  className="object-contain"
-                  fill
-                  alt="flowers"
-                />
-              </div>
-              <div className="relative hidden xl:flex w-full h-full">
-                <Image
-                  src="/images/flowers.png"
-                  className="object-contain"
-                  fill
-                  alt="flowers"
-                />
-              </div>
-              <div className="relative hidden 2xl:flex w-full h-full">
-                <Image
-                  src="/images/flowers.png"
-                  className="object-contain"
-                  fill
-                  alt="flowers"
-                />
-              </div>
-            </div>
+        <footer className="w-full relative overflow-hidden">
+          <div className="flex w-[500%]">
+            {Array.from({ length: 20 }).map((_, index) => (
+              <Image
+                key={index}
+                src="/images/flowers.png"
+                alt="flowers"
+                width={400}
+                height={200}
+                className="object-contain"
+              />
+            ))}
           </div>
-          {/* <div className="w-full">
-            <div className="flex gap-x-1 italic">
-              <span className="text-xs">Utvecklad & Tillhandahållen av</span>
-              <span className="text-xs font-semibold">NOLL2 SOLUTIONS AB</span>
-            </div>
-          </div> */}
         </footer>
       </body>
     </html>

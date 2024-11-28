@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ExternalLink, SquareArrowOutUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Map } from "@/components/map";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_APP_MAPBOX_KEY || "";
 
@@ -28,28 +29,9 @@ const variants = {
 
 
 export const ModuleSection = () => {
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   const endRSVPDate = process.env.NEXT_PUBLIC_END_RSVP_DATE;
   const diffMs = new Date().getTime() - new Date(endRSVPDate || "").getTime();
-
-  useEffect(() => {
-    if (mapContainerRef.current) {
-      const map = new mapboxgl.Map({
-        container: mapContainerRef.current,
-        style: 'mapbox://styles/dcarlsson/cm1gvrcwg003e01r2c1x01tt9',
-        center: [18.090709486764048, 59.394866756208195], // Longitude, Latitude
-        zoom: 12,
-        attributionControl: false,
-      });
-
-      new mapboxgl.Marker({ color: 'pink' }).setLngLat([18.090709486764048, 59.394866756208195]).addTo(map);
-
-      return () => {
-        map.remove();
-      };
-    }
-  }, []);
 
   return (
     <div className="my-24 flex flex-col items-center justify-center w-full h-full overflow-hidden">
@@ -95,7 +77,7 @@ export const ModuleSection = () => {
             showAction
             actionText="Visa"
             classNames="max-w-32 flex-1"
-            href="/toastmadames"
+            href="/wedding-day"
           />
           <Module
             heading=""
@@ -127,6 +109,7 @@ export const ModuleSection = () => {
             showAction
             actionText="Till sidan"
             classNames="w-32"
+            href="/gift-registry"
           />
         </motion.div>
       </motion.div>
@@ -161,33 +144,73 @@ const Module = ({
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: 'mapbox://styles/dcarlsson/cm1gvrcwg003e01r2c1x01tt9',
-        center: [18.090709486764048, 59.394866756208195], // Longitude, Latitude
+        center: [18.089389850709, 59.394462589815156], // Longitude, Latitude
         zoom: 12,
         attributionControl: false,
       });
-
-      new mapboxgl.Marker({ color: 'pink' }).setLngLat([18.090709486764048, 59.394866756208195]).addTo(map);
-
+  
+      map.on('load', () => {
+        map.loadImage('/images/pin.png', (error, image) => {
+          if (error) {
+            console.error('Error loading image:', error);
+            return;
+          }
+  
+          if (image) {
+            map.addImage('custom-marker', image);
+  
+            map.addSource('marker-source', {
+              type: 'geojson',
+              data: {
+                type: 'FeatureCollection',
+                features: [
+                  {
+                    type: 'Feature',
+                    geometry: {
+                      type: 'Point',
+                      coordinates: [18.089389850709, 59.394462589815156],
+                    },
+                    properties: {},
+                  },
+                ],
+              },
+            });
+  
+            map.addLayer({
+              id: 'marker-layer',
+              type: 'symbol',
+              source: 'marker-source',
+              layout: {
+                'icon-image': 'custom-marker',
+                'icon-size': 0.05, // Adjust size
+                'symbol-z-order': 'source', // Ensures labels are not obscured
+              },
+            });
+          }
+        });
+      });
+  
       return () => {
         map.remove();
       };
     }
   }, []);
+  
+  
 
-  const handleOnClick = () => {
-    href && router.push(href);
-  }
+  const handleOnClick = () => href && router.push(href);
 
   if (showMap) {
     return (
-      <motion.div className={cn("bg-stone-400/10 flex-1 rounded-xl shadow-lg border-4 border-stone-400/10 overflow-hidden", classNames)}>
-        <div ref={mapContainerRef} style={{ borderRadius: "9px" }} className="w-full h-full rounded-lg overflow-hidden"></div>
+      <motion.div className={cn("bg-beige border border-black flex-1 rounded-xl shadow-lg  overflow-hidden", classNames)}>
+        {/* <div ref={mapContainerRef} style={{ borderRadius: "9px" }} className="w-full h-full rounded-lg overflow-hidden"></div> */}
+        <Map coordinates={[18.089738520514267, 59.39448440724202]} zoom={12} isGoogleCoordinates={false} />
       </motion.div>
     )
   }
 
   return (
-    <motion.div className={cn("bg-stone-400/10 flex flex-col justify-between p-4 rounded-xl shadow-lg h-full hover:cursor-pointer", classNames)} onClick={handleOnClick}>
+    <motion.div className={cn("bg-beige border border-black flex flex-col justify-between p-4 rounded-xl shadow-lg h-full hover:cursor-pointer", classNames)} onClick={handleOnClick}>
       <div className="flex flex-col">
         <span className="text-xl">{heading}</span>
         <span className="text-stone-500/80">{subtext}</span>

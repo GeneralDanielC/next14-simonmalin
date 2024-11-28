@@ -21,7 +21,10 @@ const LoginPage = () => {
                     <div className="mt-4">
                         <ClientLoginForm />
                     </div>
-                    <span className="bg-blue-500">epostadress vid frågor.</span>
+                    <div className="flex flex-col mt-5 items-start w-full">
+                        <span className="text-xl">Frågor eller problem?</span>
+                        <a className="text-stone-500 underline" href={`mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL}`}>{process.env.NEXT_PUBLIC_SUPPORT_EMAIL}</a>
+                    </div>
                 </div>
             </div>
         </div>

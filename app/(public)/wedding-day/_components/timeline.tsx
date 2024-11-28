@@ -1,40 +1,50 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { AddressCardDetails } from "@/components/modals/address-modal";
+import { ModalProvider } from "@/components/providers/modal-provider";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
-interface TimelineItem {
-    time: string
-    heading: string
-    description: string
-    address: string
-}
+import { useAddressModal } from "@/hooks/use-enlarge-image-modal copy";
+import { useState } from "react";
 
 interface TimelineProps {
-    items: TimelineItem[]
+    items: AddressCardDetails[]
 }
 
 export const Timeline = ({
     items,
 }: TimelineProps) => {
+    const [addressCardDetails, setAddressCardDetails] = useState<AddressCardDetails | undefined>();
+
     return (
         <div className="flex flex-col h-full gap-y-3">
-            {items.map((item) => (
-                <TimelineItem item={item} />
+            {items.map((item, index) => (
+                <div key={index}>
+                    <TimelineItem item={item} setAddressCardDetails={setAddressCardDetails} />
+                </div>
             ))}
+            <ModalProvider
+                addressCardDetails={addressCardDetails}
+            />
         </div>
     )
 }
 
 const TimelineItem = ({
-    item
-}: { item: TimelineItem }) => {
+    item,
+    setAddressCardDetails,
+}: {
+    item: AddressCardDetails,
+    setAddressCardDetails: React.Dispatch<React.SetStateAction<AddressCardDetails | undefined>>
+}) => {
+    const addressModal = useAddressModal();
+
+    const handleOnClick = () => {
+        setAddressCardDetails(item);
+        addressModal.onOpen();
+    }
 
     return (
-        <Link href={`https://maps.google.com/?q=${item.address}`} target="_blank">
+        <div onClick={handleOnClick}>
             <div className="flex flex-row h-full gap-x-4 hover:cursor-pointer">
                 {/* Left */}
                 <div className="flex flex-col h-full justify-center items-center gap-y-2">
@@ -48,6 +58,7 @@ const TimelineItem = ({
                     <h3>{item.description}</h3>
                 </div>
             </div>
-        </Link>
+
+        </div>
     )
 }
