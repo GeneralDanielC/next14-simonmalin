@@ -35,7 +35,7 @@ export const AlcoholFreeCard = ({
     }, [party, parties])
 
     return (
-        <Card x-chunk="dashboard-05-chunk-2">
+        <Card x-chunk="dashboard-05-chunk-2" className="col-span-3 sm:col-span-1">
             <CardHeader className="pb-2">
                 <CardDescription className="text-xs">Alcohol-Free</CardDescription>
                 <CardTitle className="flex flex-row gap-x-2 items-center">

@@ -47,8 +47,8 @@ export const AttendanceCard = ({
     }, [party, parties])
 
     return (
-        <Card x-chunk="dashboard-05-chunk-1" className="flex flex-row w-full">
-            <div className="w-full">
+        <Card x-chunk="dashboard-05-chunk-1" className="flex flex-row w-full col-span-3 sm:col-span-2">
+            <div className="w-full flex flex-col justify-between">
                 <CardHeader className="pb-2">
                     <CardDescription className="text-xs">Attending</CardDescription>
                     <CardTitle className="flex flex-row gap-x-2 items-center">
@@ -65,9 +65,9 @@ export const AttendanceCard = ({
                     <Progress value={(attendingGuests || 0) / (totalGuests || 0) * 100} aria-label="" />
                 </CardFooter>
             </div>
-            <div className="w-full">
+            <div className="w-full flex flex-col justify-between">
                 <CardHeader className="pb-2">
-                    <CardDescription className="text-xs">Attending Nuptials</CardDescription>
+                    <CardDescription className="text-xs">Nuptials</CardDescription>
                     <CardTitle className="flex flex-row gap-x-2 items-center">
                         <span className={cn("text-4xl", attendingNuptials === totalGuests && "text-emerald-400")}>{attendingNuptials}</span>
                         <span className="text-xl text-stone-400">/ {totalGuests}</span>
@@ -82,9 +82,9 @@ export const AttendanceCard = ({
                     <Progress value={(attendingNuptials || 0) / (totalGuests || 0) * 100} aria-label="" />
                 </CardFooter>
             </div>
-            <div className="w-full">
+            <div className="w-full flex flex-col justify-between">
                 <CardHeader className="pb-2">
-                    <CardDescription className="text-xs">Attending Reception</CardDescription>
+                    <CardDescription className="text-xs">Reception</CardDescription>
                     <CardTitle className="flex flex-row gap-x-2 items-center">
                         <span className={cn("text-4xl", attendingReception === totalGuests && "text-emerald-400")}>{attendingReception}</span>
                         <span className="text-xl text-stone-400">/ {totalGuests}</span>

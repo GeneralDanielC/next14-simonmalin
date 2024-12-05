@@ -68,11 +68,10 @@ export const NavBar = () => {
                                 </div>
                             </div>
                             <div className="absolute bottom-3 w-full flex justify-center">
-                                <a href="https://noll2.io" className="text-xs lowercase text-stone-400 hover:underline">TILLHANDAHÅLLS AV NOLL2 SOLUTIONS AB</a>
+                                <a href="https://noll2.io" className="text-xs lowercase text-stone-400 hover:underline" target="_blank">TILLHANDAHÅLLS AV NOLL2 SOLUTIONS AB</a>
                             </div>
-                            <div onClick={handleRedirectToAuth} className="fixed bg-blue-500 size-10 bottom-0 hover:cursor-pointer">
-                                
-                            </div>
+                            {/* Hidden login button */}
+                            <div onClick={handleRedirectToAuth} className="fixed size-10 bottom-0 hover:cursor-pointer"></div>
                         </SheetContent>
                     </Sheet>
                 </div>

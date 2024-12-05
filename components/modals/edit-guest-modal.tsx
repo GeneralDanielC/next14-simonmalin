@@ -83,7 +83,7 @@ export const EditGuestModal = ({
             open={editGuestModal.isOpen}
             onOpenChange={editGuestModal.onClose}
         >
-            <DialogContent>
+            <DialogContent className="bg-card">
                 <DialogHeader>
                     <DialogTitle>{guest.firstName} {guest.lastName}</DialogTitle>
                     <DialogDescription>You can modify the guest's selected options here.</DialogDescription>

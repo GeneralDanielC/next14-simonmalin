@@ -85,17 +85,17 @@ export const GuestTable = ({
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttend ? "secondary" : "outline"}>
+                                    <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttend ? "secondary" : "outline"}>
                                         {guest.willAttend ? "Yes" : "No"}
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <Badge className={cn("text-xs", guest.willAttendNuptials ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttendNuptials ? "secondary" : "outline"}>
+                                    <Badge className={cn("text-xs", guest.willAttendNuptials ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttendNuptials ? "secondary" : "outline"}>
                                         {guest.willAttendNuptials ? "Yes" : "No"}
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <Badge className={cn("text-xs", guest.willAttendReception ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttendReception ? "secondary" : "outline"}>
+                                    <Badge className={cn("text-xs", guest.willAttendReception ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttendReception ? "secondary" : "outline"}>
                                         {guest.willAttendReception ? "Yes" : "No"}
                                     </Badge>
                                 </TableCell>
@@ -120,7 +120,7 @@ export const GuestTable = ({
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-center">
-                                        <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300" : "bg-rose-300")} variant={guest.willAttend ? "secondary" : "outline"}>
+                                        <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttend ? "secondary" : "outline"}>
                                             {guest.willAttend ? "Yes" : "No"}
                                         </Badge>
                                     </TableCell>

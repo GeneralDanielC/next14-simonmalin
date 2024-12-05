@@ -2,6 +2,7 @@
 
 import { SearchParties } from "@/components/admin/search-parties";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -21,15 +22,15 @@ type Breadcrumb = {
 
 interface NavbarProps {
     breadcrumbs: Breadcrumb[],
-    parties: PartyWithGuests[],
-    gifts: Gift[]
+    parties?: PartyWithGuests[],
+    gifts?: Gift[]
 }
 
-export const Navbar = ({ 
+export const Navbar = ({
     breadcrumbs,
     parties,
     gifts,
- }: NavbarProps) => {
+}: NavbarProps) => {
     const user = useCurrentUser();
 
     return (
@@ -48,7 +49,7 @@ export const Navbar = ({
                             className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                         >
                             <Package className="h-5 w-5 transition-all group-hover:scale-110" />
-                            <span className="sr-only">Acme Inc</span>
+                            <span className="sr-only">Admin Page</span>
                         </Link>
                         <Link
                             href="/admin/dashboard"
@@ -100,7 +101,8 @@ export const Navbar = ({
                     ))}
                 </BreadcrumbList>
             </Breadcrumb>
-            <SearchParties parties={parties} gifts={gifts} />
+            {!parties && !gifts && <div className="w-full"></div>}
+            {parties && gifts && <SearchParties parties={parties} gifts={gifts} />}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -119,12 +121,16 @@ export const Navbar = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
-                    {/* <DropdownMenuSeparator /> */}
-                    {/* <DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
                         <Link href={"/admin/settings"}>
                             Settings
                         </Link>
-                    </DropdownMenuItem> */}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                        <ThemeToggle />
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem><LogoutButton>Logout</LogoutButton></DropdownMenuItem>
                 </DropdownMenuContent>

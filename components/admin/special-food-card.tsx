@@ -49,7 +49,7 @@ export const SpecialFoodCard = ({
 
     return (
         <Card
-            className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
+            className="col-span-3 sm:col-span-2 md:col-span-3" x-chunk="dashboard-05-chunk-0"
         >
             <CardHeader className="pb-3">
                 <CardDescription className="text-xs">Special Food Preferences</CardDescription>

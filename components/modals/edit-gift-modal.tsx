@@ -65,7 +65,7 @@ export const EditGiftModal = ({
             open={editGiftModal.isOpen}
             onOpenChange={editGiftModal.onClose}
         >
-            <DialogContent>
+            <DialogContent className="bg-card">
                 <DialogHeader>
                     <DialogTitle>Edit '{gift.title}'</DialogTitle>
                     <DialogDescription>You can modify the gift here.</DialogDescription>

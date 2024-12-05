@@ -37,10 +37,10 @@ export const NewGiftForm = () => {
             <DialogTrigger asChild>
                 <Button variant="secondary" className="text-xs">New Gift</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-card">
                 <DialogHeader>
                     <DialogTitle>New Gift</DialogTitle>
-                    <DialogDescription>Here you can add new gifts by filling in the form below.</DialogDescription>
+                    <DialogDescription>Add new gifts by filling in the form below.</DialogDescription>
                 </DialogHeader>
                 <form
                     action={handleSubmit}

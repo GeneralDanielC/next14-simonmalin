@@ -50,7 +50,7 @@ export const NewPartyForm = () => {
                     New Party
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-card">
                 <DialogHeader>
                     <DialogTitle>New Party</DialogTitle>
                     <DialogDescription>You can create a new party here.</DialogDescription>

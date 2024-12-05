@@ -86,7 +86,7 @@ export const PartySettings = ({
                 <AlertDialogTrigger asChild>
                     <Button variant="destructive" className="text-xs">Delete Party</Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent>
+                <AlertDialogContent className="bg-card">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>

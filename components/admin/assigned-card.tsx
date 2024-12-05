@@ -33,7 +33,7 @@ export const AssignedCard = ({
     }, [gifts]);
 
     return (
-        <Card x-chunk="dashboard-05-chunk-2">
+        <Card x-chunk="dashboard-05-chunk-2" className="col-span-2">
             <CardHeader className="pb-2">
                 <CardDescription className="text-xs">{showAssigned ? "Assigned" : "Not Assigned"}</CardDescription>
                 <CardTitle className="flex flex-row gap-x-2 items-center">

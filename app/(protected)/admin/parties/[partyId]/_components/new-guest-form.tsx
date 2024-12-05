@@ -75,7 +75,7 @@ export const NewGuestForm = ({
                     New Guest
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-card">
                 <DialogHeader>
                     <DialogTitle>New Guest</DialogTitle>
                     <DialogDescription>You can add a guest to the party here.</DialogDescription>

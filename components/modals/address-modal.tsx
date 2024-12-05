@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useAddressModal } from "@/hooks/use-enlarge-image-modal copy";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { useRouter } from "next/navigation";
 
 type MapSettings = {
     coordinates: [number, number]
@@ -32,6 +33,19 @@ interface AddressModalProps {
 
 export const AddressModal = ({ addressCardDetails }: AddressModalProps) => {
     const addressModal = useAddressModal();
+    const router = useRouter();
+
+    const handleOpenMaps = () => {
+        const isAppleDevice = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
+    
+        const coordinates = addressCardDetails.mapSettings.coordinates.toString();
+        const mapsUrl = isAppleDevice
+            ? `https://maps.apple.com/maps?q=${coordinates}`
+            : `https://maps.google.com/?q=${coordinates}`;
+    
+        window.open(mapsUrl, '_blank'); // Opens the map URL in a new tab or window
+    };
+    
 
     return (
         <Dialog
@@ -55,13 +69,8 @@ export const AddressModal = ({ addressCardDetails }: AddressModalProps) => {
                             <span className="text-stone-500">{addressCardDetails.street}</span>
                             <span className="text-stone-500">{addressCardDetails.postalCode} {addressCardDetails.city}</span>
                         </div>
-                        <Button
-
-                            asChild
-                        >
-                            <Link href={`https://maps.google.com/?q=${addressCardDetails.mapSettings.coordinates.toString()}`} target="_blank">
-                                Öppna i kartor
-                            </Link>
+                        <Button onClick={handleOpenMaps}>
+                            Öppna i kartor
                         </Button>
                     </div>
                 </div>
