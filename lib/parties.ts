@@ -144,7 +144,21 @@ export const getTotalGuests = ({ parties }: { parties: PartyWithGuests[] }) => {
     parties.map(party => {
         totalGuests += party.guests.length;
     })
-    console.log(totalGuests);
+    // console.log(totalGuests);
 
     return totalGuests;
+}
+
+export const getLatestPartyUpdate = ({ parties }: { parties: PartyWithGuests[] }) => {
+    if (parties.length === 0) return "null"; 
+
+    let latestDate = parties[0].updatedAt; 
+
+    parties.forEach((party) => {
+        if (party.updatedAt > latestDate) {
+            latestDate = party.updatedAt;
+        }
+    });
+
+    return latestDate;
 }

@@ -36,23 +36,48 @@ import { GuestTable } from "@/components/admin/guest-table"
 import { PartyWithGuests } from "@/types"
 import { NewPartyForm } from "./new-party-form"
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination"
+import { useEffect, useState } from "react"
+import { SortDropdown } from "@/components/sort-dropdown"
+import { FilterGuestsDropdown } from "@/components/filter-guests-dropdown"
+import { getLatestPartyUpdate } from "@/lib/parties"
 
 interface PartiesGuestsTabsProps {
     parties: PartyWithGuests[]
 }
 
 export const PartiesGuestsTabs = ({
-    parties
+    parties: passedParties
 }: PartiesGuestsTabsProps) => {
+    const defaultTabValue = "parties"
+
+    const [parties, setParties] = useState<PartyWithGuests[]>(passedParties);
+
+    const [currentTab, setCurrentTab] = useState<string>(defaultTabValue);
+
+    const handleChangeTab = (value: string) => {
+        setCurrentTab(value)
+    }
+
     return (
-        <Tabs defaultValue="parties">
+        <Tabs defaultValue={defaultTabValue} onValueChange={handleChangeTab}>
             <div className="flex items-center">
                 <TabsList>
                     <TabsTrigger value="parties">Parties</TabsTrigger>
                     <TabsTrigger value="guests">Guests</TabsTrigger>
                 </TabsList>
                 <div className="ml-auto flex items-center gap-2">
-                    <DropdownMenu>
+                    {currentTab === defaultTabValue ? (
+                        <div>
+                            {/* <FilterGuestsDropdown parties={parties} /> */}
+                            {/* <SortDropdown parties={parties} setParties={setParties} /> */}
+                        </div>
+                    ) : (
+                        <div>
+                            <FilterGuestsDropdown parties={parties} setParties={setParties} />
+                            {/* Sort guests by name desc, asc */}
+                        </div>
+                    )}
+                    {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="outline"
@@ -67,16 +92,43 @@ export const PartiesGuestsTabs = ({
                             <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuCheckboxItem checked>
-                                Fulfilled
+                                None
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuCheckboxItem>
+                                Attending All
                             </DropdownMenuCheckboxItem>
                             <DropdownMenuCheckboxItem>
-                                Declined
+                                Not Attending
                             </DropdownMenuCheckboxItem>
                             <DropdownMenuCheckboxItem>
-                                Refunded
+                                Only Nuptials
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem>
+                                No Nuptials
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem>
+                                Only Reception
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem>
+                                No Reception
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuCheckboxItem>
+                                Has Allergies
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem>
+                                No Allergies
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuCheckboxItem>
+                                Prefer Alcohol
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem>
+                                Prefer Alcohol-free
                             </DropdownMenuCheckboxItem>
                         </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu> */}
                     <Button
                         size="sm"
                         variant="outline"
@@ -107,7 +159,7 @@ export const PartiesGuestsTabs = ({
                     </CardContent>
                     <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                         <div className="text-xs text-muted-foreground">
-                            Updated <time dateTime="2023-11-23">November 23, 2023</time>
+                            Updated <time dateTime="2023-11-23">November 23, 2024</time>
                         </div>
                         <Pagination className="ml-auto mr-0 w-auto">
                             <PaginationContent>
@@ -146,7 +198,7 @@ export const PartiesGuestsTabs = ({
                     </CardContent>
                     <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                         <div className="text-xs text-muted-foreground">
-                            Updated <time dateTime="2023-11-23">November 23, 2023</time>
+                            Updated <time dateTime={new Date(getLatestPartyUpdate({ parties })).toLocaleDateString()}>{new Date(getLatestPartyUpdate({ parties })).toLocaleString("sv-se", { month: "long", day: "2-digit", year: "numeric" })}</time>
                         </div>
                         <Pagination className="ml-auto mr-0 w-auto">
                             <PaginationContent>

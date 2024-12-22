@@ -27,7 +27,7 @@ export const NewPartyForm = () => {
 
     const { execute, fieldErrors } = useAction(createParty, {
         onSuccess: (data) => {
-            toast.success("Successfully created gift.")
+            toast.success("Successfully created party.")
             formRef.current?.reset();
             setOpen(false);
             router.push(`/admin/parties/${data.id}`)

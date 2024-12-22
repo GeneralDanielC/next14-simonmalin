@@ -50,9 +50,14 @@ export const GuestTable = ({
                             Food Preferences
                         </TableHead>
                         <TableHead className="text-center">Alcohol Free</TableHead>
-                        <TableHead className="text-center">Attending</TableHead>
-
                         <TableHead className="text-center">
+                            <div className="flex flex-col w-full">
+                                <span>Attending</span>
+                                <span className="text-[8px]">wedding / nuptials / reception</span>
+                            </div>
+                        </TableHead>
+
+                        {/* <TableHead className="text-center">
                             <div className="flex flex-col w-full">
                                 <span>Attending</span>
                                 <span className="text-xs italic">Nuptials</span>
@@ -63,7 +68,7 @@ export const GuestTable = ({
                                 <span>Attending</span>
                                 <span className="text-xs italic">Reception</span>
                             </div>
-                        </TableHead>
+                        </TableHead> */}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -72,31 +77,22 @@ export const GuestTable = ({
                             <TableRow className="hover:cursor-pointer" onClick={() => handleOpenModal(guest.id)}>
                                 <TableCell>
                                     <div className="font-medium">{guest.firstName} {guest.lastName}</div>
-                                    {/* <div className="hidden text-sm text-muted-foreground md:inline">
-                                                olivia@example.com
-                                            </div> */}
                                 </TableCell>
                                 <TableCell className="hidden sm:table-cell text-xs">
-                                    {guest.foodPreferences !== "" ? guest.foodPreferences : <span className="text-xs text-stone-400 italic">None.</span>}
+                                    {guest.foodPreferences !== "" ? guest.foodPreferences : <span className="text-xs text-stone-400 italic">-</span>}
                                 </TableCell>
                                 <TableCell className="text-center">
                                     <Badge className="text-xs" variant={guest.alcoholPreference ? "secondary" : "outline"}>
                                         {guest.alcoholPreference ? "Yes" : "No"}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-center">
-                                    <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttend ? "secondary" : "outline"}>
-                                        {guest.willAttend ? "Yes" : "No"}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="text-center">
-                                    <Badge className={cn("text-xs", guest.willAttendNuptials ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttendNuptials ? "secondary" : "outline"}>
-                                        {guest.willAttendNuptials ? "Yes" : "No"}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="text-center">
-                                    <Badge className={cn("text-xs", guest.willAttendReception ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttendReception ? "secondary" : "outline"}>
-                                        {guest.willAttendReception ? "Yes" : "No"}
+                                <TableCell className="text-center text-xs">
+                                    <Badge className={cn("text-xs flex flex-row gap-2 w-full items-center justify-center")} variant="secondary">
+                                        <span className={cn(guest.willAttend ? "text-emerald-500" : "text-rose-500")}>{guest.willAttend ? "Yes" : "No"}</span>
+                                        <span className="text-stone-400">/</span>
+                                        <span className={cn(guest.willAttendNuptials ? "text-emerald-500" : "text-rose-500")}>{guest.willAttendNuptials ? "Yes" : "No"}</span>
+                                        <span className="text-stone-400">/</span>
+                                        <span className={cn(guest.willAttendReception ? "text-emerald-500" : "text-rose-500")}>{guest.willAttendReception ? "Yes" : "No"}</span>
                                     </Badge>
                                 </TableCell>
                             </TableRow>
@@ -107,30 +103,41 @@ export const GuestTable = ({
                                 <TableRow className="hover:cursor-pointer" onClick={() => router.push(`/admin/parties/${party.id}`)}>
                                     <TableCell>
                                         <div className="font-medium">{guest.firstName} {guest.lastName}</div>
-                                        <div className="hidden text-sm text-muted-foreground md:inline">
+                                        <div className="text-sm text-muted-foreground md:inline">
                                             {party.email}
                                         </div>
                                     </TableCell>
                                     <TableCell className="hidden sm:table-cell text-xs">
-                                        {guest.foodPreferences !== "" ? guest.foodPreferences : <span className="text-xs text-stone-400 italic">None.</span>}
+                                        {guest.foodPreferences !== "" ? guest.foodPreferences : <span className="text-xs text-stone-400 italic">-</span>}
                                     </TableCell>
                                     <TableCell className="text-center">
                                         <Badge className="text-xs" variant={guest.alcoholPreference ? "secondary" : "outline"}>
                                             {guest.alcoholPreference ? "Yes" : "No"}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-center">
-                                        <Badge className={cn("text-xs", guest.willAttend ? "bg-emerald-300 dark:bg-emerald-500" : "bg-rose-300 dark:bg-rose-500")} variant={guest.willAttend ? "secondary" : "outline"}>
-                                            {guest.willAttend ? "Yes" : "No"}
-                                        </Badge>
+                                    <TableCell className="text-center text-xs">
+                                        {!guest.willAttend ? (
+                                            <Badge className={cn("text-xs flex flex-row gap-2 w-full items-center justify-center")} variant="secondary">
+                                                <span className={cn(guest.willAttend ? "text-emerald-500" : "text-rose-500")}>{guest.willAttend ? "Yes" : "No"}</span>
+                                            </Badge>
+                                        ) : (
+                                            <Badge className={cn("text-xs flex flex-row gap-2 w-full items-center justify-center")} variant="secondary">
+                                                <span className={cn(guest.willAttend ? "text-emerald-500" : "text-rose-500")}>{guest.willAttend ? "Yes" : "No"}</span>
+                                                <span className="text-stone-400">/</span>
+                                                <span className={cn(guest.willAttendNuptials ? "text-emerald-500" : "text-rose-500")}>{guest.willAttendNuptials ? "Yes" : "No"}</span>
+                                                <span className="text-stone-400">/</span>
+                                                <span className={cn(guest.willAttendReception ? "text-emerald-500" : "text-rose-500")}>{guest.willAttendReception ? "Yes" : "No"}</span>
+                                            </Badge>
+                                        )}
+
                                     </TableCell>
                                 </TableRow>
                             ))
                         ))
                     )}
 
-                </TableBody>
-            </Table>
+                </TableBody >
+            </Table >
             <ModalProvider guest={guest} party={party} />
         </>
     )
