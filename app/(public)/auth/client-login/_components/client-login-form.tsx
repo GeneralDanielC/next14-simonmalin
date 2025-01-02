@@ -22,6 +22,7 @@ export const ClientLoginForm = () => {
             router.push(callbackUrl);
         },
         onError: (error) => {
+            console.log(error);
             toast.error("Ajdå! Något gick fel.");
         }
     })
