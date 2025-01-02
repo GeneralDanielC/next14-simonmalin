@@ -12,11 +12,14 @@ const OsaPage = () => {
     const endRSVPDate = process.env.NEXT_PUBLIC_END_RSVP_DATE;
     const diffMs = new Date().getTime() - new Date(endRSVPDate || "").getTime();
 
+    console.log("DiffMs", diffMs);
+    
+
     return (
         <div>
             <HeroSection
                 heading="O.S.A."
-                subtext={`${Math.abs(calculateTime({ diffMs }).days)} dagar kvar`}
+                subtext={diffMs < 0 ? `${Math.abs(calculateTime({ diffMs }).days)} dagar kvar` : "försent"}
             />
             <Skew
                 card={false}

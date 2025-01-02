@@ -32,7 +32,7 @@ export const OurStoryContent = () => {
                     height={400}
                     alt="Malin & Simon"
                 />
-                <span className="italic text-xs">Bildbeskrivning</span>
+                {/* <span className="italic text-xs">Bildbeskrivning</span> */}
             </div>
             {/* text-section */}
             <div className="max-w-[400px] w-full px-6">
@@ -72,7 +72,7 @@ export const OurStoryContent = () => {
                         alt="Malin & Simon"
                     />
                 </div>
-                <span className="italic text-xs">Bildbeskrivning</span>
+                {/* <span className="italic text-xs">Bildbeskrivning</span> */}
             </div>
             {/* text-section */}
             <div className="max-w-[400px] w-full px-6">

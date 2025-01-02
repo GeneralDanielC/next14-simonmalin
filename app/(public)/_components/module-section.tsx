@@ -60,6 +60,7 @@ export const ModuleSection = () => {
             actionText="Till sidan"
             classNames="w-32 flex-1"
             href="/toastmadames"
+            disabled
           />
         </motion.div>
 
@@ -110,6 +111,7 @@ export const ModuleSection = () => {
             actionText="Till sidan"
             classNames="w-32"
             href="/gift-registry"
+            disabled
           />
         </motion.div>
       </motion.div>
@@ -125,6 +127,7 @@ interface ModuleProps {
   showMap?: boolean
   href?: string
   classNames?: string
+  disabled?: boolean
 }
 
 const Module = ({
@@ -134,7 +137,8 @@ const Module = ({
   actionText,
   showMap = false,
   href,
-  classNames
+  classNames,
+  disabled
 }: ModuleProps) => {
   const router = useRouter();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -198,7 +202,7 @@ const Module = ({
   
   
 
-  const handleOnClick = () => href && router.push(href);
+  const handleOnClick = () => !disabled && href && router.push(href);
 
   if (showMap) {
     return (
@@ -210,7 +214,7 @@ const Module = ({
   }
 
   return (
-    <motion.div className={cn("bg-beige border border-black flex flex-col justify-between p-4 rounded-xl shadow-lg h-full hover:cursor-pointer", classNames)} onClick={handleOnClick}>
+    <motion.div className={cn("bg-beige border border-black flex flex-col justify-between p-4 rounded-xl shadow-lg h-full hover:cursor-pointer", classNames, disabled && "cursor-not-allowed hover:cursor-not-allowed opacity-50")} onClick={handleOnClick}>
       <div className="flex flex-col">
         <span className="text-xl">{heading}</span>
         <span className="text-stone-500/80">{subtext}</span>
