@@ -16,7 +16,7 @@ export const sendTwoFactorTokenEmail = async (
     token: string
 ) => {
     await resend.emails.send({
-        from: "Malin & Simons bröllop <info@pakkit.app>",
+        from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: `Malin & Simon // 2FA Code: ${token}`,
         html: `<p>Your 2FA code: ${token}</p>`,
@@ -31,7 +31,7 @@ export const sendPasswordResetEmail = async (
     const resetLink = `${domain}/auth/new-password?token=${token}`;
 
     await resend.emails.send({
-        from: "Malin & Simons bröllop <info@pakkit.app>",
+        from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: "Malin & Simon // Reset your password",
         html: `<p>Click <a href="${resetLink}">here</a> to reset password.</p>`,
@@ -46,7 +46,7 @@ export const sendVerificationEmail = async (
     const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
     await resend.emails.send({
-        from: "Malin & Simons bröllop <info@pakkit.app>",
+        from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: "Malin & Simon // Confirm your email",
         html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
@@ -73,7 +73,7 @@ export const sendRSVPConfirmation = async (
         `).join('');
 
     await resend.emails.send({
-        from: "Malin & Simons bröllop <info@pakkit.app>",
+        from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: `Malin & Simons bröllop // OSA Bekräftelse`,
         html: `
@@ -91,7 +91,7 @@ export const sendNewAssignedGiftToClient = async (
     gift: Gift
 ) => {
     await resend.emails.send({
-        from: "Malin & Simons bröllop <info@pakkit.app>",
+        from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: `Malin & Simons bröllop // Presentbekräftelse`,
         html: `
@@ -109,7 +109,7 @@ export const sendGiftConfirmation = async (
     gift: Gift
 ) => {
     await resend.emails.send({
-        from: "Malin & Simons bröllop <info@pakkit.app>",
+        from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: `Malin & Simons bröllop // Presentbekräftelse`,
         html: `
