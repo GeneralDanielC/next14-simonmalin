@@ -20,9 +20,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     const { password } = data;
 
-    const websitePassword = process.env.NEXT_PUBLIC_WEBSITE_PASSWORD || "MS9697";
+    const websitePassword = process.env.NEXT_PUBLIC_WEBSITE_PASSWORD || "fest";
 
-    if (password !== websitePassword) return { error: "Incorrect Password." }
+    if (password.toLowerCase() !== websitePassword) return { error: "Incorrect Password." }
 
     cookies().set(CLIENT_LOGIN_COOKIE, 'authenticated', { path: '/', maxAge: 60 * 60 * 24 * 7 });
 
