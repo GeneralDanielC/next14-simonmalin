@@ -20,7 +20,7 @@ export const OurStoryContent = () => {
             {/* text-section */}
             <div className="max-w-[400px] w-full px-6">
                 <h2 className="text-4xl mb-2">5 juni 2018</h2>
-                <p>2017 började Simon industriell ekonomi och Malin medicinsk teknik på KTH. Efter ett år av plugg var det dags för tentapublubb på industriell ekonomis sektionslokal I-stället. Malin och hennes KTH-klasskompis Klara drog till I-stället där de sprang på Klaras gymnasieklasskompis Simon.</p>
+                <p>2017 började Simon industriell ekonomi och Malin medicinsk teknik på KTH. Efter ett år av plugg var det dags för tentapubklubb på industriell ekonomis sektionslokal I-stället. Malin och hennes KTH-klasskompis Klara drog till I-stället där de sprang på Klaras gymnasieklasskompis Simon.</p>
             </div>
             {/* images-section */}
             <div className="max-w-[400px] flex flex-col gap-y-2 justify-center items-center px-6 h-auto">

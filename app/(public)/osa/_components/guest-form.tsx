@@ -18,9 +18,11 @@ interface GuestFormProps {
     children: React.ReactNode
     handleSubmit: (guest?: Guest) => void
     handleOnOpen?: () => void
+    handleOnDeleteGuest?: (index: number) => void
     guest: Guest
     setGuest: React.Dispatch<React.SetStateAction<Guest>>
     edit?: boolean
+    editIndex?: number
 }
 
 export const GuestForm = ({
@@ -30,9 +32,11 @@ export const GuestForm = ({
     children,
     handleSubmit,
     handleOnOpen,
+    handleOnDeleteGuest,
     guest,
     setGuest,
-    edit = false
+    edit = false,
+    editIndex,
 }: GuestFormProps) => {
     const [open, setOpen] = useState(false);
 
@@ -212,6 +216,7 @@ export const GuestForm = ({
 
                     </div>
                     <Button
+                        type="button"
                         className="border border-black"
                         variant="success"
                         onClick={() => {
@@ -224,6 +229,22 @@ export const GuestForm = ({
                     >
                         {submitText}
                     </Button>
+                    {edit &&
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            className="hover:bg-stone-400/10 text-rose-500"
+                            onClick={() => {
+                                console.log(editIndex);
+                                
+                                editIndex !== undefined && handleOnDeleteGuest && handleOnDeleteGuest(editIndex)
+                                setOpen(false)
+                            }}
+                        >
+                            ta bort gäst
+                        </Button>
+                    }
+
                 </div>
             </DialogContent>
         </Dialog>

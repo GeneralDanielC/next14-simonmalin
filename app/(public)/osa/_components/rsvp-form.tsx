@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { ElementRef, useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Trash } from "lucide-react";
 
 
 import { Button } from "@/components/ui/button";
@@ -185,9 +185,13 @@ export const RSVPForm = ({
         }
     }
 
+    const handleOnDeleteGuest = (index: number) => {
+        setGuests((prevGuests) => prevGuests.filter((_, i) => i !== index));
+    };
+
     useEffect(() => {
         console.log(isPending);
-        
+
     }, [isPending])
 
     return (
@@ -255,31 +259,45 @@ export const RSVPForm = ({
                             handleOnOpen={() => {
                                 setEditIndex(index)
                             }}
+                            editIndex={index}
+                            handleOnDeleteGuest={handleOnDeleteGuest}
                         >
-                            <Button
-                                variant="ghost"
-                                className="hover:bg-stone-400/10 px-2 h-full"
-                                disabled={isPending}
-                            >
-                                <div className="w-full h-full flex flex-col border-b border-stone-400 border-dotted text-left pb-1.5">
-                                    <span className="text-lg font-thin">{guest.firstName} {guest.lastName}</span>
-                                    <div className="text-stone-500 flex flex-col font-thin">
-                                        {guest.willAttend && (
-                                            <>
-                                                <span>{guest.foodPreferences ? guest.foodPreferences : "Inga allergier"}</span>
-                                                <span>{guest.alcoholPreference ? "Önskar alkoholfritt" : "Önskar inte alkoholfritt"}</span>
-                                            </>
-                                        )}
-                                        <span>
-                                            {guest.willAttend && guest.willAttendNuptials && guest.willAttendReception && "Deltar på vigseln och mottagning"}
-                                            {guest.willAttend && guest.willAttendNuptials && !guest.willAttendReception && "Deltar enbart på vigseln"}
-                                            {guest.willAttend && !guest.willAttendNuptials && guest.willAttendReception && "Deltar enbart på mottagning"}
-                                            {guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception && "Något gick fel"}
-                                            {!guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception && "Deltar inte på bröllopet"}
-                                        </span>
+                            <div className="flex flex-row justify-between items-center">
+                                <Button
+                                    variant="ghost"
+                                    className="hover:bg-stone-400/10 px-2 w-full h-full"
+                                    disabled={isPending}
+                                    type="button"
+                                >
+                                    <div className="w-full h-full flex flex-col border-b border-stone-400 border-dotted text-left pb-1.5">
+                                        <span className="text-lg font-thin">{guest.firstName} {guest.lastName}</span>
+                                        <div className="text-stone-500 flex flex-col font-thin">
+                                            {guest.willAttend && (
+                                                <>
+                                                    <span>{guest.foodPreferences ? guest.foodPreferences : "Inga allergier"}</span>
+                                                    <span>{guest.alcoholPreference ? "Önskar alkoholfritt" : "Önskar inte alkoholfritt"}</span>
+                                                </>
+                                            )}
+                                            <span>
+                                                {guest.willAttend && guest.willAttendNuptials && guest.willAttendReception && "Deltar på vigseln och mottagning"}
+                                                {guest.willAttend && guest.willAttendNuptials && !guest.willAttendReception && "Deltar enbart på vigseln"}
+                                                {guest.willAttend && !guest.willAttendNuptials && guest.willAttendReception && "Deltar enbart på mottagning"}
+                                                {guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception && "Något gick fel"}
+                                                {!guest.willAttend && !guest.willAttendNuptials && !guest.willAttendReception && "Deltar inte på bröllopet"}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </Button>
+                                </Button>
+                                {/* <Button
+                                    className="flex-none w-10 hover:bg-stone-400/10"
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => handleOnDeleteGuest(index)}
+                                    type="button"
+                                >
+                                    <Trash className="size-3" />
+                                </Button> */}
+                            </div>
                         </GuestForm>
                     ))}
                 </div>
