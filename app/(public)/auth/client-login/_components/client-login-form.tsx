@@ -17,9 +17,10 @@ export const ClientLoginForm = () => {
 
     const { execute, fieldErrors } = useAction(clientLogin, {
         onSuccess: (data) => {
-            const callbackUrl = searchParams.get("callbackUrl") || "/";
+            const callbackUrl = searchParams.get("callbackUrl") || "/";            
             toast.success("Inloggad!");
             router.push(callbackUrl);
+            router.replace(callbackUrl)
         },
         onError: (error) => {
             console.log(error);

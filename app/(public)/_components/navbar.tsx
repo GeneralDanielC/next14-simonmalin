@@ -19,9 +19,9 @@ export const NavBar = () => {
         { title: "24 maj 2025", href: "/wedding-day", disabled: false },
         { title: "O.S.A.", href: "/osa", disabled: false },
         { title: "Toastmadames", href: "/toastmadames", disabled: false },
-        { title: "Önskelista", href: "/gift-registry", disabled: false },
+        { title: "Önskelista", href: "/gift-registry", disabled: true },
         { title: "Vår historia", href: "/our-story", disabled: false },
-        { title: "Galleri", href: "/gallery", disabled: false },
+        { title: "Galleri", href: "/gallery", disabled: true },
     ];
 
     const [openNavbar, setOpenNavbar] = useState(false);

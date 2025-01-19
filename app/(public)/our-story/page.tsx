@@ -15,7 +15,7 @@ const OurStoryPage = () => {
                 backgroundColor="bg-green"
             >
                 <div className="text-stone-500 py-20">
-                    <h1 className="text-4xl">Hur vi hamnade här idag</h1>
+                    <h1 className="text-4xl">Hur vi hamnade här</h1>
                 </div>
             </Skew>
             <OurStoryContent />

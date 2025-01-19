@@ -3,6 +3,7 @@ import { Skew } from "@/components/skew";
 import { Separator } from "@/components/ui/separator";
 import { Timeline } from "./_components/timeline";
 import { AddressCardDetails } from "@/components/modals/address-modal";
+import { ContactWedding } from "@/components/contact-wedding";
 
 const WeddingDayPage = () => {
 
@@ -95,7 +96,7 @@ const WeddingDayPage = () => {
             >
                 <div className="text-stone-500 py-20">
                     <h1 className="text-4xl">Frågor?</h1>
-                    <h2>Kontakta brudparet</h2>
+                    <ContactWedding text="Kontakt brudparet" />
                 </div>
             </Skew>
 

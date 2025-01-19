@@ -26,13 +26,12 @@ const ToastMadamesPage = () => {
                 {/* images-section */}
                 <div className="max-w-[400px] flex flex-col gap-y-2 justify-center items-center px-6 h-auto">
                     <Image
-                        src="/images/our-story/IMG_0001.jpg"
-                        className="rounded-md"
+                        src="/images/our-story/toastmadames.jpg"
+                        className="rounded-md shadow-lg"
                         width={400}
                         height={400}
                         alt="Malin & Simon"
                     />
-                    <span className="italic text-xs">Bild på Madde & Ebba</span>
                 </div>
             </div>
             <Skew
