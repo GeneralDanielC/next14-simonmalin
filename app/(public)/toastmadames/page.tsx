@@ -12,7 +12,7 @@ const ToastMadamesPage = () => {
                 backgroundColor="bg-pink-600/10"
             >
                 <div className="text-stone-500 py-20">
-                    <h1 className="text-4xl">Se våra underbara toastmadames</h1>
+                    <h1 className="text-4xl">Här är våra underbara toastmadames</h1>
                     <h2>Madde Lehander och Ebba Jernbeck</h2>
                 </div>
             </Skew>
