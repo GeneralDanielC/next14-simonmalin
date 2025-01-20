@@ -16,9 +16,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     // TODO: AUTHORIZE USERS SO THEY ARE LOGGED IN TO THE SITE.
 
-    const { email, guests } = data;
+    const { email: passedEmail, guests } = data;
 
-    if (!email) return { error: "Missing data. Something went wrong!" }
+    if (!passedEmail) return { error: "Missing data. Something went wrong!" }
+
+    const email = passedEmail.toLowerCase();
 
     if (guests.length === 0) return { error: "Du måste ange åtminstone en gäst." }
 

@@ -4,6 +4,7 @@ import { getPartyById } from "@/data/data";
 import { southland } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { RSVPContainer } from "../_components/rsvp-container";
+import { ContactWedding } from "@/components/contact-wedding";
 
 const OsaPage = async ({
     params
@@ -62,7 +63,7 @@ const OsaPage = async ({
             >
                 <div className="py-14 text-stone-500">
                     <h1 className="text-4xl">Upplever du problem?</h1>
-                    <p>Kontakta brudparet eller <a className="underline" href="mailto:daniel.carlsson@noll2.io">utvecklaren.</a></p>
+                    <ContactWedding text="Kontakta brudparet" />
                 </div>
             </Skew>
         </div>
