@@ -14,11 +14,13 @@ import { sendRSVPConfirmation } from "@/lib/mail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 
-    const { partyId, email, guests } = data;
+    const { partyId, email: passedEmail, guests } = data;
 
     if (!partyId) return { error: "Something went wrong! Missing id." }
 
-    if (!email) return { error: "Something went wrong! Missing email." }
+    if (!passedEmail) return { error: "Something went wrong! Missing email." }
+
+    const email = passedEmail.toLowerCase();
 
     if (guests.length === 0) return { error: "Du måste ange åtminstone en gäst." }
 
