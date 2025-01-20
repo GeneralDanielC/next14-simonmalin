@@ -146,14 +146,14 @@ export const GuestForm = ({
                                         ...editingGuest,
                                         alcoholPreference: !checked && false,
                                         willAttend: checked,
-                                        willAttendNuptials: !checked && false,
-                                        willAttendReception: !checked && false,
+                                        willAttendNuptials: !checked ? false : true,
+                                        willAttendReception: !checked ? false : true,
                                     }) : setGuest({
                                         ...guest,
                                         alcoholPreference: !checked && false,
                                         willAttend: checked,
-                                        willAttendNuptials: !checked && false,
-                                        willAttendReception: !checked && false,
+                                        willAttendNuptials: !checked ? false : true,
+                                        willAttendReception: !checked ? false : true,
                                     })}
                             />
 
