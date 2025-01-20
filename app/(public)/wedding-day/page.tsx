@@ -96,7 +96,7 @@ const WeddingDayPage = () => {
             >
                 <div className="text-stone-500 py-20">
                     <h1 className="text-4xl">Frågor?</h1>
-                    <ContactWedding text="Kontakt brudparet" />
+                    <ContactWedding text="Kontakta brudparet" />
                 </div>
             </Skew>
 
