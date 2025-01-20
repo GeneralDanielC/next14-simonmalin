@@ -9,7 +9,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { EditRSVP } from "./schema";
-import { getPartyByEmail } from "@/data/data";
+import { getPartyByEmail, getPartyById } from "@/data/data";
 import { sendRSVPConfirmation } from "@/lib/mail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -24,7 +24,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (guests.length === 0) return { error: "Du måste ange åtminstone en gäst." }
 
-    if (new Date().getTime() > new Date(process.env.NEXT_PUBLIC_END_RSVP_DATE || "2025-01-01").getTime()) return { error: "Det är försent för att OSA!" }
+    if (new Date().getTime() > new Date(process.env.NEXT_PUBLIC_END_RSVP_DATE || "2025-03-30").getTime()) return { error: "Det är försent för att OSA!" }
 
     // Validation & Correction
     guests.map(guest => {
@@ -37,8 +37,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     let party;
 
     try {
-        // throw new Error("a"); // artificial error - to be removed
+        // Fetching and checking current guests in the party.
+        const existingParty = await getPartyById(partyId);
 
+        if (!existingParty) return { error: "Something went wrong! Party could not be found." }
+
+        const existingGuests = existingParty.guests;
+
+        const updatedGuestIds = guests.map((guest) => guest.id);
+
+        const guestsToDelete = existingGuests.filter(
+            (guest) => !updatedGuestIds.includes(guest.id)
+        );
+
+        // Perform deletion for guests no longer in the updated list
+        await Promise.all(
+            guestsToDelete.map((guest) =>
+                db.guest.delete({ where: { id: guest.id } })
+            )
+        );
+
+        // Updating the party with remaining guests
         party = await db.party.update({
             where: { id: partyId },
             data: {

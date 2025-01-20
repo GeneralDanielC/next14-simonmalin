@@ -28,7 +28,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (existingParty) { return { error: "Du har redan osat. Klicka på länken i mejlet för att göra ändringar." } }
 
-    if (new Date().getTime() > new Date(process.env.NEXT_PUBLIC_END_RSVP_DATE || "2025-01-01").getTime()) return { error: "Det är försent för att OSA!" }
+    if (new Date().getTime() > new Date(process.env.NEXT_PUBLIC_END_RSVP_DATE || "2025-03-30").getTime()) return { error: "Det är försent för att OSA!" }
 
     // Validation & Correction
     guests.map(guest => {
