@@ -64,7 +64,7 @@ export const GuestForm = ({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{dialogTitle}</DialogTitle>
-                    <DialogDescription className="text-xs">{dialogDescription}</DialogDescription>
+                    <DialogDescription className="">{dialogDescription}</DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-y-2">
                     <div className="w-full flex flex-row gap-x-2">
@@ -95,43 +95,49 @@ export const GuestForm = ({
                             placeholder="Efternamn"
                         />
                     </div>
-                    <FormInput
-                        id="foodPreferences"
-                        defaultValue={edit ? editingGuest.foodPreferences : guest.foodPreferences}
-                        disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
-                        onChange={(e) =>
-                            edit ? setEditingGuest({
-                                ...editingGuest,
-                                foodPreferences: e.target.value
-                            }) : setGuest({
-                                ...guest,
-                                foodPreferences: e.target.value
-                            })}
-                        placeholder="Allergier & Specialkost"
-                        className={cn("disabled:opacity-100 disabled:text-stone-400/70", (edit ? !editingGuest.willAttend : !guest.willAttend) && "placeholder:text-stone-400/70")}
-                    />
-                    <div className={cn("flex flex-row justify-between items-center bg-stone-400/10 rounded-xl shadow-sm px-3 py-2")}>
-                        <div className="flex flex-col justify-center">
-                            <Label htmlFor="alkoholfritt" className={cn((edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Alkoholfritt</Label>
-                            <span className={cn("text-xs", (edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Alkoholfri dryck önskas.</span>
+                    {(editingGuest.willAttend || guest.willAttend) && (
+
+
+                        <div className="flex flex-col gap-y-2">
+                            <FormInput
+                                id="foodPreferences"
+                                defaultValue={edit ? editingGuest.foodPreferences : guest.foodPreferences}
+                                disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
+                                onChange={(e) =>
+                                    edit ? setEditingGuest({
+                                        ...editingGuest,
+                                        foodPreferences: e.target.value
+                                    }) : setGuest({
+                                        ...guest,
+                                        foodPreferences: e.target.value
+                                    })}
+                                placeholder="Allergier & Specialkost"
+                                className={cn("disabled:opacity-100 disabled:text-stone-400/70", (edit ? !editingGuest.willAttend : !guest.willAttend) && "placeholder:text-stone-400/70")}
+                            />
+                            <div className={cn("flex flex-row justify-between items-center bg-stone-400/10 rounded-xl shadow-sm px-3 py-2")}>
+                                <div className="flex flex-col justify-center">
+                                    <Label htmlFor="alkoholfritt" className={cn((edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Alkoholfritt</Label>
+                                    <span className={cn("text-xs", (edit ? !editingGuest.willAttend : !guest.willAttend) && "text-stone-400/70")}>Alkoholfri dryck önskas.</span>
+                                </div>
+                                <Switch
+                                    id="alkoholfritt"
+                                    defaultChecked={edit ? editingGuest.alcoholPreference : guest.alcoholPreference}
+                                    checked={
+                                        edit ? editingGuest.alcoholPreference : guest.alcoholPreference
+                                    }
+                                    disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
+                                    onCheckedChange={(checked) =>
+                                        edit ? setEditingGuest({
+                                            ...editingGuest,
+                                            alcoholPreference: checked
+                                        }) : setGuest({
+                                            ...guest,
+                                            alcoholPreference: checked
+                                        })}
+                                />
+                            </div>
                         </div>
-                        <Switch
-                            id="alkoholfritt"
-                            defaultChecked={edit ? editingGuest.alcoholPreference : guest.alcoholPreference}
-                            checked={
-                                edit ? editingGuest.alcoholPreference : guest.alcoholPreference
-                            }
-                            disabled={edit ? !editingGuest.willAttend : !guest.willAttend}
-                            onCheckedChange={(checked) =>
-                                edit ? setEditingGuest({
-                                    ...editingGuest,
-                                    alcoholPreference: checked
-                                }) : setGuest({
-                                    ...guest,
-                                    alcoholPreference: checked
-                                })}
-                        />
-                    </div>
+                    )}
                     <div className="flex flex-col gap-y-2 bg-stone-400/10 rounded-xl shadow-sm px-3 py-2">
                         <div className="flex flex-row justify-between items-center">
                             <div className="flex flex-col justify-center">
@@ -236,7 +242,7 @@ export const GuestForm = ({
                             className="hover:bg-stone-400/10 text-rose-500"
                             onClick={() => {
                                 console.log(editIndex);
-                                
+
                                 editIndex !== undefined && handleOnDeleteGuest && handleOnDeleteGuest(editIndex)
                                 setOpen(false)
                             }}

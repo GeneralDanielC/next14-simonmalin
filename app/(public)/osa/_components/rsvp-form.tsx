@@ -213,7 +213,7 @@ export const RSVPForm = ({
                 {mode === "rsvp" && (
                     <GuestForm
                         dialogTitle="Ny gäst"
-                        dialogDescription="Lägg till fler gäster i ditt sällskap."
+                        dialogDescription="Lägg till gäster i ditt sällskap."
                         submitText="Lägg till"
                         handleSubmit={handleAddGuest}
                         handleOnOpen={() =>
