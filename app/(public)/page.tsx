@@ -34,7 +34,7 @@ export default async function Home() {
         direction="bt"
       >
         <div className="text-stone-500 py-14">
-          <Countdown targetDate={new Date("2025-05-24")} />
+          <Countdown targetDate={new Date("2025-05-24 15:00")} />
         </div>
       </Skew>
     </div>

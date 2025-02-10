@@ -40,6 +40,7 @@ import { useEffect, useState } from "react"
 import { SortDropdown } from "@/components/sort-dropdown"
 import { FilterGuestsDropdown } from "@/components/filter-guests-dropdown"
 import { getLatestPartyUpdate } from "@/lib/parties"
+import { ExportButton } from "./export-button"
 
 interface PartiesGuestsTabsProps {
     parties: PartyWithGuests[]
@@ -73,7 +74,7 @@ export const PartiesGuestsTabs = ({
                         </div>
                     ) : (
                         <div>
-                            <FilterGuestsDropdown parties={parties} setParties={setParties} />
+                            {/* <FilterGuestsDropdown parties={parties} setParties={setParties} /> */}
                             {/* Sort guests by name desc, asc */}
                         </div>
                     )}
@@ -129,15 +130,7 @@ export const PartiesGuestsTabs = ({
                             </DropdownMenuCheckboxItem>
                         </DropdownMenuContent>
                     </DropdownMenu> */}
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-7 gap-1 text-sm"
-                        disabled
-                    >
-                        <File className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only">Export</span>
-                    </Button>
+                    <ExportButton parties={parties} />
                 </div>
             </div>
             <TabsContent value="parties">

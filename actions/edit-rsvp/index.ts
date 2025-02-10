@@ -42,6 +42,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
         if (!existingParty) return { error: "Something went wrong! Party could not be found." }
 
+        const existingPartyByEmail = await getPartyByEmail(email);
+
+        if (existingPartyByEmail && (existingParty.id !== existingPartyByEmail.id)) { return { error: "Denna e-postadress finns redan registrerad." } }
+
         const existingGuests = existingParty.guests;
 
         const updatedGuestIds = guests.map((guest) => guest.id);
@@ -57,14 +61,17 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             )
         );
 
-        // Updating the party with remaining guests
+        const guestsToUpdate = guests.filter((guest) => existingGuests.some((g) => g.id === guest.id));
+
+        const newGuests = guests.filter((guest) => !guest.id);
+
         party = await db.party.update({
             where: { id: partyId },
             data: {
                 email,
                 guests: {
-                    update: guests.map((guest) => ({
-                        where: { id: guest.id },  // Find guest by ID
+                    update: guestsToUpdate.map((guest) => ({
+                        where: { id: guest.id },
                         data: {
                             firstName: guest.firstName,
                             lastName: guest.lastName,
@@ -72,8 +79,17 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                             alcoholPreference: guest.alcoholPreference,
                             willAttend: guest.willAttend,
                             willAttendNuptials: guest.willAttendNuptials,
-                            willAttendReception: guest.willAttendReception
+                            willAttendReception: guest.willAttendReception,
                         },
+                    })),
+                    create: newGuests.map((guest) => ({
+                        firstName: guest.firstName,
+                        lastName: guest.lastName,
+                        foodPreferences: guest.foodPreferences,
+                        alcoholPreference: guest.alcoholPreference,
+                        willAttend: guest.willAttend,
+                        willAttendNuptials: guest.willAttendNuptials,
+                        willAttendReception: guest.willAttendReception,
                     })),
                 },
                 updatedAt: new Date(),

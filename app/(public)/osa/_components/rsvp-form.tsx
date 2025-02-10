@@ -19,6 +19,7 @@ import { GuestForm } from "./guest-form";
 import { useFormStatus } from "react-dom";
 import { PartyWithGuests } from "@/types";
 import { editRSVP } from "@/actions/edit-rsvp";
+import { ConfirmDialog } from "./confirm-dialog";
 
 export type Guest = {
     id: string;
@@ -42,8 +43,9 @@ export const RSVPForm = ({
     mode = "rsvp",
     setSuccess
 }: RSVPFormProps) => {
-    const formRef = useRef<ElementRef<"form">>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const [isPending, setIsPending] = useState<boolean>(false);
+    const [email, setEmail] = useState<string | undefined>(party?.email);
 
     const [guest, setGuest] = useState<Guest>({
         id: "",
@@ -204,42 +206,43 @@ export const RSVPForm = ({
                 <FormInput
                     id="email"
                     defaultValue={party?.email}
+                    onChange={(e) => setEmail(e.target.value)}
                     type="email"
                     placeholder="E-postadress"
                     errors={fieldErrorsRSVP || fieldErrorsEdit}
                     className="bg-transparent border border-black"
                 />
 
-                {mode === "rsvp" && (
-                    <GuestForm
-                        dialogTitle="Ny gäst"
-                        dialogDescription="Lägg till gäster i ditt sällskap."
-                        submitText="Lägg till"
-                        handleSubmit={handleAddGuest}
-                        handleOnOpen={() =>
-                            setGuest({
-                                id: "",
-                                firstName: "",
-                                lastName: "",
-                                foodPreferences: "",
-                                alcoholPreference: false,
-                                willAttend: false,
-                                willAttendNuptials: false,
-                                willAttendReception: false,
-                            })
-                        }
-                        guest={guest}
-                        setGuest={setGuest}
+
+                <GuestForm
+                    dialogTitle="Ny gäst"
+                    dialogDescription="Lägg till gäster i ditt sällskap."
+                    submitText="Lägg till"
+                    handleSubmit={handleAddGuest}
+                    handleOnOpen={() =>
+                        setGuest({
+                            id: "",
+                            firstName: "",
+                            lastName: "",
+                            foodPreferences: "",
+                            alcoholPreference: false,
+                            willAttend: false,
+                            willAttendNuptials: false,
+                            willAttendReception: false,
+                        })
+                    }
+                    guest={guest}
+                    setGuest={setGuest}
+                >
+                    <Button
+                        variant="link"
+                        className="text-xs border border-black rounded-xl"
+                        disabled={isPending}
                     >
-                        <Button
-                            variant="link"
-                            className="text-xs border border-black rounded-xl"
-                            disabled={isPending}
-                        >
-                            Lägg till gäst...
-                        </Button>
-                    </GuestForm>
-                )}
+                        Lägg till gäst...
+                    </Button>
+                </GuestForm>
+
 
                 {/* List of guests in the party */}
                 <div className="flex flex-col">
@@ -288,25 +291,16 @@ export const RSVPForm = ({
                                         </div>
                                     </div>
                                 </Button>
-                                {/* <Button
-                                    className="flex-none w-10 hover:bg-stone-400/10"
-                                    size="icon"
-                                    variant="ghost"
-                                    onClick={() => handleOnDeleteGuest(index)}
-                                    type="button"
-                                >
-                                    <Trash className="size-3" />
-                                </Button> */}
                             </div>
                         </GuestForm>
                     ))}
                 </div>
-
-                <FormSubmit
+                <ConfirmDialog formRef={formRef} mode={mode} guests={guests} email={email} />
+                {/* <FormSubmit
                     className="w-full border border-black" variant="success"
                 >
                     {mode === "rsvp" ? "Skicka" : "Spara"}
-                </FormSubmit>
+                </FormSubmit> */}
             </form>
         </div>
     )

@@ -82,6 +82,8 @@ export const sendRSVPConfirmation = async (
             <p>Här är detaljerna för ditt sällskap:</p>
             ${guestDetails}
             <a href="${link}">Klicka här för att se och ändra dina val.</a>
+            <br/>
+            <p>Du kan inte svara på detta mejl.</p>
         `
     });
 }
@@ -100,6 +102,8 @@ export const sendNewAssignedGiftToClient = async (
             <p style="font-weight: bold;">${gift.title}</p>
             <p style="">${gift.backstory}</p>
             <a href=${gift.url}>${gift.url}</a>
+            <br/>
+            <p>Du kan inte svara på detta mejl.</p>
             `
     });
 }
@@ -119,6 +123,8 @@ export const sendGiftConfirmation = async (
             <p style="font-weight: bold;">${gift.title}</p>
             <p style="">${gift.backstory}</p>
             <a href=${gift.url}>${gift.url}</a>
+            <br/>
+            <p>Du kan inte svara på detta mejl.</p>
             `
     });
 }
