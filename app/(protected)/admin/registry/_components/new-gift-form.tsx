@@ -32,7 +32,7 @@ export const NewGiftForm = () => {
 
         const quantity = parseInt(rawQuantity);
 
-        execute({ title, url, backstory, quantity });
+        execute({ title, url, backstory, quantity });        
     }
 
     return (
@@ -53,7 +53,7 @@ export const NewGiftForm = () => {
                     <div className="flex flex-row gap-x-2">
                         <FormInput id="title" placeholder="Title..." label="Title" errors={fieldErrors} required />
 
-                        <FormInput id="quantity" placeholder="Quantity..." label="Quantity (leave empty for infinity)" type="number" errors={fieldErrors} />
+                        <FormInput id="quantity" placeholder="Quantity..." label="Quantity (put 0 for infinity)" type="number" errors={fieldErrors} defaultValue={0} />
                     </div>
                     <FormInput id="url" placeholder="Link..." label="Link" errors={fieldErrors} />
                     <FormTextarea id="backstory" placeholder="Backstory..." label="Backstory" errors={fieldErrors} />

@@ -98,10 +98,6 @@ export const RequestGiftModal = ({
                                             </div>
                                             <div className="flex flex-row gap-x-2">
                                                 <ChevronsRight className="size-5 flex-none" />
-                                                <span>Antalet kan inte överstiga det tillgängliga antalet.</span>
-                                            </div>
-                                            <div className="flex flex-row gap-x-2">
-                                                <ChevronsRight className="size-5 flex-none" />
                                                 <span>När alla exemplar är reserverade, döljs presenten från listan.</span>
                                             </div>
                                         </>

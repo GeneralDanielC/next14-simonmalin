@@ -17,7 +17,7 @@ interface RegistryListProps {
     gifts: GiftWithAssignments[]
 }
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 5;
 
 export const RegistryList = ({
     gifts,
@@ -83,11 +83,15 @@ export const RegistryList = ({
                         </div>
                         <div className="flex flex-row gap-x-2">
                             <ChevronsRight className="size-5 flex-none" />
-                            <span>Vissa presenter har en <span className="font-bold">begränsad kvantitet</span>. När du fyller i formuläret, reserverar du det antal du vill köpa. <span className="font-bold">Ange endast det antal du vill köpa</span>, så förblir resterande tillgängligt för andra gäster. När alla exemplar är reserverade, döljs presenten från listan.</span>
+                            <span>Vissa presenter har en <span className="font-bold">begränsad kvantitet</span>. När du fyller i formuläret, reserverar du det antal du vill köpa. <span className="font-bold">Ange endast det antal du vill köpa</span>, så förblir resterande tillgängliga för andra gäster. När alla exemplar är reserverade, döljs presenten från listan.</span>
                         </div>
                         <div className="flex flex-row gap-x-2">
                             <ChevronsRight className="size-5 flex-none" />
                             <span>Presenter utan begränsning är markerade med ett oändlighetstecken. Det är inte lika viktigt att reservera dessa, men om du vill ha en bekräftelse via mejl kan du ändå fylla i formuläret.</span>
+                        </div>
+                        <div className="flex flex-row gap-x-2">
+                            <ChevronsRight className="size-5 flex-none" />
+                            <span>Vill du ta bort din reservation kan du kontakta {process.env.NEXT_PUBLIC_SUPPORT_EMAIL}</span>
                         </div>
                     </div>
                     <DialogFooter>
@@ -100,7 +104,7 @@ export const RegistryList = ({
             <div className="flex flex-col gap-y-0.5 mt-5">
                 {currentGifts.map(gift => (
                     <div onClick={() => handleOpenModal(gift)} key={gift.id} className="flex flex-col p-1 rounded-lg hover:cursor-pointer hover:bg-stone-500/10">
-                        <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-row justify-between items-center gap-x-2">
                             <div className="flex flex-col">
                                 <span>{gift.title}</span>
                                 <span className="text-xs text-stone-500/90">{gift.backstory}</span>

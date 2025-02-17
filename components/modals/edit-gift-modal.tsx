@@ -87,7 +87,7 @@ export const EditGiftModal = ({
                             <FormInput
                                 id="quantity"
                                 placeholder="Quantity..."
-                                label="Quantity (leave empty for infinity)"
+                                label="Quantity (put 0 for infinity)"
                                 type="number"
                                 defaultValue={gift.quantity ?? 0}
                                 errors={fieldErrors}

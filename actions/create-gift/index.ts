@@ -31,7 +31,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 title,
                 backstory,
                 url,
-                quantity
+                quantity: quantity === 0 ? null : quantity,
             },
         });
 
