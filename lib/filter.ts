@@ -1,13 +1,15 @@
 import { Gift } from "@prisma/client";
-import { PartyWithGuests } from "@/types";
+import { GiftWithAssignments, PartyWithGuests } from "@/types";
 import { getAttendingGuestsInParty } from "./parties";
 
-export const filterGiftsByIsAssigned = ({ gifts }: { gifts: Gift[] }) => {
-    return gifts.filter(gift => !!gift.assignedToEmail);
+export const filterGiftsByIsAssigned = ({ gifts }: { gifts: GiftWithAssignments[] }) => {
+    // return gifts.filter(gift => !!gift.assignedToEmail);
+    return gifts;
 }
 
-export const filterGiftsByIsNotAssigned = ({ gifts }: { gifts: Gift[] }) => {
-    return gifts.filter(gift => !gift.assignedToEmail);
+export const filterGiftsByIsNotAssigned = ({ gifts }: { gifts: GiftWithAssignments[] }) => {
+    // return gifts.filter(gift => !gift.assignedToEmail);
+    return gifts;
 }
 
 // Parties

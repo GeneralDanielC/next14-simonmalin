@@ -19,28 +19,24 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     const { id } = data;
 
-    let gift;
+    let giftAssignment;
 
     try {
         // throw new Error("a"); // artificial error - to be removed
 
-        gift = await db.gift.update({
+        giftAssignment = await db.giftAssignment.delete({
             where: {
                 id
-            },
-            data: {
-                assignedToEmail: "",
-                updatedAt: new Date(),
             },
         });
 
     } catch (error) {
         console.error(error);
-        return { error: "Failed to update." }
+        return { error: "Failed to unassign." }
     }
 
     revalidatePath(`/admin/registry`);
-    return { data: gift };
+    return { data: giftAssignment };
 }
 
 export const unassignGift = createSafeAction(UnassignGift, handler);

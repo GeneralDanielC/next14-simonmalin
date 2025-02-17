@@ -36,7 +36,13 @@ export const getParties = async () => {
 }
 
 export const getGifts = async () => {
-    const gifts = await db.gift.findMany();
+    const gifts = await db.gift.findMany({ include: { giftAssignments: true } });
 
     return gifts;
+}
+
+export const getGiftById = async (id: string) => {
+    const gift =  await db.gift.findUnique({ where: { id }, include: { giftAssignments: true } })
+
+    return gift;
 }

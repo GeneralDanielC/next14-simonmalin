@@ -17,7 +17,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (!user) return { error: "Unauthorized" }
 
-    const { id, title, backstory, url, assignedToEmail, prevAssignedToEmail } = data;
+    const { id, title, backstory, url, quantity } = data;
 
     if (!title) return { error: "Something went wrong! Missing title." }
 
@@ -34,7 +34,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 title,
                 backstory,
                 url,
-                assignedToEmail,
+                quantity,
                 updatedAt: new Date(),
             },
         });
@@ -43,12 +43,6 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         console.error(error);
         return { error: "Failed to update." }
     }
-
-    if (prevAssignedToEmail !== assignedToEmail && assignedToEmail) {
-        await sendNewAssignedGiftToClient(assignedToEmail, gift);
-    }
-    // IF prevEmail has changed, then contact old email and new email.
-    // No necessary approval if email has changed...
 
     revalidatePath(`/admin/registry`);
     return { data: gift };

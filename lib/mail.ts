@@ -1,6 +1,6 @@
 import { getUserByEmail } from "@/data/auth/user";
-import { PartyWithGuests } from "@/types";
-import { Gift, Guest, Party } from "@prisma/client";
+import { GiftWithAssignments, PartyWithGuests } from "@/types";
+import { Gift, GiftAssignment, Guest, Party } from "@prisma/client";
 import { Resend } from "resend";
 
 // Create a new instance of the Resend class using the API key from environment variables.
@@ -110,18 +110,21 @@ export const sendNewAssignedGiftToClient = async (
 
 export const sendGiftConfirmation = async (
     email: string,
-    gift: Gift
+    gift: GiftWithAssignments,
+    giftAssignment: GiftAssignment
 ) => {
     await resend.emails.send({
         from: "Malin & Simons bröllop <info@malinsimon2025.se>",
         to: email,
         subject: `Malin & Simons bröllop // Presentbekräftelse`,
         html: `
-            <h1>Tack! Presenten är nu gömd från andra gäster.</h1>
+            <h1>Tack! Presenten är nu paxad.</h1>
             <p>Kontakta ${supportEmail} om du inte längre vill köpa denna present.</p>
             <br/>
-            <p style="font-weight: bold;">${gift.title}</p>
+            <p style="font-weight: bold;">Presentinfo</p>
+            <p style="">${gift.title}</p>
             <p style="">${gift.backstory}</p>
+            <p style="">${gift.quantity && `Antal: ${giftAssignment.count}`}</p>
             <a href=${gift.url}>${gift.url}</a>
             <br/>
             <p>Du kan inte svara på detta mejl.</p>

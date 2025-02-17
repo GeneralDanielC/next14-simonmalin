@@ -1,19 +1,23 @@
 "use client";
 
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { useRequestGiftModal } from "@/hooks/use-request-gift-modal";
+import { getAvailableGiftCount, getAvailableGifts } from "@/lib/gifts";
+import { GiftsWithAssignments, GiftWithAssignments } from "@/types";
 import { Gift } from "@prisma/client";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsRight, Infinity, Info } from "lucide-react";
 import { useState } from "react";
 
 interface RegistryListProps {
-    gifts: Gift[]
+    gifts: GiftWithAssignments[]
 }
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 8;
 
 export const RegistryList = ({
     gifts,
@@ -21,10 +25,11 @@ export const RegistryList = ({
     const requestGiftModal = useRequestGiftModal();
 
     const [hideList, setHideList] = useState<boolean>(false);
-    const [requestGift, setRequestGift] = useState<Gift | undefined>(undefined);
+    const [requestGift, setRequestGift] = useState<GiftWithAssignments | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const filteredGifts = gifts.filter(gift => !gift.assignedToEmail);
+    // TO BE FIXED: SETUP A FUNCTION UTIL THAT CHECKS IF THE GIFT IS AVAILABLE.
+    const filteredGifts = getAvailableGifts({ gifts });
 
     const totalPages = Math.ceil(filteredGifts.length / ITEMS_PER_PAGE);
 
@@ -43,7 +48,7 @@ export const RegistryList = ({
         }
     };
 
-    const handleOpenModal = (gift: Gift) => {
+    const handleOpenModal = (gift: GiftWithAssignments) => {
         setRequestGift(gift);
         requestGiftModal.onOpen();
     }
@@ -59,11 +64,52 @@ export const RegistryList = ({
 
     return (
         <div>
-            <div className="flex flex-col gap-y-0.5">
+            <Dialog>
+                <DialogTrigger className="w-full" asChild>
+                    <Button variant="outline" className="w-full">Information om önkselistan</Button>
+                </DialogTrigger>
+                <DialogContent className="bg-beige">
+                    <DialogHeader>
+                        <DialogTitle>Information om önskelistan</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col gap-y-2">
+                        <div className="flex flex-row gap-x-2">
+                            <ChevronsRight className="size-5 flex-none" />
+                            <span>Här hittar du en lista över brudparets önskade presenter.</span>
+                        </div>
+                        <div className="flex flex-row gap-x-2">
+                            <ChevronsRight className="size-5 flex-none" />
+                            <span>Om du vill köpa något, <span className="font-bold">paxa</span> det genom att klicka på presenten och fylla i formuläret. Detta förhindrar att flera gäster råkar köpa samma sak.</span>
+                        </div>
+                        <div className="flex flex-row gap-x-2">
+                            <ChevronsRight className="size-5 flex-none" />
+                            <span>Vissa presenter har en <span className="font-bold">begränsad kvantitet</span>. När du fyller i formuläret, reserverar du det antal du vill köpa. <span className="font-bold">Ange endast det antal du vill köpa</span>, så förblir resterande tillgängligt för andra gäster. När alla exemplar är reserverade, döljs presenten från listan.</span>
+                        </div>
+                        <div className="flex flex-row gap-x-2">
+                            <ChevronsRight className="size-5 flex-none" />
+                            <span>Presenter utan begränsning är markerade med ett oändlighetstecken. Det är inte lika viktigt att reservera dessa, men om du vill ha en bekräftelse via mejl kan du ändå fylla i formuläret.</span>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline" className="w-full">Jag har förstått!</Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <div className="flex flex-col gap-y-0.5 mt-5">
                 {currentGifts.map(gift => (
                     <div onClick={() => handleOpenModal(gift)} key={gift.id} className="flex flex-col p-1 rounded-lg hover:cursor-pointer hover:bg-stone-500/10">
-                        <span>{gift.title}</span>
-                        <span className="text-xs text-stone-500/90">{gift.backstory}</span>
+                        <div className="flex flex-row justify-between items-center">
+                            <div className="flex flex-col">
+                                <span>{gift.title}</span>
+                                <span className="text-xs text-stone-500/90">{gift.backstory}</span>
+                            </div>
+                            <div className="flex flex-col justify-center items-center text-stone-500">
+                                <span>{gift.quantity ? `${getAvailableGiftCount({ gift })} / ${gift.quantity}` : <Infinity />}</span>
+                                <span className="text-xs">tillgängliga</span>
+                            </div>
+                        </div>
                         <Separator className="bg-transparent border-b border-black border-dotted my-1" />
                     </div>
                 ))}

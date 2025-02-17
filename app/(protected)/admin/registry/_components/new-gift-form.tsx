@@ -28,8 +28,11 @@ export const NewGiftForm = () => {
         const title = formData.get("title") as string;
         const url = formData.get("url") as string;
         const backstory = formData.get("backstory") as string;
+        const rawQuantity = formData.get("quantity") as string;
 
-        execute({ title, url, backstory });
+        const quantity = parseInt(rawQuantity);
+
+        execute({ title, url, backstory, quantity });
     }
 
     return (
@@ -49,12 +52,14 @@ export const NewGiftForm = () => {
                 >
                     <div className="flex flex-row gap-x-2">
                         <FormInput id="title" placeholder="Title..." label="Title" errors={fieldErrors} required />
-                        <FormInput id="url" placeholder="Link..." label="Link" errors={fieldErrors} />
+
+                        <FormInput id="quantity" placeholder="Quantity..." label="Quantity (leave empty for infinity)" type="number" errors={fieldErrors} />
                     </div>
+                    <FormInput id="url" placeholder="Link..." label="Link" errors={fieldErrors} />
                     <FormTextarea id="backstory" placeholder="Backstory..." label="Backstory" errors={fieldErrors} />
 
                     <DialogFooter className="mt-2">
-                        <Button variant={"success"}>Save</Button>
+                        <Button>Save</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

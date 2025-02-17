@@ -30,15 +30,16 @@ import { Gift } from "@prisma/client"
 import { useEffect, useState } from "react"
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
 import { filterGiftsByIsAssigned, filterGiftsByIsNotAssigned } from "@/lib/filter"
+import { GiftWithAssignments } from "@/types"
 
 interface RegistryTabsProps {
-    gifts: Gift[],
+    gifts: GiftWithAssignments[],
 }
 
 type Checked = DropdownMenuCheckboxItemProps["checked"]
 
 export const RegistryTabs = ({ gifts }: RegistryTabsProps) => {
-    const [filteredGifts, setFilteredGifts] = useState<Gift[]>(gifts);
+    const [filteredGifts, setFilteredGifts] = useState<GiftWithAssignments[]>(gifts);
 
     const [noFilter, setNoFilter] = useState<Checked>(true);
     const [showAssigned, setShowAssigned] = useState<Checked>(false);

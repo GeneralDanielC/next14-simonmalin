@@ -10,14 +10,16 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Gift } from "@prisma/client"
-import { Check, X } from "lucide-react"
+import { Check, Infinity, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { ModalProvider } from "@/components/providers/modal-provider"
 import { useEditGiftModal } from "@/hooks/use-edit-gift-modal"
+import { GiftWithAssignments } from "@/types"
+import { getAvailableGiftCount } from "@/lib/gifts"
 
 interface GiftsTableProps {
-    gifts: Gift[]
+    gifts: GiftWithAssignments[]
 }
 
 export const GiftsTable = ({
@@ -25,7 +27,7 @@ export const GiftsTable = ({
 }: GiftsTableProps) => {
     const editGiftModal = useEditGiftModal();
 
-    const [gift, setGift] = useState<Gift | undefined>();
+    const [gift, setGift] = useState<GiftWithAssignments | undefined>();
 
     const handleOpenModal = (giftId: string) => {
         const gift = gifts.find(gift => gift.id === giftId);
@@ -41,7 +43,8 @@ export const GiftsTable = ({
                 <TableHeader>
                     <TableRow>
                         <TableHead>Title & Backstory</TableHead>
-                        <TableHead className="text-right">Assigned</TableHead>
+                        <TableHead className="text-left">Available / Count</TableHead>
+                        <TableHead className="text-right">Assignments</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -53,13 +56,13 @@ export const GiftsTable = ({
                                     {gift.backstory}
                                 </div>
                             </TableCell>
-                            <TableCell className="text-right min-w-[200px]">
-                                <Badge className="text-xs" variant={"secondary"}>
-                                    {!gift.assignedToEmail ? "No" : "Yes"}
-                                </Badge>
-                                <div className=" text-xs text-muted-foreground md:block">
-                                    {gift.assignedToEmail}
-                                </div>
+                            <TableCell className="">
+                                {gift.quantity ? `${getAvailableGiftCount({ gift })} / ${gift.quantity}` : <Infinity />}
+                            </TableCell>
+                            <TableCell className="text-right text-xs flex flex-col">
+                                {gift.giftAssignments.map(gift =>
+                                    <span key={gift.id}>{gift.email}</span>
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}

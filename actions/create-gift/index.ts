@@ -17,7 +17,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (!user) return { error: "Unauthorized" }
 
-    const { title, backstory, url } = data;
+    const { title, backstory, url, quantity } = data;
 
     if (!title) return { error: "Something went wrong! Missing title." }
 
@@ -30,7 +30,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             data: {
                 title,
                 backstory,
-                url
+                url,
+                quantity
             },
         });
 

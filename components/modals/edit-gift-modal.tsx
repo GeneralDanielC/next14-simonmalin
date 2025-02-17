@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
-import { Gift } from "@prisma/client";
+import { Gift, GiftAssignment } from "@prisma/client";
 import { FormInput } from "@/components/form/form-input";
 import { FormSwitch } from "@/components/form/form-switch";
 import { FormSubmit } from "@/components/form/form-submit";
@@ -20,9 +20,10 @@ import { unassignGift } from "@/actions/unassign-gift";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteGift } from "@/actions/delete-gift";
+import { GiftWithAssignments } from "@/types";
 
 interface EditGiftModalProps {
-    gift: Gift
+    gift: GiftWithAssignments
 }
 
 export const EditGiftModal = ({
@@ -49,14 +50,16 @@ export const EditGiftModal = ({
         const url = formData.get("url") as string;
         const backstory = formData.get("backstory") as string;
         const assignedToEmail = formData.get("assignedToEmail") as string;
+        const rawQuantity = formData.get("quantity") as string;
+
+        const quantity = parseInt(rawQuantity);
 
         execute({
             id: gift.id,
             title,
-            prevAssignedToEmail: gift.assignedToEmail || undefined,
             backstory,
             url,
-            assignedToEmail: assignedToEmail || undefined,
+            quantity,
         })
     }
 
@@ -68,7 +71,7 @@ export const EditGiftModal = ({
             <DialogContent className="bg-card">
                 <DialogHeader>
                     <DialogTitle>Edit '{gift.title}'</DialogTitle>
-                    <DialogDescription>You can modify the gift here.</DialogDescription>
+                    <DialogDescription>You can modify the gift here. Information about changes will not be sent to the guest.</DialogDescription>
                 </DialogHeader>
                 <form ref={formRef} action={handleEditGiftSubmit}>
                     <div className="flex flex-col gap-y-1">
@@ -82,13 +85,21 @@ export const EditGiftModal = ({
                                 errors={fieldErrors}
                             />
                             <FormInput
-                                id="url"
-                                placeholder="Link..."
-                                label="Link"
-                                defaultValue={gift.url ?? ""}
+                                id="quantity"
+                                placeholder="Quantity..."
+                                label="Quantity (leave empty for infinity)"
+                                type="number"
+                                defaultValue={gift.quantity ?? 0}
                                 errors={fieldErrors}
                             />
                         </div>
+                        <FormInput
+                            id="url"
+                            placeholder="Link..."
+                            label="Link"
+                            defaultValue={gift.url ?? ""}
+                            errors={fieldErrors}
+                        />
                         <FormTextarea
                             id="backstory"
                             placeholder="Backstory..."
@@ -97,33 +108,35 @@ export const EditGiftModal = ({
                             errors={fieldErrors}
                             rows={3}
                         />
-                        <FormInput
-                            id="assignedToEmail"
-                            placeholder="Email..."
-                            label="Assigned To Email"
-                            disabled={!!gift.assignedToEmail}
-                            defaultValue={gift.assignedToEmail ?? ""}
-                            onChange={(e) => setNewAssignedToEmail(e.target.value)}
-                            errors={fieldErrors}
-                        />
                         <FormSubmit
-                            variant="success"
                             className="mt-3"
                         >
                             Save
                         </FormSubmit>
                     </div>
                 </form>
-                <div className="flex flex-row gap-x-2 w-full">
-                    <UnassignGift gift={gift} />
-                    <DeleteGift gift={gift} />
+                <Separator className="my-4" />
+                <div className="flex flex-col gap-y-2">
+                    <span>Gift Assignments</span>
+                    {gift.giftAssignments.map(assignment => (
+                        <div key={assignment.id} className="flex flex-row justify-between items-center border border-accent p-2 rounded-md">
+                            <div className="flex flex-col text-sm">
+                                <span>{assignment.email}</span>
+                                <span>Quantity: {assignment.count}</span>
+                            </div>
+                            <UnassignGift giftAssignment={assignment} />
+                        </div>
+                    ))}
+                    {gift.giftAssignments.length === 0 && <span className="text-sm">No assignments yet.</span>}
                 </div>
+                <Separator className="my-4" />
+                <DeleteGift gift={gift} />
             </DialogContent>
         </Dialog>
     )
 }
 
-const UnassignGift = ({ gift }: { gift: Gift }) => {
+const UnassignGift = ({ giftAssignment }: { giftAssignment: GiftAssignment }) => {
     const editGiftModal = useEditGiftModal()
 
     const { execute } = useAction(unassignGift, {
@@ -137,24 +150,18 @@ const UnassignGift = ({ gift }: { gift: Gift }) => {
     })
 
     const handleSubmit = () => {
-        execute({ id: gift.id });
+        execute({ id: giftAssignment.id });
     }
 
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className="w-full border border-black" variant="secondary">Unassign Gift</Button>
+                <Button className="border border-black" variant="secondary">Unassign</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="bg-accent">
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This will unassign the current person, making the gift available for other guests to claim.</AlertDialogDescription>
-                    {gift.assignedToEmail &&
-                        <AlertDialogDescription className="flex flex-col">
-                            <span>If needed, make sure to contact the current guest.</span>
-                            <span className="font-bold text-xs">{gift.assignedToEmail}</span>
-                        </AlertDialogDescription>
-                    }
+                    <AlertDialogDescription>This will unassign the current person, making the gift available for other guests to claim. The current guest will not be informed about this.</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -171,7 +178,7 @@ const UnassignGift = ({ gift }: { gift: Gift }) => {
     )
 }
 
-const DeleteGift = ({ gift }: { gift: Gift }) => {
+const DeleteGift = ({ gift }: { gift: GiftWithAssignments }) => {
     const editGiftModal = useEditGiftModal()
 
     const { execute } = useAction(deleteGift, {
@@ -191,18 +198,12 @@ const DeleteGift = ({ gift }: { gift: Gift }) => {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className="w-full" variant="destructive">Delete Gift</Button>
+                <Button className="w-full bg-red-400">Delete Gift</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="bg-accent">
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This action cannot be undone. This will permanently delete the data from our servers.</AlertDialogDescription>
-                    {gift.assignedToEmail &&
-                        <AlertDialogDescription className="flex flex-col">
-                        <span>If needed, make sure to contact the current guest.</span>
-                        <span className="font-bold text-xs">{gift.assignedToEmail}</span>
-                    </AlertDialogDescription>
-                    }
+                    <AlertDialogDescription>This action cannot be undone. This will permanently delete the data from our servers. Assigned guests will not be informed.</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>

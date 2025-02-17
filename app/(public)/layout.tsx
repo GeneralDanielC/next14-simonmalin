@@ -11,6 +11,7 @@ import Link from "next/link";
 import { NavBar } from "./_components/navbar";
 import { Toaster } from "sonner";
 import { ContactWedding } from "@/components/contact-wedding";
+import { Analytics } from "@vercel/analytics/react"
 
 const cormorant = Cormorant_SC({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"] });
 
@@ -30,7 +31,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const maintenance = true;
+  const maintenance = false;
 
   return (
     <html lang="sv">
@@ -74,6 +75,7 @@ export default function RootLayout({
             ))}
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );

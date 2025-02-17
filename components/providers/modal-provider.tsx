@@ -1,7 +1,7 @@
 "use client";
 
 import { EditGuestModal } from "@/components/modals/edit-guest-modal";
-import { PartyWithGuests } from "@/types";
+import { GiftWithAssignments, PartyWithGuests } from "@/types";
 import { Gift, Guest } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { EditGiftModal } from "../modals/edit-gift-modal";
@@ -12,8 +12,8 @@ import { AddressCardDetails, AddressModal } from "../modals/address-modal";
 interface ModalProviderProps {
     party?: PartyWithGuests,
     guest?: Guest,
-    gift?: Gift,
-    requestGift?: Gift,
+    gift?: GiftWithAssignments,
+    requestGift?: GiftWithAssignments,
     imageUrl?: string
     addressCardDetails?: AddressCardDetails
 }

@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -111,13 +111,23 @@ model Party {
 }
 
 model Gift {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   backstory       String?
   url             String?
-  assignedToEmail String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  quantity        Int?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now())
+  giftAssignments GiftAssignment[]
+}
+
+model GiftAssignment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  count     Int?
+  gift      Gift     @relation(fields: [giftId], references: [id], onDelete: Cascade)
+  giftId    String   @db.ObjectId
+  createdAt DateTime @default(now())
 }
 
 model GalleryPost {

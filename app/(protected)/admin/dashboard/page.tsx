@@ -29,7 +29,7 @@ const DashboardPage = async () => {
                     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                         <AlertsCard gifts={gifts} parties={parties} />
                         <LinkCard title="Parties" description="Manage parties and guests." icon={<Users className="size-10" />} href="/admin/parties" />
-                        <LinkCard title="Gift Registry" description="Manage your gift registry." icon={<Package className="size-10" />} href="/admin/parties" />
+                        <LinkCard title="Gift Registry" description="Manage your gift registry." icon={<Package className="size-10" />} href="/admin/registry" />
                         <AttendanceCard parties={parties} />
                     </div>
                 </div>

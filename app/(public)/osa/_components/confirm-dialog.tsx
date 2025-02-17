@@ -43,15 +43,15 @@ export const ConfirmDialog = ({
                     <AlertDialogDescription className="text-black">Vänligen kontrollera följande:</AlertDialogDescription>
                     <div className="flex flex-col text-sm gap-y-1">
                         <div className="flex flex-row gap-x-3 items-center">
-                            <ChevronsRight className="size-5" />
+                            <ChevronsRight className="size-5 flex-none" />
                             <span>Alla gäster i ditt sällskap, <span className="font-semibold">inklusive du själv</span> står nedan.</span>
                         </div>
                         <div className="flex flex-row gap-x-3 items-center">
-                            <ChevronsRight className="size-5" />
+                            <ChevronsRight className="size-5 flex-none" />
                             <span>Gästernas val stämmer.</span>
                         </div>
                         <div className="flex flex-row gap-x-3 items-center">
-                            <ChevronsRight className="size-5" />
+                            <ChevronsRight className="size-5 flex-none" />
                             <span>Den angivna e-postadressen stämmer.</span>
                         </div>
                     </div>
@@ -91,7 +91,7 @@ export const ConfirmDialog = ({
                     <FormSubmit
                         className="w-full border border-black" variant="success"
                         onClick={() => formRef.current?.requestSubmit()}
-                        >
+                    >
                         {mode === "rsvp" ? "Skicka" : "Spara"}
                     </FormSubmit>
                 </AlertDialogFooter>

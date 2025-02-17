@@ -12,9 +12,12 @@ import { useRequestGiftModal } from "@/hooks/use-request-gift-modal";
 import { requestGift } from "@/actions/request-gift";
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ChevronsRight, Infinity } from "lucide-react";
+import { getAvailableGiftCount } from "@/lib/gifts";
+import { GiftWithAssignments } from "@/types";
 
 interface RequestGiftModalProps {
-    gift: Gift
+    gift: GiftWithAssignments
 }
 
 export const RequestGiftModal = ({
@@ -35,12 +38,27 @@ export const RequestGiftModal = ({
     })
 
     const handleRequestGiftSubmit = (formData: FormData) => {
-        const assignedToEmail = formData.get("assignedToEmail") as string;
+        const email = formData.get("email") as string;
+        const rawCount = formData.get("count") as string;
+        const count = parseInt(rawCount)
 
-        execute({
-            id: gift.id,
-            assignedToEmail,
-        })
+        if (gift.quantity && getAvailableGiftCount({ gift }) > 0) {
+            if (!count || count < 1) {
+                toast.error("Du måste ange ett antal över 0.");
+                return;
+            }
+            execute({
+                id: gift.id,
+                email,
+                count
+            })
+        } else {
+            execute({
+                id: gift.id,
+                email,
+                count: undefined
+            })
+        }
     }
 
     return (
@@ -49,29 +67,67 @@ export const RequestGiftModal = ({
             onOpenChange={requestGiftModal.onClose}
         >
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Vill du paxa '{gift.title}' ?</DialogTitle>
-                    <DialogDescription>Presenten kommer att gömmas från andra gäster.</DialogDescription>
-                </DialogHeader>
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="more-info" className="border-none">
-                        <AccordionTrigger className="border border-black p-2 rounded-lg">Mer info</AccordionTrigger>
-                        <AccordionContent className="flex flex-col px-2 py-1.5">
-                            <span className="text-lg">{gift.title}</span>
-                            <span>{gift.backstory}</span>
-                            <span>{gift.url && <Link className="underline" href={gift.url}>{gift.url}</Link>}</span>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
+
+                <div className="flex flex-row items-center border border-black rounded-lg p-3">
+                    <div className="w-full flex flex-col">
+                        <span className="text-muted-foreground text-sm">presentinfo</span>
+                        <span className="text-lg font-semibold">{gift.title}</span>
+                        <span className="text-sm">{gift.backstory}</span>
+                        <span className="text-sm">{gift.url && <Link target="_blank" className="underline" href={gift.url}>Länk till present</Link>}</span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                        <span className="text-4xl">{gift.quantity ? getAvailableGiftCount({ gift }).toString() : <Infinity />}</span>
+                        <span className="text-sm">tillgängliga</span>
+                    </div>
+                </div>
                 <form ref={formRef} action={handleRequestGiftSubmit}>
-                    <div className="flex flex-col gap-y-1">
-                        <FormInput
-                            id="assignedToEmail"
-                            placeholder="E-postadress..."
-                            defaultValue={gift.assignedToEmail ?? ""}
-                            errors={fieldErrors}
-                            autofocus
-                        />
+                    <div className="flex flex-col gap-y-1 mt-2">
+                        <DialogHeader>
+                            <DialogTitle>Vill du köpa den här presenten?</DialogTitle>
+                            <DialogDescription className="flex flex-col">
+                                <div className="flex flex-col text-sm gap-y-1">
+                                    <div className="flex flex-row gap-x-2 items-center">
+                                        <ChevronsRight className="size-5" />
+                                        <span>Ange din e-postadress.</span>
+                                    </div>
+                                    {gift.quantity && (
+                                        <>
+                                            <div className="flex flex-row gap-x-2">
+                                                <ChevronsRight className="size-5 flex-none" />
+                                                <span>Ange hur många exemplar av presenten du vill köpa.</span>
+                                            </div>
+                                            <div className="flex flex-row gap-x-2">
+                                                <ChevronsRight className="size-5 flex-none" />
+                                                <span>Antalet kan inte överstiga det tillgängliga antalet.</span>
+                                            </div>
+                                            <div className="flex flex-row gap-x-2">
+                                                <ChevronsRight className="size-5 flex-none" />
+                                                <span>När alla exemplar är reserverade, döljs presenten från listan.</span>
+                                            </div>
+                                        </>
+                                    )}
+
+                                </div>
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="flex flex-row gap-2 mt-4">
+                            <FormInput
+                                id="email"
+                                placeholder="E-postadress"
+                                errors={fieldErrors}
+                                autofocus
+                            />
+                            {gift.quantity && (
+                                <FormInput
+                                    id="count"
+                                    type="number"
+                                    placeholder="Antal"
+                                    min={1}
+                                    errors={fieldErrors}
+                                    autofocus
+                                />
+                            )}
+                        </div>
                         <FormSubmit
                             variant="success"
                             className="mt-3 border border-black"
