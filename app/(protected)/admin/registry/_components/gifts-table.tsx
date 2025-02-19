@@ -126,7 +126,7 @@ export const GiftsTable = ({
                                                 className={`hover:cursor-pointer ${snapshot.isDragging && "bg-accent flex flex-row justify-between items-center"}`}
                                                 onClick={() => handleOpenModal(gift.id)}
                                             >
-                                                <TableCell className={cn(snapshot.isDragging && "w-[200px]")}>
+                                                <TableCell className={cn(snapshot.isDragging && "flex-1 h-full")}>
                                                     <div className="font-medium">{gift.title}</div>
                                                     <div className="text-xs text-muted-foreground md:inline">
                                                         {gift.backstory}
