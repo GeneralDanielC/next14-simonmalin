@@ -62,10 +62,9 @@ export const NewGiftForm = () => {
 
                         <FormInput id="quantity" placeholder="The perfect amount..." label="Quantity (put 0 for infinity)" type="number" errors={fieldErrors} defaultValue={0} min={0} />
                     </div>
-                    <FormSwitch id="hidden" label="Hidden" description="Whether the gift will be hidden from clients." value={hidden} onChange={(checked) => setHidden(checked)} className="data-[state=checked]:bg-accent-foreground" />
                     <FormInput id="url" placeholder="e.g. google.se..." label="Link" errors={fieldErrors} />
                     <FormTextarea id="backstory" placeholder="Some kind of good backstory..." label="Backstory" errors={fieldErrors} rows={4} />
-
+                    <FormSwitch id="hidden" label="Hidden" description="Checking this will hide the gift on the client side." value={hidden} onChange={(checked) => setHidden(checked)} className="data-[state=checked]:bg-accent-foreground" />
                     <DialogFooter className="mt-2">
                         <Button>Save</Button>
                     </DialogFooter>

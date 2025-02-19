@@ -198,10 +198,10 @@ export const RegistryTabs = ({ gifts }: RegistryTabsProps) => {
                     <CardHeader className="px-7">
                         <div className="flex flex-row items-center justify-between">
                             <div className="flex flex-col gap-y-1">
-                                <CardTitle>Gift Registry</CardTitle>
+                                <CardTitle>Manage Gift Registry</CardTitle>
                                 <CardDescription className="flex flex-col gap-y-2">
-                                    List of all gifts in the registry.
-                                    <span className="text-xs italic">Tip: Tap a row to view and edit.</span>
+                                    Add, modify, delete and reorder gifts.
+                                    <span className="text-xs italic">Tip: Drag a row to reorder.</span>
                                 </CardDescription>
                             </div>
                             <NewGiftForm />

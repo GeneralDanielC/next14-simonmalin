@@ -62,7 +62,7 @@ export const SearchParties = ({
                     />
                     {/* CommandList positioned absolutely below the input */}
                     <div className="absolute top-full left-0 mt-2 w-full z-10">
-                        <CommandList className="max-h-[300px] overflow-y-auto bg-white shadow-lg rounded-lg">
+                        <CommandList className="max-h-[300px] overflow-y-auto bg-accent shadow-lg rounded-lg">
                             {searchTerm !== "" && (
                                 <div>
                                     {/* Parties & Guests Section */}

@@ -98,7 +98,6 @@ export const EditGiftModal = ({
                                 errors={fieldErrors}
                             />
                         </div>
-                        <FormSwitch id="hidden" label="Hidden" description="Whether the gift will be hidden from clients." value={hidden} onChange={(checked) => setHidden(checked)} className="data-[state=checked]:bg-accent-foreground" />
                         <FormInput
                             id="url"
                             placeholder="Link..."
@@ -114,6 +113,7 @@ export const EditGiftModal = ({
                             errors={fieldErrors}
                             rows={4}
                         />
+                        <FormSwitch id="hidden" label="Hidden" description="Checking this will hide the gift on the client side." value={hidden} onChange={(checked) => setHidden(checked)} className="data-[state=checked]:bg-accent-foreground" />
                         <FormSubmit
                             className="mt-3"
                         >
