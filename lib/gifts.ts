@@ -31,7 +31,7 @@ export const getAvailableGiftCount = ({ gift }: { gift: GiftWithAssignments }) =
     let count = 0;
 
     gift.giftAssignments.map(giftAssignment => {
-        count += giftAssignment.count;
+        if (giftAssignment.count) count += giftAssignment.count;
     })
 
     return gift?.quantity - count;

@@ -15,10 +15,7 @@ import { getAvailableGiftCount } from "@/lib/gifts";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 
-    const { id, email, count: requestedCount } = data;
-
-    console.log("ID", id, "Email", email, "count", requestedCount);
-    
+    const { id, email, count: requestedCount } = data;    
 
     if (!email) return { error: "Something went wrong! Missing title." }
 

@@ -3,13 +3,19 @@ import { GiftWithAssignments, PartyWithGuests } from "@/types";
 import { getAttendingGuestsInParty } from "./parties";
 
 export const filterGiftsByIsAssigned = ({ gifts }: { gifts: GiftWithAssignments[] }) => {
-    // return gifts.filter(gift => !!gift.assignedToEmail);
-    return gifts;
+    return gifts.filter(gift => gift.giftAssignments.length > 0);
 }
 
 export const filterGiftsByIsNotAssigned = ({ gifts }: { gifts: GiftWithAssignments[] }) => {
-    // return gifts.filter(gift => !gift.assignedToEmail);
-    return gifts;
+    return gifts.filter(gift => gift.giftAssignments.length === 0);
+}
+
+export const filterGiftsByHidden = ({ gifts }: { gifts: GiftWithAssignments[] }) => {
+    return gifts.filter(gift => gift.hidden);
+}
+
+export const filterGiftsByVisible = ({ gifts }: { gifts: GiftWithAssignments[] }) => {
+    return gifts.filter(gift => !gift.hidden);
 }
 
 // Parties

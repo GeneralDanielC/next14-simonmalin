@@ -8,9 +8,7 @@ import { getUserById } from "@/data/auth/user";
 import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
-import { UnassignGift } from "./schema";
-import { getPartyByEmail } from "@/data/data";
-import { sendNewAssignedGiftToClient, sendRSVPConfirmation } from "@/lib/mail";
+import { UpdateGiftOrder } from "./schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
@@ -21,26 +19,31 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     if (!dbUser) return { error: "Unauthorized" }
 
-    const { id } = data;
+    const { gifts } = data;
 
-    let giftAssignment;
+    let updatedGifts;
 
     try {
         // throw new Error("a"); // artificial error - to be removed
 
-        giftAssignment = await db.giftAssignment.delete({
+        const transaction = gifts.map((gift) => db.gift.update({
             where: {
-                id
+                id: gift.id,
             },
-        });
+            data: {
+                order: gift.order,
+            }
+        }));
+
+        updatedGifts = await db.$transaction(transaction);
 
     } catch (error) {
         console.error(error);
-        return { error: "Failed to unassign." }
+        return { error: "Failed to reorder." }
     }
 
     revalidatePath(`/admin/registry`);
-    return { data: giftAssignment };
+    return { data: updatedGifts };
 }
 
-export const unassignGift = createSafeAction(UnassignGift, handler);
+export const updateGiftOrder = createSafeAction(UpdateGiftOrder, handler);

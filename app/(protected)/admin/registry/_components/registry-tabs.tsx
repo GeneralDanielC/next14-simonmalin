@@ -29,8 +29,9 @@ import { GiftsTable } from "./gifts-table"
 import { Gift } from "@prisma/client"
 import { useEffect, useState } from "react"
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-import { filterGiftsByIsAssigned, filterGiftsByIsNotAssigned } from "@/lib/filter"
+import { filterGiftsByHidden, filterGiftsByIsAssigned, filterGiftsByIsNotAssigned, filterGiftsByVisible } from "@/lib/filter"
 import { GiftWithAssignments } from "@/types"
+import { exportGiftsToExcel } from "@/lib/excel"
 
 interface RegistryTabsProps {
     gifts: GiftWithAssignments[],
@@ -44,9 +45,61 @@ export const RegistryTabs = ({ gifts }: RegistryTabsProps) => {
     const [noFilter, setNoFilter] = useState<Checked>(true);
     const [showAssigned, setShowAssigned] = useState<Checked>(false);
     const [showNotAssigned, setShowNotAssigned] = useState<Checked>(false);
+    const [showHidden, setShowHidden] = useState<Checked>(false);
+    const [showVisible, setShowVisible] = useState<Checked>(false);
+
 
     // Handle filter changes: Only one filter can be active at a time
-    const handleFilterChange = (filter: "none" | "assigned" | "notAssigned") => {
+    const handleFilterChange = (filter: "none" | "assigned" | "notAssigned" | "hidden" | "visible") => {
+        switch (filter) {
+            case "none":
+                setNoFilter(true);
+                setShowAssigned(false);
+                setShowNotAssigned(false);
+                setShowHidden(false);
+                setShowVisible(false);
+
+                setFilteredGifts(gifts); //reset to all gifts
+                break
+            case "assigned":
+                setNoFilter(false);
+                setShowAssigned(true);
+                setShowNotAssigned(false);
+                setShowHidden(false);
+                setShowVisible(false);
+
+                setFilteredGifts(filterGiftsByIsAssigned({ gifts }));
+                break
+            case "notAssigned":
+                setNoFilter(false);
+                setShowAssigned(false);
+                setShowNotAssigned(true);
+                setShowHidden(false);
+                setShowVisible(false);
+
+                setFilteredGifts(filterGiftsByIsNotAssigned({ gifts }));
+                break
+            case "hidden":
+                setNoFilter(false);
+                setShowAssigned(false);
+                setShowNotAssigned(false);
+                setShowHidden(true);
+                setShowVisible(false);
+
+                setFilteredGifts(filterGiftsByHidden({ gifts }));
+                break
+            case "visible":
+                setNoFilter(false);
+                setShowAssigned(false);
+                setShowNotAssigned(false);
+                setShowHidden(false);
+                setShowVisible(true);
+
+                setFilteredGifts(filterGiftsByVisible({ gifts }));
+                break
+            default:
+                break;
+        }
         if (filter === "none") {
             setNoFilter(true);
             setShowAssigned(false);
@@ -76,7 +129,7 @@ export const RegistryTabs = ({ gifts }: RegistryTabsProps) => {
     }, [noFilter, gifts]);
 
     return (
-        <Tabs defaultValue="gifts">
+        <Tabs defaultValue="gifts" className="max-w-full">
             <div className="flex items-center">
                 <TabsList>
                     <TabsTrigger value="gifts">Gift Registry</TabsTrigger>
@@ -115,13 +168,25 @@ export const RegistryTabs = ({ gifts }: RegistryTabsProps) => {
                             >
                                 Not Assigned
                             </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem
+                                checked={showHidden}
+                                onCheckedChange={() => handleFilterChange("hidden")}
+                            >
+                                Hidden
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem
+                                checked={showVisible}
+                                onCheckedChange={() => handleFilterChange("visible")}
+                            >
+                                Visible
+                            </DropdownMenuCheckboxItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <Button
                         size="sm"
                         variant="outline"
                         className="h-7 gap-1 text-sm"
-                        disabled
+                        onClick={() => exportGiftsToExcel(gifts)}
                     >
                         <File className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only">Export</span>

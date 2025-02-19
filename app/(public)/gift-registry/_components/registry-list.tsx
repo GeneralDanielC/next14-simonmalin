@@ -28,8 +28,9 @@ export const RegistryList = ({
     const [requestGift, setRequestGift] = useState<GiftWithAssignments | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // TO BE FIXED: SETUP A FUNCTION UTIL THAT CHECKS IF THE GIFT IS AVAILABLE.
-    const filteredGifts = getAvailableGifts({ gifts });
+    const availableGifts = getAvailableGifts({ gifts });
+
+    const filteredGifts = availableGifts.filter(gift => !gift.hidden)
 
     const totalPages = Math.ceil(filteredGifts.length / ITEMS_PER_PAGE);
 

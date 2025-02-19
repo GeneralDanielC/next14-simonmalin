@@ -36,7 +36,7 @@ export const getParties = async () => {
 }
 
 export const getGifts = async () => {
-    const gifts = await db.gift.findMany({ include: { giftAssignments: true } });
+    const gifts = await db.gift.findMany({ include: { giftAssignments: true }, orderBy: {order: "asc"} });
 
     return gifts;
 }

@@ -8,11 +8,16 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { DeleteGuest } from "./schema";
+import { getUserById } from "@/data/auth/user";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
 
-    if (!user) return { error: "Unauthorized" }
+    if (!user || !user.id) return { error: "Unauthorized" }
+
+    const dbUser = await getUserById(user.id);
+
+    if (!dbUser) return { error: "Unauthorized" }
 
     const { id } = data;
 

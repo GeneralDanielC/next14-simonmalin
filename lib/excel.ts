@@ -1,6 +1,7 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import { PartyWithGuests } from "@/types"; // Ensure correct types
+import { GiftWithAssignments, PartyWithGuests } from "@/types"; // Ensure correct types
+import { getAvailableGiftCount } from "./gifts";
 
 export const exportPartiesToExcel = async (parties: PartyWithGuests[]) => {
     const workbook = new ExcelJS.Workbook();
@@ -39,4 +40,37 @@ export const exportPartiesToExcel = async (parties: PartyWithGuests[]) => {
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
 
     saveAs(blob, `parties_guests_${new Date().toISOString().split("T")[0]}.xlsx`);
+};
+
+export const exportGiftsToExcel = async (gifts: GiftWithAssignments[]) => {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Gifts");
+
+    // Define columns
+    sheet.columns = [
+        { header: "Title", key: "title", width: 25 },
+        { header: "Backstory", key: "backstory", width: 30 },
+        { header: "Available", key: "available", width: 20 },
+        { header: "Quantity", key: "quantity", width: 15 },
+        { header: "Hidden", key: "hidden", width: 15 },
+        { header: "Assignments", key: "assignments", width: 25 },
+    ];
+
+    // Add rows
+    gifts.forEach((gift) => {
+        sheet.addRow({
+            title: gift.title,
+            backstory: gift.backstory,
+            available: getAvailableGiftCount({ gift }) === 999 ? "infinity" : getAvailableGiftCount({ gift }),
+            quantity: gift.quantity,
+            hidden: gift.hidden ? "Hidden" : "Visible",
+            assignments: gift.giftAssignments.map((assignment) => assignment.email).join(", \n"),
+        });
+    });
+
+    // Create the file and trigger download
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+    saveAs(blob, `gifts_${new Date().toISOString().split("T")[0]}.xlsx`);
 };

@@ -2,16 +2,20 @@
 
 import { createGift } from "@/actions/create-gift"
 import { FormInput } from "@/components/form/form-input"
+import { FormSwitch } from "@/components/form/form-switch"
 import { FormTextarea } from "@/components/form/form-textarea"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useAction } from "@/hooks/use-action"
+import { FilePlus, Plus } from "lucide-react"
 import { ElementRef, useRef, useState } from "react"
 import { toast } from "sonner"
 
 export const NewGiftForm = () => {
     const formRef = useRef<ElementRef<"form">>(null);
     const [open, setOpen] = useState<boolean>(false);
+
+    const [hidden, setHidden] = useState(true);
 
     const { execute, fieldErrors } = useAction(createGift, {
         onSuccess: (data) => {
@@ -32,13 +36,16 @@ export const NewGiftForm = () => {
 
         const quantity = parseInt(rawQuantity);
 
-        execute({ title, url, backstory, quantity });        
+        execute({ title, url, backstory, quantity, hidden });
     }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary" className="text-xs">New Gift</Button>
+                <Button variant="secondary" className="text-sm flex flex-col h-full gap-y-1">
+                    <FilePlus className="size-5" />
+                    <span>New Gift</span>
+                </Button>
             </DialogTrigger>
             <DialogContent className="bg-card">
                 <DialogHeader>
@@ -48,15 +55,16 @@ export const NewGiftForm = () => {
                 <form
                     action={handleSubmit}
                     ref={formRef}
-                    className="flex flex-col gap-y-1"
+                    className="flex flex-col gap-y-2"
                 >
                     <div className="flex flex-row gap-x-2">
-                        <FormInput id="title" placeholder="Title..." label="Title" errors={fieldErrors} required />
+                        <FormInput id="title" placeholder="A clear title..." label="Title *" errors={fieldErrors} required />
 
-                        <FormInput id="quantity" placeholder="Quantity..." label="Quantity (put 0 for infinity)" type="number" errors={fieldErrors} defaultValue={0} />
+                        <FormInput id="quantity" placeholder="The perfect amount..." label="Quantity (put 0 for infinity)" type="number" errors={fieldErrors} defaultValue={0} min={0} />
                     </div>
-                    <FormInput id="url" placeholder="Link..." label="Link" errors={fieldErrors} />
-                    <FormTextarea id="backstory" placeholder="Backstory..." label="Backstory" errors={fieldErrors} />
+                    <FormSwitch id="hidden" label="Hidden" description="Whether the gift will be hidden from clients." value={hidden} onChange={(checked) => setHidden(checked)} className="data-[state=checked]:bg-accent-foreground" />
+                    <FormInput id="url" placeholder="e.g. google.se..." label="Link" errors={fieldErrors} />
+                    <FormTextarea id="backstory" placeholder="Some kind of good backstory..." label="Backstory" errors={fieldErrors} rows={4} />
 
                     <DialogFooter className="mt-2">
                         <Button>Save</Button>

@@ -9,15 +9,17 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { EditGift } from "./schema";
-import { getPartyByEmail } from "@/data/data";
-import { sendNewAssignedGiftToClient, sendRSVPConfirmation } from "@/lib/mail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
 
-    if (!user) return { error: "Unauthorized" }
+    if (!user || !user.id) return { error: "Unauthorized" }
 
-    const { id, title, backstory, url, quantity } = data;
+    const dbUser = await getUserById(user.id);
+
+    if (!dbUser) return { error: "Unauthorized" }
+
+    const { id, title, backstory, url, quantity, hidden } = data;
 
     if (!title) return { error: "Something went wrong! Missing title." }
 
@@ -36,6 +38,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 url,
                 quantity: quantity === 0 ? null : quantity,
                 updatedAt: new Date(),
+                hidden
             },
         });
 

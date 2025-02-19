@@ -8,6 +8,7 @@ export const EditGift = z.object({
     }).min(1, { message: "Required." }),
     backstory: z.optional(z.string()),
     url: z.optional(z.string()),
-    quantity: z.optional(z.number().min(0))
+    quantity: z.optional(z.number().min(0)),
+    hidden: z.boolean()
 });
 

@@ -8,6 +8,7 @@ import { CreateGalleryPost } from "./schema";
 import { generatePresignedUrl } from "@/lib/r2";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
+    
     const { name, email, comment, fileName, fileType, hidden } = data;
 
     if (!email) return { error: "Something went wrong! Missing email." };

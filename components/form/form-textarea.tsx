@@ -69,6 +69,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>((
                     )}
                     aria-describedby={`${id}-error`}
                     defaultValue={defaultValue}
+                    
                 />
             </div>
             <FormErrors

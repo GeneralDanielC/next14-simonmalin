@@ -13,7 +13,11 @@ import { DeleteGift } from "./schema";
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
 
-    if (!user) return { error: "Unauthorized" }
+    if (!user || !user.id) return { error: "Unauthorized" }
+
+    const dbUser = await getUserById(user.id);
+
+    if (!dbUser) return { error: "Unauthorized" }
 
     const { id } = data;
 
@@ -27,6 +31,31 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 id
             },
         });
+
+        // Fetch remaining gifts
+        const remainingGifts = await db.gift.findMany({
+            orderBy: {
+                order: 'asc'
+            }
+        });
+
+        // Adjust the order of the remaining items
+        const updatedGifts = remainingGifts.map((gift, index) => ({
+            ...gift,
+            order: index
+        }));
+
+        // Update items in db
+        const transaction = updatedGifts.map(gift => db.gift.update({
+            where: {
+                id: gift.id,
+            },
+            data: {
+                order: gift.order
+            }
+        }));
+
+        await db.$transaction(transaction);
 
     } catch (error) {
         console.error(error);

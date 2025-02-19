@@ -116,6 +116,8 @@ model Gift {
   backstory       String?
   url             String?
   quantity        Int?
+  order           Int
+  hidden          Boolean          @default(true)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now())
   giftAssignments GiftAssignment[]

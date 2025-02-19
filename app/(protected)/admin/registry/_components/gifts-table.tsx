@@ -1,6 +1,16 @@
 "use client"
 
 import {
+    DragDropContext,
+    Draggable,
+    Droppable
+} from "@hello-pangea/dnd";
+import { useEffect, useState } from "react"
+import { Gift } from "@prisma/client"
+import { Check, Eye, EyeOff, Infinity, X } from "lucide-react"
+
+
+import {
     Table,
     TableBody,
     TableCell,
@@ -8,15 +18,15 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Gift } from "@prisma/client"
-import { Check, Infinity, X } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useState } from "react"
 import { ModalProvider } from "@/components/providers/modal-provider"
 import { useEditGiftModal } from "@/hooks/use-edit-gift-modal"
 import { GiftWithAssignments } from "@/types"
 import { getAvailableGiftCount } from "@/lib/gifts"
+import { useAction } from "@/hooks/use-action";
+import { updateGiftOrder } from "@/actions/update-gift-order";
+import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 interface GiftsTableProps {
     gifts: GiftWithAssignments[]
@@ -29,6 +39,8 @@ export const GiftsTable = ({
 
     const [gift, setGift] = useState<GiftWithAssignments | undefined>();
 
+    const [giftList, setGiftList] = useState<GiftWithAssignments[]>(gifts);
+
     const handleOpenModal = (giftId: string) => {
         const gift = gifts.find(gift => gift.id === giftId);
         if (!gift) return;
@@ -37,37 +49,117 @@ export const GiftsTable = ({
         editGiftModal.onOpen();
     }
 
+    const { execute } = useAction(updateGiftOrder, {
+        onSuccess: (data) => {
+            toast.success("Successfully reordered gifts.")
+        },
+        onError: (error) => {
+            toast.error(error);
+        }
+    })
+
+    const onDragEnd = (result: any) => {
+        const { destination, source } = result;
+
+        // If dropped outside droppable area
+        if (!destination) return;
+
+        // If dropped in the same place, do nothing
+        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+
+        // Clone the list to avoid direct state mutation
+        const reorderedGifts = Array.from(giftList);
+        const [movedGift] = reorderedGifts.splice(source.index, 1); // Remove dragged item
+        reorderedGifts.splice(destination.index, 0, movedGift); // Insert at new position
+
+        // Update the `order` values for each gift
+        const updatedGifts = reorderedGifts.map((gift, index) => ({
+            ...gift,
+            order: index,  // Assign new order index
+        }));
+
+        // Update local state
+        setGiftList(updatedGifts);
+
+        // Send the reordered gifts to the server
+        execute({
+            gifts: updatedGifts,
+        });
+    };
+
+    useEffect(() => {
+        setGiftList(gifts)
+    }, [gifts])
+
     return (
         <>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Title & Backstory</TableHead>
-                        <TableHead className="text-left">Available / Count</TableHead>
-                        <TableHead className="text-right">Assignments</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {gifts?.map(gift => (
-                        <TableRow key={gift.id} className="hover:cursor-pointer" onClick={() => handleOpenModal(gift.id)}>
-                            <TableCell>
-                                <div className="font-medium">{gift.title}</div>
-                                <div className=" text-xs text-muted-foreground md:inline">
-                                    {gift.backstory}
-                                </div>
-                            </TableCell>
-                            <TableCell className="">
-                                {gift.quantity ? `${getAvailableGiftCount({ gift })} / ${gift.quantity}` : <Infinity />}
-                            </TableCell>
-                            <TableCell className="text-right text-xs flex flex-col">
-                                {gift.giftAssignments.map(gift =>
-                                    <span key={gift.id}>{gift.email}</span>
-                                )}
-                            </TableCell>
+            <DragDropContext
+                onDragStart={() => {
+                    if (window.navigator.vibrate) {
+                        window.navigator.vibrate(100);
+                    }
+                }}
+                onDragEnd={onDragEnd}
+            >
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="flex flex-col">
+                                <span>Title</span>
+                                <span className="text-xs">Backstory</span>
+                            </TableHead>
+                            <TableHead className="text-center w-fit">Available</TableHead>
+                            <TableHead className="text-center w-fit">Visibility</TableHead>
+                            <TableHead className="text-right hidden sm:block">Assignments</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <Droppable droppableId="gifts-list">
+                        {(provided) => (
+                            <TableBody {...provided.droppableProps} ref={provided.innerRef}>
+                                {giftList.map((gift, index) => (
+                                    <Draggable key={gift.id} draggableId={gift.id} index={index}>
+                                        {(provided, snapshot) => (
+                                            <TableRow
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                className={`hover:cursor-pointer ${snapshot.isDragging && "bg-accent flex flex-row justify-between items-center"}`}
+                                                onClick={() => handleOpenModal(gift.id)}
+                                            >
+                                                <TableCell className={cn(snapshot.isDragging && "w-[200px]")}>
+                                                    <div className="font-medium">{gift.title}</div>
+                                                    <div className="text-xs text-muted-foreground md:inline">
+                                                        {gift.backstory}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    <div className="flex items-center justify-center w-full">
+                                                        {gift.quantity
+                                                            ? `${getAvailableGiftCount({ gift })} / ${gift.quantity}`
+                                                            : <Infinity />}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex w-full items-center justify-center">
+                                                        {gift.hidden ? <EyeOff className="size-4 text-rose-500" /> : <Eye className="size-4 text-emerald-500" />}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-right text-xs flex-col text-muted-foreground hidden sm:flex">
+                                                    {gift.giftAssignments.map((assignment) => (
+                                                        <span key={assignment.id}>{assignment.email}</span>
+                                                    ))}
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+
+                            </TableBody>
+                        )}
+                    </Droppable>
+                </Table>
+            </DragDropContext>
             <ModalProvider gift={gift} />
         </>
     )

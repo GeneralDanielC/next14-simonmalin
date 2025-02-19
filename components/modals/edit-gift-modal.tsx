@@ -9,7 +9,7 @@ import { Gift, GiftAssignment } from "@prisma/client";
 import { FormInput } from "@/components/form/form-input";
 import { FormSwitch } from "@/components/form/form-switch";
 import { FormSubmit } from "@/components/form/form-submit";
-import { ElementRef, useRef, useState } from "react";
+import { ElementRef, useEffect, useRef, useState } from "react";
 import { editGuestInParty } from "@/actions/edit-guest-in-party";
 import { useEditGiftModal } from "@/hooks/use-edit-gift-modal";
 import { FormTextarea } from "@/components/form/form-textarea";
@@ -32,7 +32,7 @@ export const EditGiftModal = ({
     const editGiftModal = useEditGiftModal()
     const formRef = useRef<ElementRef<"form">>(null);
 
-    const [newAssignedToEmail, setNewAssignedToEmail] = useState<string>("");
+    const [hidden, setHidden] = useState(gift.hidden);
 
     const { execute, fieldErrors } = useAction(editGift, {
         onSuccess: (data) => {
@@ -60,8 +60,13 @@ export const EditGiftModal = ({
             backstory,
             url,
             quantity,
+            hidden
         })
     }
+
+    useEffect(() => {
+        setHidden(gift.hidden)
+    }, [gift])
 
     return (
         <Dialog
@@ -74,12 +79,12 @@ export const EditGiftModal = ({
                     <DialogDescription>You can modify the gift here. Information about changes will not be sent to the guest.</DialogDescription>
                 </DialogHeader>
                 <form ref={formRef} action={handleEditGiftSubmit}>
-                    <div className="flex flex-col gap-y-1">
+                    <div className="flex flex-col gap-y-2">
                         <div className="w-full flex flex-row gap-x-2">
                             <FormInput
                                 id="title"
                                 placeholder="Title..."
-                                label="Title"
+                                label="Title *"
                                 defaultValue={gift.title}
                                 required
                                 errors={fieldErrors}
@@ -93,6 +98,7 @@ export const EditGiftModal = ({
                                 errors={fieldErrors}
                             />
                         </div>
+                        <FormSwitch id="hidden" label="Hidden" description="Whether the gift will be hidden from clients." value={hidden} onChange={(checked) => setHidden(checked)} className="data-[state=checked]:bg-accent-foreground" />
                         <FormInput
                             id="url"
                             placeholder="Link..."
@@ -106,7 +112,7 @@ export const EditGiftModal = ({
                             label="Backstory"
                             defaultValue={gift.backstory ?? ""}
                             errors={fieldErrors}
-                            rows={3}
+                            rows={4}
                         />
                         <FormSubmit
                             className="mt-3"

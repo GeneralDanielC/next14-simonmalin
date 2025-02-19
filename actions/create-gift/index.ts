@@ -9,15 +9,17 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { CreateGift } from "./schema";
-import { getPartyByEmail } from "@/data/data";
-import { sendRSVPConfirmation } from "@/lib/mail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
 
-    if (!user) return { error: "Unauthorized" }
+    if (!user || !user.id) return { error: "Unauthorized" }
 
-    const { title, backstory, url, quantity } = data;
+    const dbUser = await getUserById(user.id);
+
+    if (!dbUser) return { error: "Unauthorized" }
+
+    const { title, backstory, url, quantity, hidden } = data;
 
     if (!title) return { error: "Something went wrong! Missing title." }
 
@@ -25,6 +27,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     try {
         // throw new Error("a"); // artificial error - to be removed
+        const maxOrderGift = await db.gift.findFirst({
+            orderBy: {
+                order: 'desc',
+            },
+            select: {
+                order: true,
+            }
+        });
+
+        const newOrder = maxOrderGift ? maxOrderGift.order + 1 : 0;
 
         gift = await db.gift.create({
             data: {
@@ -32,6 +44,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 backstory,
                 url,
                 quantity: quantity === 0 ? null : quantity,
+                order: newOrder,
+                hidden
             },
         });
 
