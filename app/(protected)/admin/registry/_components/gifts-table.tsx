@@ -141,7 +141,12 @@ export const GiftsTable = ({
                                                 </TableCell>
                                                 <TableCell>
                                                     <div className="flex w-full items-center justify-center">
-                                                        {gift.hidden ? <EyeOff className="size-4 text-rose-500" /> : <Eye className="size-4 text-emerald-500" />}
+                                                        {gift.hidden || (!gift.hidden && getAvailableGiftCount({gift}) === 0) ? <EyeOff 
+                                                        className={cn(
+                                                            "size-4 text-rose-500",
+                                                            getAvailableGiftCount({gift}) === 0 && "text-amber-500"
+                                                        )} 
+                                                        /> : <Eye className="size-4 text-emerald-500" />}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="text-right text-xs flex-col text-muted-foreground hidden sm:flex">
