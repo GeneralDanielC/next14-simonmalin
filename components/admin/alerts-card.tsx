@@ -29,7 +29,7 @@ enum AlertType {
     TOO_MANY_GIFTS = "TOO_MANY_GIFTS",
 }
 
-type Alert = {
+export type Alert = {
     type: AlertType;
     description: string;
 };
@@ -140,21 +140,21 @@ export const AlertsCard = ({
 
     const checkForMissingGuests = (): Alert[] => {
         const alerts: Alert[] = [];
-
+    
         parties.forEach((party) => {
             const email = party.email.toLowerCase();
             let containsGuestName = false;
-
+    
             party.guests.forEach((guest) => {
                 const firstName = guest.firstName.toLowerCase();
                 const lastName = guest.lastName.toLowerCase();
-
+    
                 // Direct match (quick check)
                 if (email.includes(firstName) || email.includes(lastName)) {
                     containsGuestName = true;
                     return;
                 }
-
+    
                 // Fuzzy matching (Levenshtein Distance)
                 const emailWords = email.split(/[^a-zA-Z]/).filter(Boolean); // Split email into words
                 emailWords.forEach((word) => {
@@ -167,7 +167,7 @@ export const AlertsCard = ({
                     }
                 });
             });
-
+    
             // If no guest name is found in the email, add an alert
             if (!containsGuestName) {
                 alerts.push({
@@ -176,7 +176,7 @@ export const AlertsCard = ({
                 });
             }
         });
-
+    
         return alerts;
     };
     

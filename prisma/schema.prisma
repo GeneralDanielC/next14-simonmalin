@@ -30,6 +30,8 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now())
+  lastSignIn            DateTime               @default(now())
 }
 
 model Account {

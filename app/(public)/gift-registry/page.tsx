@@ -25,7 +25,7 @@ const GiftRegistryPage = async () => {
             >
                 <div className="text-stone-500 py-20">
                     <h1 className="text-4xl">Information</h1>
-                    <h2>Hittat något du vill köpa? Klicka på saken för att paxa!</h2>
+                    <h2>Hittat något du vill köpa? Läs informationen nedan</h2>
                 </div>
             </Skew>
             <div className="py-36 w-full h-full flex flex-col gap-y-12 justify-center items-center px-6">

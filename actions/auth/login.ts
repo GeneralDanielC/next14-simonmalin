@@ -89,6 +89,19 @@ export const login = async (
     }
 
     try {
+        await db.user.update({
+            where: {
+                id: existingUser.id,
+            },
+            data: {
+                lastSignIn: new Date()
+            }
+        })
+    } catch (error) {
+        return {error: "Failed to update user."}
+    }
+
+    try {
         await signIn("credentials", {
             email,
             password,

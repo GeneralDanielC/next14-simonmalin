@@ -110,7 +110,6 @@ export const ModuleSection = () => {
             actionText="Till sidan"
             classNames="w-32"
             href="/gift-registry"
-            disabled
           />
         </motion.div>
       </motion.div>

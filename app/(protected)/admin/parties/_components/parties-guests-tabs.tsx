@@ -138,7 +138,7 @@ export const PartiesGuestsTabs = ({
                     <CardHeader className="px-7">
                         <div className="flex flex-row items-center justify-between">
                             <div className="flex flex-col gap-y-1">
-                                <CardTitle>Parties</CardTitle>
+                                <CardTitle>Parties ({parties.length})</CardTitle>
                                 <CardDescription className="flex flex-col gap-y-2">
                                     List of all parties.
                                     <span className="text-xs italic">Tip: Tap a row to view and edit.</span>
