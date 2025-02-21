@@ -25,7 +25,7 @@ export const login = async (
 
     const { email, password, code } = validatedFields.data;
 
-    const existingUser = await getUserByEmail(email);
+    const existingUser = await getUserByEmail(email);    
 
     if (!existingUser || !existingUser.email || !existingUser.password) {
         return { error: "Email does not exist!" };
@@ -86,19 +86,6 @@ export const login = async (
 
             return { twoFactor: true };
         }
-    }
-
-    try {
-        await db.user.update({
-            where: {
-                id: existingUser.id,
-            },
-            data: {
-                lastSignIn: new Date()
-            }
-        })
-    } catch (error) {
-        return {error: "Failed to update user."}
     }
 
     try {
