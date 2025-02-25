@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { currentUser } from "@/lib/auth";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -21,6 +22,9 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const user = await currentUser();
+
+    if (!user) return <p>Unauthorized</p>
 
     return (
         <html lang="sv" className="h-screen w-full">

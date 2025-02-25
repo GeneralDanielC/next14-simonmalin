@@ -6,8 +6,12 @@ import { AlertsCard } from "@/components/admin/alerts-card";
 import { LinkCard } from "@/components/admin/link-card";
 import { Package, Users } from "lucide-react";
 import { AttendanceCard } from "@/components/admin/attendance-card";
+import { currentUser } from "@/lib/auth";
 
 const DashboardPage = async () => {
+    const user = await currentUser();
+
+    if (!user) return <p>Unauthorized</p>
 
     const gifts = await getGifts();
     const parties = await getParties();

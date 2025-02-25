@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Gift } from "@prisma/client"
-import { getAssignedGifts, getNotAssignedGifts } from "@/lib/gifts"
+import { getAssignedGifts, getAvailableGifts, getNotAssignedGifts } from "@/lib/gifts"
 
 import {
     Card,
@@ -17,38 +17,35 @@ import { GiftWithAssignments } from "@/types"
 
 interface AssignedCardProps {
     gifts: GiftWithAssignments[],
-    showAssigned: boolean,
 }
 
-export const AssignedCard = ({
-    gifts,
-    showAssigned
+export const AvailableGiftsCard = ({
+    gifts
 }: AssignedCardProps) => {
-    const [assignedGifts, setAssignedGifts] = useState(getAssignedGifts({ gifts }));
-    const [notAssignedGifts, setNotAssignedGifts] = useState(getNotAssignedGifts({ gifts }));
+    const [availableGifts, setAvailableGifts] = useState(getAvailableGifts({ gifts }));
 
     const totalGifts = gifts.length;
 
     useEffect(() => {
-        showAssigned ? setAssignedGifts(getAssignedGifts({ gifts })) : setNotAssignedGifts(getNotAssignedGifts({ gifts }));
+        setAvailableGifts(getAvailableGifts({ gifts }))
     }, [gifts]);
 
     return (
         <Card x-chunk="dashboard-05-chunk-2" className="col-span-1 w-full">
             <CardHeader className="pb-2">
-                <CardDescription className="text-xs">{showAssigned ? "Assigned" : "Not Assigned"}</CardDescription>
+                <CardDescription className="text-xs">Available</CardDescription>
                 <CardTitle className="flex flex-row gap-x-2 items-center">
-                    <span className="text-4xl">{showAssigned ? assignedGifts : notAssignedGifts}</span>
+                    <span className="text-4xl">{availableGifts.length}</span>
                     <span className="text-xl text-stone-400">/ {totalGifts}</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="text-xs text-muted-foreground">
-                    {showAssigned ? "Gifts that are assigned to at least one guest." : "Gifts that are not yet assigned to any guests."}
+                    Gifts that are still available for reservation.
                 </div>
             </CardContent>
             <CardFooter>
-                <Progress value={(showAssigned ? assignedGifts : notAssignedGifts) / totalGifts * 100} aria-label="" />
+                <Progress value={availableGifts.length / totalGifts * 100} aria-label="" />
             </CardFooter>
         </Card>
     )

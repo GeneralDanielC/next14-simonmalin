@@ -6,8 +6,13 @@ import { SpecialFoodCard } from "@/components/admin/special-food-card"
 import { AttendanceCard } from "@/components/admin/attendance-card"
 import { AlcoholFreeCard } from "@/components/admin/alcohol-free-card"
 import { PartiesGuestsTabs } from "./_components/parties-guests-tabs"
+import { currentUser } from "@/lib/auth";
 
 const PartiesPage = async () => {
+
+    const user = await currentUser();
+
+    if (!user) return <p>Unauthorized</p>
 
     const gifts = await getGifts();
     const parties = await getParties();
