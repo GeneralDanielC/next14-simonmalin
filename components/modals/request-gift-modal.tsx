@@ -68,12 +68,12 @@ export const RequestGiftModal = ({
         >
             <DialogContent>
 
-                <div className="flex flex-row items-center border border-black rounded-lg p-3">
+                <div className="flex flex-row items-center border border-black rounded-lg p-3 gap-x-3">
                     <div className="w-full flex flex-col">
                         <span className="text-muted-foreground text-sm">presentinfo</span>
                         <span className="text-lg font-semibold">{gift.title}</span>
                         <span className="text-sm">{gift.backstory}</span>
-                        <span className="text-sm">{gift.url && <Link target="_blank" className="underline" href={gift.url}>Länk till present</Link>}</span>
+                        <span className="text-sm font-bold mt-5">{gift.url && <Link target="_blank" className="underline" href={gift.url}>Länk till present</Link>}</span>
                     </div>
                     <div className="flex flex-col items-center justify-center">
                         <span className="text-4xl">{gift.quantity ? getAvailableGiftCount({ gift }).toString() : <Infinity />}</span>
