@@ -13,7 +13,7 @@ export const exportPartiesToExcel = async (parties: PartyWithGuests[]) => {
         { header: "Guest First Name", key: "firstName", width: 20 },
         { header: "Guest Last Name", key: "lastName", width: 20 },
         { header: "Food Preferences", key: "foodPreferences", width: 30 },
-        { header: "Alcohol Preference", key: "alcoholPreference", width: 15 },
+        { header: "Alcohol Free", key: "alcoholPreference", width: 15 },
         { header: "Will Attend", key: "willAttend", width: 15 },
         { header: "Attend Nuptials", key: "willAttendNuptials", width: 15 },
         { header: "Attend Reception", key: "willAttendReception", width: 15 },
