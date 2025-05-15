@@ -47,12 +47,11 @@ export const ModuleSection = () => {
           custom={0} // Custom index for stagger effect
         >
           <Module
-            heading="Räkna med mig!"
-            subtext={`${Math.abs(calculateTime({ diffMs }).days)} dagar kvar`}
+            heading="Vår historia"
             showAction
-            actionText="Till O.S.A."
+            actionText="Till sidan"
             classNames="flex-1"
-            href="/osa"
+            href="/our-story"
           />
           <Module
             heading="Toastmadames"

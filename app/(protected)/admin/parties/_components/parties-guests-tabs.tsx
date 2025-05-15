@@ -41,6 +41,7 @@ import { SortDropdown } from "@/components/sort-dropdown"
 import { FilterGuestsDropdown } from "@/components/filter-guests-dropdown"
 import { getLatestPartyUpdate } from "@/lib/parties"
 import { ExportButton } from "./export-button"
+import { SearchGuests } from "@/components/admin/search-guests"
 
 interface PartiesGuestsTabsProps {
     parties: PartyWithGuests[]
@@ -146,6 +147,7 @@ export const PartiesGuestsTabs = ({
                             </div>
                             <NewPartyForm />
                         </div>
+                        
                     </CardHeader>
                     <CardContent>
                         <PartiesTable parties={parties} />
